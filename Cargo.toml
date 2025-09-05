@@ -1,0 +1,16 @@
+[package]
+name = "reflow-controller"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+simulator = []
+
+[dependencies]
+heapless = "0.7.1"
+embassy-sync = { version = "0.7.2", path = "../embassy/embassy-sync" }
+embassy-executor = { version = "0.9.0", path = "../embassy/embassy-executor" }
+embassy-time = { version = "0.5.0", path = "../embassy/embassy-time" }
+
+embedded-graphics = "0.8.1"
+# embedded-graphics-simulator = "0.7.0"
