@@ -1,4 +1,3 @@
-
 #[derive(Debug, Clone)]
 pub struct Step {
     pub name: &'static str,
@@ -7,10 +6,13 @@ pub struct Step {
     pub time: u32,
 }
 
-
 pub struct Profile {
     pub name: &'static str,
-    pub steps: [Step; 5]
+    pub steps: [Step; 5],
+}
+
+pub fn get_step(profile: usize, step: usize) -> &'static Step {
+    &PROFILES[profile].steps[step]
 }
 
 const LEAD_FREE_PROFILE: Profile = Profile {

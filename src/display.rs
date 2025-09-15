@@ -12,7 +12,7 @@ use heapless::String;
 use crate::{
     home_screen::{cobalt2_theme, draw_home_screen, Theme},
     profile::PROFILES,
-    reflow_controller::{ReflowControllerState, Status, CURRENT_STATE},
+    reflow_controller::{ReflowControllerState, Status},
     running_screen::{draw_run_screen, RunStage, RunUi},
     splash_screen::draw_splash_screen,
     VERSION,
@@ -28,14 +28,11 @@ pub static EVENT_CHANNEL: Channel<CriticalSectionRawMutex, Events, 3> = Channel:
 pub enum Events {
     UpButtonPressed,
     DownButtonPressed,
-    LeftButtonPressed,
     RightButtonPressed,
     CenterButtonPressed,
 }
 
 fn draw_splash_page<D: DrawTarget<Color = Rgb565>>(display: &mut D) {
-    display.clear(Rgb565::BLACK).ok();
-
     let character_style = MonoTextStyle::new(&FONT_6X13, Rgb565::WHITE);
     let text_style = TextStyleBuilder::new()
         .baseline(Baseline::Middle)
@@ -66,8 +63,6 @@ fn draw_running_page<D: DrawTarget<Color = Rgb565>>(
     display: &mut D,
     state: &ReflowControllerState,
 ) {
-    display.clear(Rgb565::BLACK).ok();
-
     let character_style = MonoTextStyle::new(&FONT_6X13, Rgb565::WHITE);
     let text_style = TextStyleBuilder::new()
         .baseline(Baseline::Middle)
@@ -107,8 +102,6 @@ fn draw_running_page<D: DrawTarget<Color = Rgb565>>(
 }
 
 fn draw_error_page<D: DrawTarget<Color = Rgb565>>(display: &mut D, state: &ReflowControllerState) {
-    display.clear(Rgb565::BLACK).ok();
-
     let character_style = MonoTextStyle::new(&FONT_6X13, Rgb565::WHITE);
     let text_style = TextStyleBuilder::new()
         .baseline(Baseline::Middle)
@@ -135,22 +128,17 @@ fn get_progress(total_time: u32, elapsed_time: u32) -> u8 {
     }
 }
 
-fn draw_page<D: DrawTarget<Color = Rgb565>>(display: &mut D, state: &ReflowControllerState) {
-    display.clear(Rgb565::BLACK).ok();
+pub fn draw_page<D: DrawTarget<Color = Rgb565>>(display: &mut D, state: &ReflowControllerState) {
     let theme = cobalt2_theme();
     match state.status {
-        Status::Initializing(percent) => {
+        Status::Initializing => {
             draw_splash_screen(
                 display,
                 Size::new(240, 240),
                 VERSION,
                 // if less than 50 percent show initalizing, if greater show almost ready,
-                if percent < 50 {
-                    "Initializing..."
-                } else {
-                    "Almost Ready..."
-                },
-                percent,
+                "Initializing...",
+                50,
                 theme,
             )
             .ok();
@@ -183,59 +171,9 @@ fn draw_page<D: DrawTarget<Color = Rgb565>>(display: &mut D, state: &ReflowContr
             draw_run_screen(display, Size::new(240, 240), &state, &ui, cobalt2_theme()).ok();
             return;
         }
-        Status::Error(_) => {
+        Status::Error => {
             draw_error_page(display, state);
             return;
         }
-    }
-}
-
-#[cfg(feature = "simulator")]
-mod simulator {
-    use embedded_graphics_simulator::{
-        BinaryColorTheme, OutputSettingsBuilder, SimulatorDisplay, Window,
-    };
-
-    #[embassy_executor::task]
-    pub async fn display_task() {
-        let mut receiver = CURRENT_STATE.receiver().unwrap();
-        let event_sender = EVENT_CHANNEL.sender();
-
-        'display_loop: loop {
-            if let Some(new_state) = receiver.try_changed() {
-                draw_page(&mut display, &new_state);
-            }
-
-            window.update(&display);
-
-            for event in window.events() {
-                if event == SimulatorEvent::Quit {
-                    break 'display_loop;
-                }
-                if let SimulatorEvent::KeyDown { keycode, .. } = event {
-                    match keycode {
-                        Keycode::W => event_sender.send(Events::UpButtonPressed).await,
-                        Keycode::S => event_sender.send(Events::CenterButtonPressed).await,
-                        Keycode::X => event_sender.send(Events::DownButtonPressed).await,
-                        Keycode::A => event_sender.send(Events::LeftButtonPressed).await,
-                        Keycode::D => event_sender.send(Events::RightButtonPressed).await,
-                        _ => {}
-                    }
-                }
-            }
-            Timer::after(Duration::from_millis(10)).await;
-        }
-    }
-
-    pub async fn simulator_display_task(spawner: embassy_executor::Spawner) {
-        let mut display: SimulatorDisplay<Rgb565> = SimulatorDisplay::new(Size::new(240, 240));
-
-        // Window settings: 2× scale looks nice
-        let output_settings = OutputSettingsBuilder::new()
-            .scale(2)
-            .pixel_spacing(0)
-            .build();
-        let mut window = Window::new("Reflow UI (Simulator 240x240)", &output_settings);
-        spawner.spawn(display_task()).unwrap();
     }
 }

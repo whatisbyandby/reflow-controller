@@ -1,16 +1,16 @@
 use crate::display::{Events, EVENT_CHANNEL};
-use crate::profile::PROFILES;
+use crate::profile::{Step, PROFILES};
 use crate::temperature_sensor::{run_temperature_sensor, CURRENT_TEMPERATURE};
-use crate::{display::display_task};
-use embassy_executor::Spawner;
+use defmt::{info, Format};
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;
 use embassy_sync::watch::Watch;
 use embassy_time::{Duration, Instant, Timer};
-use heapless::String;
+use serde::{Deserialize, Serialize};
+use {defmt_rtt as _, panic_probe as _};
 
-pub static CURRENT_STATE: Watch<CriticalSectionRawMutex, ReflowControllerState, 2> = Watch::new();
+pub static CURRENT_STATE: Watch<CriticalSectionRawMutex, ReflowControllerState, 3> = Watch::new();
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, Format)]
 pub enum Command {
     SetTemperature(f32), // set Temperature Command
     Fan(bool),           // Fan On/Off Command
@@ -18,12 +18,12 @@ pub enum Command {
     Off,                 // Turn Off Command
 }
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Format, Serialize, Deserialize)]
 pub enum Status {
-    Initializing(u8),
+    Initializing,
     Idle,
     Running,
-    Error(String<32>),
+    Error,
 }
 
 pub struct ReflowController {
@@ -37,10 +37,11 @@ pub struct ReflowController {
     current_step_index: usize,
     status: Status,
     current_step_start_time: Instant,
+    profile_start_time: Instant,
     step_time_remaining: u32,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Format, Serialize, Deserialize)]
 pub struct ReflowControllerState {
     pub status: Status,
     pub target_temperature: f32,
@@ -66,36 +67,46 @@ impl ReflowController {
             heater_power: 0,
             profile_index: 0,
             current_step_index: 0,
-            status: Status::Initializing(0),
+            status: Status::Initializing,
             current_step_start_time: Instant::now(),
+            profile_start_time: Instant::now(),
             step_time_remaining: 0,
         }
     }
 
-    pub async fn run(&mut self, spawner: Spawner) {
-        self.send_state().await;
-
-        spawner.spawn(run_temperature_sensor()).unwrap();
-        spawner.spawn(display_task()).unwrap();
-
+    pub async fn run(&mut self) {
         loop {
             match self.status {
-                Status::Initializing(percent) => self.handle_init(percent).await,
-                Status::Idle => {
-                    self.handle_idle_state().await;
+                Status::Initializing => {
+                    self.init().await;
                 }
-                Status::Running => {
-                    self.handle_running_state().await;
-                }
-                Status::Error(ref msg) => {
-                    
-                }
+                Status::Idle => self.idle().await,
+                Status::Running => self.running().await,
+                Status::Error => self.error().await,
             }
-            Timer::after(Duration::from_millis(40)).await;
+            self.send_state();
+            Timer::after(Duration::from_millis(1000)).await;
         }
     }
 
-    async fn send_state(&mut self) {
+    async fn init(&mut self) {
+        Timer::after_secs(1).await;
+        self.status = Status::Idle;
+    }
+
+    async fn idle(&mut self) {
+        Timer::after_secs(1).await;
+    }
+
+    async fn running(&mut self) {
+        Timer::after_secs(1).await;
+    }
+
+    async fn error(&mut self) {
+        Timer::after_secs(1).await;
+    }
+
+    fn send_state(&mut self) {
         let snd = CURRENT_STATE.sender();
         let state = ReflowControllerState {
             status: self.status.clone(),
@@ -111,122 +122,6 @@ impl ReflowController {
             current_step: self.current_step_index as u8,
         };
         snd.send(state);
-    }
-
-    async fn handle_start_event(&mut self) {
-        if self.status == Status::Idle {
-            self.current_step_start_time = Instant::now();
-            self.status = Status::Running;
-        } else if self.status == Status::Running {
-            self.status = Status::Idle;
-        }
-        self.send_state().await;
-    }
-
-    async fn handle_right_turn(&mut self) {
-        if self.status == Status::Idle {
-            self.profile_index = (self.profile_index + 1) % 3;
-        }
-
-        self.target_temperature = PROFILES[self.profile_index].steps[0].end_temperature;
-    }
-
-    async fn handle_left_turn(&mut self) {
-        if self.status == Status::Idle {
-            if self.profile_index == 0 {
-                self.profile_index = 2;
-            } else {
-                self.profile_index -= 1;
-            }
-        }
-        self.target_temperature = PROFILES[self.profile_index].steps[0].end_temperature;
-    }
-
-    async fn handle_events(&mut self) {
-        let receiver = EVENT_CHANNEL.receiver();
-        if receiver.is_empty() {
-            return;
-        }
-        match receiver.receive().await {
-            Events::UpButtonPressed => {
-                
-            }
-            Events::DownButtonPressed => {
-                
-            }
-            Events::LeftButtonPressed => {
-                
-                self.handle_left_turn().await;
-            }
-            Events::RightButtonPressed => {
-                
-                self.handle_right_turn().await;
-            }
-            Events::CenterButtonPressed => {
-               
-                self.handle_start_event().await;
-            }
-        }
-    }
-
-    async fn handle_idle_state(&mut self) {
-        self.handle_events().await;
-        if CURRENT_TEMPERATURE.signaled() {
-            let new_temperature = CURRENT_TEMPERATURE.wait().await;
-            self.handle_new_temperature(new_temperature).await;
-        }
-        self.send_state().await;
-    }
-
-    async fn handle_init(&mut self, percent: u8) {
-
-        self.target_temperature = PROFILES[self.profile_index].steps[0].end_temperature;
-
-        if percent < 100 {
-            Timer::after(Duration::from_millis(100)).await;
-            self.status = Status::Initializing(percent + 1);
-        } else {
-            self.status = Status::Idle;
-        }
-        self.send_state().await;
-    }
-
-    async fn handle_timers(&mut self) {
-        let step_time = PROFILES[self.profile_index].steps[self.current_step_index].time as u64;
-        let now = Instant::now();
-        let time_passed = now.duration_since(self.current_step_start_time).as_secs();
-
-        // Prevent overflow
-        let time_remaining = step_time.saturating_sub(time_passed) as u32;
-        self.step_time_remaining = time_remaining;
-        if time_remaining == 0 {
-            self.current_step_start_time = Instant::now();
-            self.current_step_index += 1;
-            if self.current_step_index == PROFILES[self.profile_index].steps.len() {
-                self.current_step_index = 0;
-                self.handle_start_event().await;
-            }
-        }
-    }
-
-    async fn handle_running_state(&mut self) {
-        self.handle_events().await;
-        if CURRENT_TEMPERATURE.signaled() {
-            let new_temperature = CURRENT_TEMPERATURE.wait().await;
-            self.handle_new_temperature(new_temperature).await;
-        }
-        self.update_heater_power().await;
-        self.handle_timers().await;
-        self.send_state().await;
-    }
-
-    async fn update_heater_power(&mut self) {
-        // Calculate the desired heater power based on the current and target temperatures
-        if self.current_temperature < self.target_temperature {
-            self.heater_power = 100;
-        } else {
-            self.heater_power = 0;
-        }
     }
 
     async fn handle_new_temperature(&mut self, new_temperature: f32) {
