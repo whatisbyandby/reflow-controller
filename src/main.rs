@@ -17,9 +17,9 @@ async fn main(spawner: Spawner) {
     let p = embassy_rp::init(Default::default());
     let r = split_resources!(p);
 
-    spawner.spawn(unwrap!(usb_task(spawner, r.usb)));
+    spawner.spawn(usb_task(spawner, r.usb)).unwrap();
     // spawner.spawn(unwrap!(display_task(r.display)));
-    spawner.spawn(unwrap!(controller_task()));
+    spawner.spawn(controller_task()).unwrap();
     // spawner.spawn(unwrap!(run_temperature_sensor()));
 }
 

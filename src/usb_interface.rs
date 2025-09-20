@@ -60,7 +60,7 @@ async fn logger_task(driver: Driver<'static, USB>) {
 #[embassy_executor::task]
 pub async fn usb_task(spawner: Spawner, r: USBResources) {
     let driver = Driver::new(r.usb, Irqs);
-    spawner.spawn(logger_task(driver).unwrap());
+    spawner.spawn(logger_task(driver)).unwrap();
 
     let mut receiver = CURRENT_STATE.receiver().unwrap();
 
