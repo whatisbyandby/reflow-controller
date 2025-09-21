@@ -27,6 +27,7 @@ embassy-rp = { version = "0.8.0", path = "../embassy/embassy-rp", features = [
 ] }
 
 embassy-usb-logger = { version = "0.5.1", path = "../embassy/embassy-usb-logger" }
+embassy-futures = { version = "0.1.2", path = "../embassy/embassy-futures" }
 
 embedded-graphics = "0.8.1"
 assign-resources = "0.5.0"
@@ -41,6 +42,7 @@ defmt = "1.0.1"
 defmt-rtt = "1.0.0"
 fixed = "1.23.1"
 fixed-macro = "1.2"
+bitflags = "2.4"
 
 display-interface-spi = "0.5.0"
 mipidsi = "0.8.0"
@@ -50,7 +52,9 @@ log = "0.4"
 # Core Serde without std
 serde = { version = "1", default-features = false, features = ["derive"] }
 
+
 # Heapless collections with Serde impls
 heapless = { version = "0.8", features = ["serde"] }
 # Option B: JSON in no_std (writes into a fixed buffer you provide)
 serde-json-core = "0.6"
+embedded-hal-async = "1.0.0"

@@ -6,12 +6,13 @@ use embassy_rp::usb::{Driver, InterruptHandler};
 use embassy_usb_logger::ReceiverHandler;
 use heapless::String;
 
+use crate::reflow_controller::{ReflowControllerState, CURRENT_STATE};
+use crate::USBResources;
 use core::str;
+use defmt::unwrap;
 use embassy_executor::Spawner;
 use embassy_time::Timer;
 use {defmt_rtt as _, panic_probe as _};
-use crate::reflow_controller::{Command, ReflowControllerState, CURRENT_STATE};
-use crate::USBResources;
 
 // —— USB interrupt binding ——
 bind_interrupts!(struct Irqs {
@@ -37,10 +38,6 @@ impl ReceiverHandler for Handler {
             // this will automatically put the pico into boot mode
             if data == "q" || data == "elf2uf2-term" {
                 reset_to_usb_boot(0, 0); // Restart the chip
-            } else if let Ok(cmd) = from_str::<Command>(data) {
-                // Handle other commands here
-                defmt::info!("Received command: {:?}", cmd);
-                // You can add code to process the command as needed
             } else {
                 defmt::warn!("Unknown command: {}", data);
             }
@@ -60,7 +57,7 @@ async fn logger_task(driver: Driver<'static, USB>) {
 #[embassy_executor::task]
 pub async fn usb_task(spawner: Spawner, r: USBResources) {
     let driver = Driver::new(r.usb, Irqs);
-    spawner.spawn(logger_task(driver)).unwrap();
+    spawner.spawn(unwrap!(logger_task(driver)));
 
     let mut receiver = CURRENT_STATE.receiver().unwrap();
 
