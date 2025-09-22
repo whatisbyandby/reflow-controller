@@ -73,11 +73,9 @@ async fn door_switch_task(pin: Peri<'static, PIN_4>) -> ! {
         let sender = INPUT_EVENT_CHANNEL.sender();
         match current_state {
             Level::Low => {
-                defmt::info!("Door Closed to start");
                 sender.send(InputEvent::DoorClosed).await;
             }
             Level::High => {
-                defmt::info!("Door Opened to start");
                 sender.send(InputEvent::DoorOpened).await;
             }
         }

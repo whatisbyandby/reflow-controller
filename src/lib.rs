@@ -26,15 +26,15 @@ use embassy_sync::watch::Watch;
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, mutex::Mutex};
 use serde::{Deserialize, Serialize};
 
-
 pub type I2c0Bus = Mutex<NoopRawMutex, I2c<'static, I2C0, i2c::Async>>;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize, Format)]
 pub enum InputEvent {
     ButtonAPressed,
     ButtonBPressed,
-    StartButtonPressed,
+    ButtonXPressed,
     ButtonYPressed,
+    StartButtonPressed,
     DoorOpened,
     DoorClosed,
 }
@@ -78,8 +78,8 @@ pub struct ReflowControllerState {
     pub heater_power: u8, // value between 0 and 100
     pub total_time_remaining: u32,
     pub step_time_remaining: u32,
-    pub current_step: u8,
-    pub current_profile: u8,
+    pub current_step: &'static str,
+    pub current_profile: &'static str,
 }
 
 assign_resources! {

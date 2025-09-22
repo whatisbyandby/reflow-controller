@@ -35,10 +35,13 @@ async fn main(spawner: Spawner) {
     static I2C_BUS: StaticCell<I2c0Bus> = StaticCell::new();
     let i2c_bus = I2C_BUS.init(Mutex::new(i2c));
 
-    spawner.spawn(unwrap!(usb_task(spawner, r.usb)));
-    spawner.spawn(unwrap!(heater_task(i2c_bus)));
     spawner.spawn(unwrap!(controller_task()));
+    
+    spawner.spawn(unwrap!(heater_task(i2c_bus)));
     spawner.spawn(unwrap!(run_temperature_sensor(i2c_bus)));
+    
     spawner.spawn(unwrap!(interface_task(spawner, r.inputs)));
     spawner.spawn(unwrap!(output_task(spawner, r.outputs)));
+    
+    spawner.spawn(unwrap!(usb_task(spawner, r.usb)));
 }
