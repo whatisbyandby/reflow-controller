@@ -1,22 +1,10 @@
-use crate::profile::{Step, PROFILES};
+use crate::pid::PidController;
+use crate::profile::PROFILES;
 use crate::temperature_sensor::CURRENT_TEMPERATURE;
-use crate::{InputEvent, INPUT_EVENT_CHANNEL};
-use defmt::Format;
-use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;
-use embassy_sync::watch::Watch;
+use crate::{InputEvent, OutputCommand, ReflowControllerState, Status, CURRENT_STATE, INPUT_EVENT_CHANNEL, OUTPUT_COMMAND_CHANNEL};
 use embassy_time::{Duration, Instant, Timer};
-use serde::{Deserialize, Serialize};
 use {defmt_rtt as _, panic_probe as _};
 
-pub static CURRENT_STATE: Watch<CriticalSectionRawMutex, ReflowControllerState, 3> = Watch::new();
-
-#[derive(Debug, Clone, PartialEq, Format, Serialize, Deserialize)]
-pub enum Status {
-    Initializing,
-    Idle,
-    Running,
-    Error,
-}
 
 pub struct ReflowController {
     target_temperature: f32,
@@ -24,29 +12,16 @@ pub struct ReflowController {
     door_closed: bool,
     fan: bool,
     light: bool,
-    heater_power: u32, // value between 0 and 100
+    heater_power: u8, // value between 0 and 100
     profile_index: usize,
     current_step_index: usize,
     status: Status,
     current_step_start_time: Instant,
     profile_start_time: Instant,
     step_time_remaining: u32,
+    pid_controller: PidController,
 }
 
-#[derive(Debug, Clone, Format, Serialize, Deserialize)]
-pub struct ReflowControllerState {
-    pub status: Status,
-    pub target_temperature: f32,
-    pub current_temperature: f32,
-    pub door_closed: bool,
-    pub fan: bool,
-    pub light: bool,
-    pub heater_power: u32, // value between 0 and 100
-    pub total_time_remaining: u32,
-    pub step_time_remaining: u32,
-    pub current_step: u8,
-    pub current_profile: u8,
-}
 
 impl ReflowController {
     pub fn new() -> Self {
@@ -63,19 +38,31 @@ impl ReflowController {
             current_step_start_time: Instant::now(),
             profile_start_time: Instant::now(),
             step_time_remaining: 0,
+            pid_controller: PidController::new(2.0, 0.5, 0.0, 0.1),
         }
     }
 
     pub async fn run(&mut self) {
         loop {
+            if CURRENT_TEMPERATURE.signaled() {
+                let new_temp = CURRENT_TEMPERATURE.wait().await;
+                self.handle_new_temperature(new_temp).await;
+            }
+            // Check for input events
+            let receiver = INPUT_EVENT_CHANNEL.receiver();
+
+            if !receiver.is_empty() {
+                let event = receiver.receive().await;
+                self.handle_event(event).await;
+            }
             match self.status {
-                Status::Initializing => {
-                    self.init().await;
-                }
+                Status::Initializing => self.init().await,
                 Status::Idle => self.idle().await,
                 Status::Running => self.running().await,
                 Status::Error => self.error().await,
             }
+            let heater_sender = crate::HEATER_COMMAND_CHANNEL.sender();
+            heater_sender.send(self.heater_power as u8).await;
             self.send_state();
             Timer::after(Duration::from_millis(100)).await;
         }
@@ -87,28 +74,73 @@ impl ReflowController {
     }
 
     async fn idle(&mut self) {
-        if CURRENT_TEMPERATURE.signaled() {
-            let new_temp = CURRENT_TEMPERATURE.wait().await;
-            self.handle_new_temperature(new_temp).await;
+        if self.door_closed {
+            OUTPUT_COMMAND_CHANNEL
+                .sender()
+                .send(OutputCommand::SetStartButtonLight(crate::LedState::LedOn))
+                .await;
+        } else {
+            OUTPUT_COMMAND_CHANNEL
+                .sender()
+                .send(OutputCommand::SetStartButtonLight(crate::LedState::LedOff))
+                .await;
         }
-        let receiver = INPUT_EVENT_CHANNEL.receiver();
+    }
 
-        if !receiver.is_empty() {
-            let event = receiver.receive().await;
-            self.handle_event(event).await;
-        }
+    async fn enter_running_state(&mut self) {
+        self.status = Status::Running;
+        self.profile_start_time = Instant::now();
+        self.current_step_start_time = Instant::now();
+        self.current_step_index = 0;
+        let current_step = &PROFILES[self.profile_index].steps[self.current_step_index];
+        self.step_time_remaining = current_step.time;
+        self.target_temperature = current_step.end_temperature;
     }
 
     async fn running(&mut self) {
-        Timer::after_secs(1).await;
+        let current_step = &PROFILES[self.profile_index].steps[self.current_step_index];
+        let elapsed = Instant::now() - self.current_step_start_time;
+        if elapsed.as_secs() >= current_step.time as u64 {
+            // Move to next step
+            self.current_step_index += 1;
+            if self.current_step_index >= PROFILES[self.profile_index].steps.len() {
+                // Profile complete
+                self.exit_running_state().await;
+                return;
+            }
+            self.current_step_start_time = Instant::now();
+            let next_step = &PROFILES[self.profile_index].steps[self.current_step_index];
+            self.step_time_remaining = next_step.time;
+            self.target_temperature = next_step.end_temperature;
+        } else {
+            self.step_time_remaining = current_step.time.saturating_sub(elapsed.as_secs() as u32);
+        }
+
+        self.heater_power =
+            self.pid_controller
+                .update(self.target_temperature, self.current_temperature) as u8;
+    }
+
+    async fn exit_running_state(&mut self) {
+        self.status = Status::Idle;
+        self.heater_power = 0;
+        self.fan = false;
+        self.light = false;
+        self.target_temperature = 0.0;
     }
 
     async fn error(&mut self) {
-        Timer::after_secs(1).await;
+        self.heater_power = 0;
+        self.fan = false;
+        self.light = false;
+        self.target_temperature = 0.0;
+        OUTPUT_COMMAND_CHANNEL
+            .sender()
+            .send(OutputCommand::SetStartButtonLight(crate::LedState::Blink(200, 200)))
+            .await;
     }
 
     fn send_state(&mut self) {
-        let snd = CURRENT_STATE.sender();
         let state = ReflowControllerState {
             status: self.status.clone(),
             target_temperature: self.target_temperature,
@@ -122,7 +154,7 @@ impl ReflowController {
             current_profile: self.profile_index as u8,
             current_step: self.current_step_index as u8,
         };
-        snd.send(state);
+        CURRENT_STATE.sender().send(state);
     }
 
     async fn handle_event(&mut self, event: InputEvent) {
@@ -135,16 +167,20 @@ impl ReflowController {
                 defmt::info!("Button Two Pressed");
                 // Handle button two press
             }
-            InputEvent::ButtonXPressed => {
-                defmt::info!("Start Button Pressed");
-                self.status = Status::Running;
+            InputEvent::StartButtonPressed => {
+                if self.status == Status::Idle && self.door_closed {
+                    self.enter_running_state().await;
+                }
             }
             InputEvent::ButtonYPressed => {
-                defmt::info!("Button Y Pressed");
+                self.status = Status::Idle;
+                self.heater_power = 0;
+                self.fan = false;
+                self.light = false;
+                self.target_temperature = 0.0;
                 // Handle button Y press
             }
             InputEvent::DoorOpened => {
-                defmt::info!("Door Opened");
                 self.door_closed = false;
                 if self.status == Status::Running {
                     self.status = Status::Error;
@@ -155,14 +191,18 @@ impl ReflowController {
                 }
             }
             InputEvent::DoorClosed => {
-                defmt::info!("Door Closed");
                 self.door_closed = true;
             }
-            _ => {}
         }
     }
 
     async fn handle_new_temperature(&mut self, new_temperature: f32) {
         self.current_temperature = new_temperature;
     }
+}
+
+#[embassy_executor::task]
+pub async fn controller_task() {
+    let mut controller = ReflowController::new();
+    controller.run().await;
 }

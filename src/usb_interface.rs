@@ -6,7 +6,7 @@ use embassy_rp::usb::{Driver, InterruptHandler};
 use embassy_usb_logger::ReceiverHandler;
 use heapless::String;
 
-use crate::reflow_controller::{ReflowControllerState, CURRENT_STATE};
+use crate::{ReflowControllerState, CURRENT_STATE};
 use crate::USBResources;
 use core::str;
 use defmt::unwrap;
@@ -19,7 +19,7 @@ bind_interrupts!(struct Irqs {
     USBCTRL_IRQ => InterruptHandler<USB>;
 });
 
-use serde_json_core::{de::from_str, ser::to_string};
+use serde_json_core::{ser::to_string};
 
 pub fn to_json_heapless(msg: &ReflowControllerState) -> String<1024> {
     // Writes JSON into your buffer; returns (&str, usize)

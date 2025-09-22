@@ -1,12 +1,9 @@
 use core::fmt;
-use defmt::{info, Format};
 use embedded_hal_async::i2c::I2c;
 
-#[cfg(feature = "defmt")]
-use defmt::{debug, trace, warn};
 
 /// MCP9600 I2C default address base
-pub const MCP9600_I2C_BASE_ADDR: u8 = 0x60;
+pub const MCP9600_I2C_BASE_ADDR: u8 = 0x67;
 
 /// MCP9600 Register addresses
 mod reg {
@@ -20,7 +17,6 @@ mod reg {
 
 /// MCP9600 Device ID and revision
 const DEVICE_ID: u8 = 0x40;
-const DEVICE_REV: u8 = 0x20;
 
 /// Scaling factor for temperature registers (°C/LSB)
 const TEMP_SCALE: f32 = 0.0625;
@@ -65,42 +61,45 @@ impl<I2cE: fmt::Debug> fmt::Display for Error<I2cE> {
         }
     }
 }
-
 /// MCP9600 driver
-pub struct Mcp9600 {
+pub struct Mcp9600<I2C, E>
+where
+    I2C: I2c<Error = E>,
+{
     addr: u8,
+    i2c: I2C,
 }
 
-impl Mcp9600 {
+impl<I2C, E> Mcp9600<I2C, E>
+where
+    I2C: I2c<Error = E>,
+{
     /// Create a new MCP9600 driver instance
-    pub const fn new(addr: u8) -> Self {
-        Self { addr }
+    pub fn new(i2c_device: I2C) -> Self {
+        Self {
+            addr: MCP9600_I2C_BASE_ADDR,
+            i2c: i2c_device,
+        }
     }
 
     /// Initialize the sensor: verify ID, set K-type, continuous mode, defaults
-    pub async fn init<I2C, E>(&self, i2c: &mut I2C) -> Result<(), Error<E>>
-    where
-        I2C: I2c<Error = E> + core::marker::Send,
-    {
-        #[cfg(feature = "defmt")]
-        debug!("MCP9600: init()");
+    pub async fn init(&mut self) -> Result<(), Error<E>> {
 
         // read the device ID and revision number
-        let (id, rev) = self.read_id_revision(i2c).await?;
+        let (_id, _rev) = self.read_id_revision().await?;
         let config = 0x01;
-        i2c.write(self.addr, &[reg::CONFIG, config])
+        self.i2c
+            .write(self.addr, &[reg::CONFIG, config])
             .await
             .map_err(Error::I2c)?;
 
         Ok(())
     }
 
-    pub async fn read_id_revision<I2C, E>(&self, i2c: &mut I2C) -> Result<(u8, u8), Error<E>>
-    where
-        I2C: I2c<Error = E> + core::marker::Send,
-    {
+    pub async fn read_id_revision(&mut self) -> Result<(u8, u8), Error<E>> {
         let mut buf = [0u8; 2];
-        i2c.write_read(self.addr, &[reg::DEVICE_ID], &mut buf)
+        self.i2c
+            .write_read(self.addr, &[reg::DEVICE_ID], &mut buf)
             .await
             .map_err(Error::I2c)?;
         if (buf[0]) != DEVICE_ID {
@@ -110,40 +109,29 @@ impl Mcp9600 {
     }
 
     /// Read hot-junction temperature (TH)
-    pub async fn read_hot_c<I2C, E>(&self, i2c: &mut I2C) -> Result<f32, Error<E>>
-    where
-        I2C: I2c<Error = E> + core::marker::Send,
-    {
-        let raw = self.read_temp16(i2c, reg::TH).await?;
+    pub async fn read_hot_c(&mut self) -> Result<f32, Error<E>> {
+        let raw = self.read_temp16(reg::TH).await?;
         Ok(raw as f32 * TEMP_SCALE)
     }
 
     /// Read cold-junction temperature (TC)
-    pub async fn read_cold_c<I2C, E>(&self, i2c: &mut I2C) -> Result<f32, Error<E>>
-    where
-        I2C: I2c<Error = E> + core::marker::Send,
-    {
-        let raw = self.read_temp16(i2c, reg::TC).await?;
+    pub async fn read_cold_c(&mut self) -> Result<f32, Error<E>> {
+        let raw = self.read_temp16(reg::TC).await?;
         Ok(raw as f32 * TEMP_SCALE)
     }
 
     /// Read temperature delta (TΔ)
-    pub async fn read_delta_c<I2C, E>(&self, i2c: &mut I2C) -> Result<f32, Error<E>>
-    where
-        I2C: I2c<Error = E> + core::marker::Send,
-    {
-        let raw = self.read_temp16(i2c, reg::TD).await?;
+    pub async fn read_delta_c(&mut self) -> Result<f32, Error<E>> {
+        let raw = self.read_temp16(reg::TD).await?;
         Ok(raw as f32 * TEMP_SCALE)
     }
 
     /// Read all three temperatures (TH, TC, TΔ)
-    pub async fn read_all_c<I2C, E>(&self, i2c: &mut I2C) -> Result<Temps, Error<E>>
-    where
-        I2C: I2c<Error = E> + core::marker::Send,
-    {
+    pub async fn read_all_c(&mut self) -> Result<Temps, Error<E>> {
         // If allowed, read all 6 bytes in one go
         let mut buf = [0u8; 6];
-        i2c.write_read(self.addr, &[reg::TH], &mut buf)
+        self.i2c
+            .write_read(self.addr, &[reg::TH], &mut buf)
             .await
             .map_err(Error::I2c)?;
         let th = Self::parse_temp16(&buf[0..2]).ok_or(Error::DataFormat)?;
@@ -157,24 +145,20 @@ impl Mcp9600 {
     }
 
     /// Read sensor status/fault flags
-    pub async fn read_status<I2C, E>(&self, i2c: &mut I2C) -> Result<SensorFault, Error<E>>
-    where
-        I2C: I2c<Error = E> + core::marker::Send,
-    {
+    pub async fn read_status(&mut self) -> Result<SensorFault, Error<E>> {
         let mut buf = [0u8; 1];
-        i2c.write_read(self.addr, &[reg::STATUS], &mut buf)
+        self.i2c
+            .write_read(self.addr, &[reg::STATUS], &mut buf)
             .await
             .map_err(Error::I2c)?;
         Ok(SensorFault::from_bits_truncate(buf[0]))
     }
 
     /// Read and parse a 16-bit signed temperature register
-    async fn read_temp16<I2C, E>(&self, i2c: &mut I2C, reg: u8) -> Result<i16, Error<E>>
-    where
-        I2C: I2c<Error = E> + core::marker::Send,
-    {
+    async fn read_temp16(&mut self, reg: u8) -> Result<i16, Error<E>> {
         let mut buf = [0u8; 2];
-        i2c.write_read(self.addr, &[reg], &mut buf)
+        self.i2c
+            .write_read(self.addr, &[reg], &mut buf)
             .await
             .map_err(Error::I2c)?;
         Self::parse_temp16(&buf).ok_or(Error::DataFormat)
