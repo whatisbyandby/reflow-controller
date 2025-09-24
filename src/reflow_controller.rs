@@ -1,13 +1,15 @@
+use defmt::info;
 use embassy_time::{Duration, Instant, Timer};
+use heapless::String;
 use {defmt_rtt as _, panic_probe as _};
 
-use crate::temperature_sensor::CURRENT_TEMPERATURE;
 use crate::{
     pid::PidController,
-    profile::{Profile, DEFAULT_PROFILE},
+    profile::{Profile, StepName, DEFAULT_PROFILE},
 };
+use crate::{temperature_sensor::CURRENT_TEMPERATURE, HEATER_POWER};
 use crate::{
-    InputEvent, OutputCommand, ReflowControllerState, Status, CURRENT_STATE, INPUT_EVENT_CHANNEL,
+    Event, OutputCommand, ReflowControllerState, Status, CURRENT_STATE, INPUT_EVENT_CHANNEL,
     OUTPUT_COMMAND_CHANNEL,
 };
 
@@ -21,10 +23,9 @@ pub struct ReflowController {
     profile: Profile,
     current_step_index: usize,
     status: Status,
-    step_start_time: Instant,
     profile_start_time: Instant,
-    step_time_remaining: u32,
     pid_controller: PidController,
+    error_message: String<256>,
 }
 
 impl ReflowController {
@@ -39,10 +40,9 @@ impl ReflowController {
             profile: DEFAULT_PROFILE.clone(),
             current_step_index: 0,
             status: Status::Initializing,
-            step_start_time: Instant::now(),
             profile_start_time: Instant::now(),
-            step_time_remaining: 0,
             pid_controller: PidController::new(2.0, 0.5, 0.0, 0.1),
+            error_message: String::new(),
         }
     }
 
@@ -64,11 +64,11 @@ impl ReflowController {
                 Status::Idle => self.idle().await,
                 Status::Running => self.running().await,
                 Status::Error => self.error().await,
+                Status::Finished => self.finished().await,
             }
-            let heater_sender = crate::HEATER_COMMAND_CHANNEL.sender();
-            heater_sender.send(self.heater_power as u8).await;
+            HEATER_POWER.sender().send(self.heater_power);
             self.send_state();
-            Timer::after(Duration::from_millis(100)).await;
+            Timer::after(Duration::from_millis(1000)).await;
         }
     }
 
@@ -91,39 +91,67 @@ impl ReflowController {
         }
     }
 
+    async fn enter_finished_state(&mut self) {
+        self.status = Status::Finished;
+        self.heater_power = 0;
+        self.fan = true;
+        self.light = false;
+        self.target_temperature = 0.0;
+        OUTPUT_COMMAND_CHANNEL
+            .sender()
+            .send(OutputCommand::SetStartButtonLight(crate::LedState::Blink(
+                100, 100,
+            )))
+            .await;
+    }
+
+    async fn finished(&mut self) {
+        // Wait for user to reset
+        Timer::after_secs(1).await;
+    }
+
+    async fn exit_finished_state(&mut self) {
+        self.status = Status::Idle;
+        self.heater_power = 0;
+        self.fan = false;
+        self.light = false;
+        self.target_temperature = 0.0;
+        OUTPUT_COMMAND_CHANNEL
+            .sender()
+            .send(OutputCommand::SetStartButtonLight(crate::LedState::LedOn))
+            .await;
+    }
+
     async fn enter_running_state(&mut self) {
         self.status = Status::Running;
         self.profile_start_time = Instant::now();
-        self.step_start_time = Instant::now();
         self.current_step_index = 0;
-        self.step_time_remaining = self.profile.steps[self.current_step_index].time;
-        self.target_temperature = self.profile.steps[self.current_step_index].set_temperature;
+        self.update_setpoint();
+        self.pid_controller.reset();
+    }
+
+    fn step_completed(&self) -> bool {
+        let step = &self.profile.steps[self.current_step_index];
+        if step.step_name == StepName::Cooling {
+            return self.current_temperature <= step.set_temperature;
+        }
+        return self.current_temperature >= step.set_temperature;
     }
 
     async fn running(&mut self) {
-        let current_step = &self.profile.steps[self.current_step_index];
-
         // Check if we've reached the target temperature for the current step
-        if self.current_temperature >= current_step.set_temperature {
-            // Move to the next step if there is one
+        self.update_setpoint();
+        if self.step_completed() {
+            // Move to the next step if available
             if self.current_step_index + 1 < self.profile.steps.len() {
                 self.current_step_index += 1;
-                self.step_start_time = Instant::now();
-                self.step_time_remaining = self.profile.steps[self.current_step_index].time;
-                self.target_temperature =
-                    self.profile.steps[self.current_step_index].set_temperature;
+                self.update_setpoint();
+                self.pid_controller.reset();
             } else {
-                // Profile complete
+                // Completed all steps
                 self.exit_running_state().await;
+                self.enter_finished_state().await;
                 return;
-            }
-        } else {
-            // Update remaining time for the current step
-            let elapsed = Instant::now() - self.step_start_time;
-            if elapsed.as_secs() < current_step.time as u64 {
-                self.step_time_remaining = current_step.time - elapsed.as_secs() as u32;
-            } else {
-                self.step_time_remaining = 0;
             }
         }
         self.heater_power =
@@ -132,6 +160,29 @@ impl ReflowController {
     }
 
     async fn exit_running_state(&mut self) {
+        self.heater_power = 0;
+        self.fan = false;
+        self.light = false;
+        self.target_temperature = 0.0;
+    }
+
+    async fn enter_error_state(&mut self, message: &str) {
+        self.error_message.clear();
+        let _ = self.error_message.push_str(message);
+        self.status = Status::Error;
+        self.heater_power = 0;
+        self.fan = false;
+        self.light = false;
+        self.target_temperature = 0.0;
+        OUTPUT_COMMAND_CHANNEL
+            .sender()
+            .send(OutputCommand::SetStartButtonLight(crate::LedState::Blink(
+                200, 200,
+            )))
+            .await;
+    }
+
+    fn enter_idle_state(&mut self) {
         self.status = Status::Idle;
         self.heater_power = 0;
         self.fan = false;
@@ -152,6 +203,15 @@ impl ReflowController {
             .await;
     }
 
+    fn exit_error_state(&mut self) {
+        self.status = Status::Idle;
+        self.heater_power = 0;
+        self.fan = false;
+        self.light = false;
+        self.target_temperature = 0.0;
+        self.error_message.clear();
+    }
+
     fn send_state(&mut self) {
         let state = ReflowControllerState {
             status: self.status.clone(),
@@ -161,65 +221,85 @@ impl ReflowController {
             fan: self.fan,
             light: self.light,
             heater_power: self.heater_power,
-            total_time_remaining: 0,
-            step_time_remaining: self.step_time_remaining,
+            timer: if self.status == Status::Running {
+                self.profile_start_time.elapsed().as_secs() as u32
+            } else {
+                0
+            },
             current_profile: self.profile.name,
-            current_step: self.profile.steps[self.current_step_index].name,
+            current_step: self.profile.steps[self.current_step_index]
+                .step_name
+                .to_str(),
+            error_message: self.error_message.clone(),
         };
         CURRENT_STATE.sender().send(state);
     }
 
-    async fn handle_event(&mut self, event: InputEvent) {
-        match event {
-            InputEvent::ButtonAPressed => {
-                defmt::info!("Button A Pressed");
-                if self.status != Status::Idle {
-                    return;
-                }
+    fn update_setpoint(&mut self) {
+        #[cfg(feature = "ramp_setpoint")]
+        {
+            if self.target_temperature == 0.0 {
+                self.target_temperature = self.current_temperature;
+            }
 
-                self.current_step_index += 1;
-                if self.current_step_index >= self.profile.steps.len() {
-                    self.current_step_index = 0;
-                }
+            let step_temperature = self.profile.steps[self.current_step_index].set_temperature;
+            let difference = step_temperature - self.current_temperature;
+            let set_temp_diff = self.profile.steps[self.current_step_index].set_temperature
+                - self.target_temperature;
+            let time_remaining = self.profile.steps[self.current_step_index]
+                .target_time
+                .saturating_sub(self.profile_start_time.elapsed().as_secs() as u32);
+            if time_remaining > 0 && set_temp_diff > 0.0 {
+                let adjustment = difference / time_remaining as f32;
+                self.target_temperature = self.target_temperature + adjustment;
+            } else {
+                self.target_temperature = step_temperature;
             }
-            InputEvent::ButtonBPressed => {
-                if self.status != Status::Idle {
-                    return;
-                }
-                if self.current_step_index == 0 {
-                    self.current_step_index = self.profile.steps.len() - 1;
-                }
-            }
-            InputEvent::ButtonXPressed => {
-                if self.status != Status::Idle {
-                    return;
-                }
-                self.profile.steps[self.current_step_index].set_temperature += 1.0;
-            }
-            InputEvent::ButtonYPressed => {
-                if self.status != Status::Idle {
-                    return;
-                }
-                self.profile.steps[self.current_step_index].set_temperature -= 1.0;
-                // Handle button Y press
-            }
-            InputEvent::StartButtonPressed => {
+        }
+
+        #[cfg(not(feature = "ramp_setpoint"))]
+        {
+            self.target_temperature = self.profile.steps[self.current_step_index].set_temperature;
+        }
+    }
+
+    async fn handle_event(&mut self, event: Event) {
+        match event {
+            Event::StartCommand => {
                 if self.status == Status::Idle && self.door_closed {
+                    info!("Starting reflow process");
                     self.enter_running_state().await;
+                } else {
+                    info!("Cannot start: either not idle or door is open");
                 }
             }
-            InputEvent::DoorOpened => {
-                self.door_closed = false;
+            Event::StopCommand => {
                 if self.status == Status::Running {
-                    self.status = Status::Error;
-                    self.heater_power = 0;
-                    self.fan = false;
-                    self.light = false;
-                    self.target_temperature = 0.0;
+                    info!("Stopping reflow process");
+                    self.exit_running_state().await;
+                    self.enter_idle_state();
                 }
             }
-            InputEvent::DoorClosed => {
-                self.door_closed = true;
+            Event::ResetCommand => {
+                if self.status == Status::Finished {
+                    info!("Resetting to idle state");
+                    self.exit_finished_state().await;
+                }
+                if self.status == Status::Error {
+                    info!("Resetting from error state to idle");
+                    self.exit_error_state();
+                }
+            }
+            Event::DoorStateChanged(closed) => {
+                self.door_closed = closed;
+                if !closed && self.status == Status::Running {
+                    if self.profile.steps[self.current_step_index].step_name != StepName::Cooling {
+                        info!("Door opened while running, entering error state");
+                        self.enter_error_state("Door opened while running!").await;
+                    } else {
+                        info!("Door opened during cooling step, stopping reflow process");
+                    }
+                }
             }
         }
     }

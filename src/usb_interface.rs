@@ -6,8 +6,8 @@ use embassy_rp::usb::{Driver, InterruptHandler};
 use embassy_usb_logger::ReceiverHandler;
 use heapless::String;
 
-use crate::{ReflowControllerState, CURRENT_STATE};
-use crate::USBResources;
+use crate::{Event, USBResources};
+use crate::{ReflowControllerState, CURRENT_STATE, INPUT_EVENT_CHANNEL};
 use core::str;
 use defmt::unwrap;
 use embassy_executor::Spawner;
@@ -19,7 +19,7 @@ bind_interrupts!(struct Irqs {
     USBCTRL_IRQ => InterruptHandler<USB>;
 });
 
-use serde_json_core::{ser::to_string};
+use serde_json_core::ser::to_string;
 
 pub fn to_json_heapless(msg: &ReflowControllerState) -> String<1024> {
     // Writes JSON into your buffer; returns (&str, usize)
@@ -33,13 +33,32 @@ impl ReceiverHandler for Handler {
     async fn handle_data(&self, data: &[u8]) {
         if let Ok(data) = str::from_utf8(data) {
             let data = data.trim();
-
-            // If you are using elf2uf2-term with the '-t' flag, then when closing the serial monitor,
-            // this will automatically put the pico into boot mode
-            if data == "q" || data == "elf2uf2-term" {
-                reset_to_usb_boot(0, 0); // Restart the chip
-            } else {
-                defmt::warn!("Unknown command: {}", data);
+            match data {
+                "q" => {
+                    reset_to_usb_boot(0, 0);
+                }
+                "START" => {
+                    INPUT_EVENT_CHANNEL
+                        .sender()
+                        .try_send(Event::StartCommand)
+                        .unwrap();
+                }
+                // Add more commands here
+                "STOP" => {
+                    INPUT_EVENT_CHANNEL
+                        .sender()
+                        .try_send(Event::StopCommand)
+                        .unwrap();
+                }
+                "RESET" => {
+                    INPUT_EVENT_CHANNEL
+                        .sender()
+                        .try_send(Event::ResetCommand)
+                        .unwrap();
+                }
+                _ => {
+                    defmt::warn!("Unknown command: {}", data);
+                }
             }
         }
     }

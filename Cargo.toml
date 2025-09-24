@@ -3,6 +3,10 @@ name = "reflow-controller"
 version = "0.1.0"
 edition = "2021"
 
+[features]
+ramp_setpoint = []
+mock_temperature_sensor = []
+
 
 [dependencies]
 embassy-embedded-hal = { version = "0.5.0", path = "../embassy/embassy-embedded-hal", features = [

@@ -2,8 +2,8 @@
 
 pub mod heater;
 pub mod inputs;
-pub mod outputs;
 pub mod mcp9600;
+pub mod outputs;
 pub mod pid;
 pub mod profile;
 pub mod reflow_controller;
@@ -29,14 +29,11 @@ use serde::{Deserialize, Serialize};
 pub type I2c0Bus = Mutex<NoopRawMutex, I2c<'static, I2C0, i2c::Async>>;
 
 #[derive(Debug, PartialEq, Serialize, Deserialize, Format)]
-pub enum InputEvent {
-    ButtonAPressed,
-    ButtonBPressed,
-    ButtonXPressed,
-    ButtonYPressed,
-    StartButtonPressed,
-    DoorOpened,
-    DoorClosed,
+pub enum Event {
+    StartCommand,
+    StopCommand,
+    ResetCommand,
+    DoorStateChanged(bool), // true = closed, false = opened
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
@@ -54,9 +51,10 @@ pub enum OutputCommand {
     SetStartButtonLight(LedState),
 }
 
-pub static INPUT_EVENT_CHANNEL: Channel<CriticalSectionRawMutex, InputEvent, 3> = Channel::new();
-pub static OUTPUT_COMMAND_CHANNEL: Channel<CriticalSectionRawMutex, OutputCommand, 3> = Channel::new();
-pub static HEATER_COMMAND_CHANNEL: Channel<CriticalSectionRawMutex, u8, 3> = Channel::new();
+pub static INPUT_EVENT_CHANNEL: Channel<CriticalSectionRawMutex, Event, 3> = Channel::new();
+pub static OUTPUT_COMMAND_CHANNEL: Channel<CriticalSectionRawMutex, OutputCommand, 3> =
+    Channel::new();
+pub static HEATER_POWER: Watch<CriticalSectionRawMutex, u8, 2> = Watch::new();
 pub static CURRENT_STATE: Watch<CriticalSectionRawMutex, ReflowControllerState, 3> = Watch::new();
 
 #[derive(Debug, Clone, PartialEq, Format, Serialize, Deserialize)]
@@ -64,10 +62,11 @@ pub enum Status {
     Initializing,
     Idle,
     Running,
+    Finished,
     Error,
 }
 
-#[derive(Debug, Clone, Format, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ReflowControllerState {
     pub status: Status,
     pub target_temperature: f32,
@@ -76,10 +75,10 @@ pub struct ReflowControllerState {
     pub fan: bool,
     pub light: bool,
     pub heater_power: u8, // value between 0 and 100
-    pub total_time_remaining: u32,
-    pub step_time_remaining: u32,
+    pub timer: u32,
     pub current_step: &'static str,
     pub current_profile: &'static str,
+    pub error_message: heapless::String<256>,
 }
 
 assign_resources! {
@@ -89,6 +88,7 @@ assign_resources! {
         button_x: PIN_14,
         button_y: PIN_15,
         door_switch: PIN_4,
+        start_button: PIN_5,
     },
     outputs: OutputResources {
         fan: PIN_17,
