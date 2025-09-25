@@ -6,6 +6,7 @@ use {defmt_rtt as _, panic_probe as _};
 use crate::{
     pid::PidController,
     profile::{Profile, StepName, DEFAULT_PROFILE},
+    HeaterCommand,
 };
 use crate::{temperature_sensor::CURRENT_TEMPERATURE, HEATER_POWER};
 use crate::{
@@ -31,7 +32,7 @@ pub struct ReflowController {
 impl ReflowController {
     pub fn new() -> Self {
         Self {
-            target_temperature: 0.0,
+            target_temperature: -100.0,
             current_temperature: -100.0,
             door_closed: false,
             fan: false,
@@ -66,15 +67,30 @@ impl ReflowController {
                 Status::Error => self.error().await,
                 Status::Finished => self.finished().await,
             }
-            HEATER_POWER.sender().send(self.heater_power);
+            let heater_sender = HEATER_POWER.sender();
+            heater_sender.send(HeaterCommand::SetFan(self.fan)).await;
+            heater_sender
+                .send(crate::HeaterCommand::SetPower(self.heater_power))
+                .await;
             self.send_state();
+            if self.profile_start_time.elapsed().as_secs() as u32 > 500 {
+                self.exit_finished_state().await;
+            }
             Timer::after(Duration::from_millis(1000)).await;
         }
     }
 
     async fn init(&mut self) {
         Timer::after_secs(1).await;
+        self.enter_idle_state();
+    }
+
+    fn enter_idle_state(&mut self) {
         self.status = Status::Idle;
+        self.heater_power = 0;
+        self.fan = false;
+        self.light = false;
+        self.target_temperature = 25.0;
     }
 
     async fn idle(&mut self) {
@@ -96,11 +112,11 @@ impl ReflowController {
         self.heater_power = 0;
         self.fan = true;
         self.light = false;
-        self.target_temperature = 0.0;
+        self.target_temperature = 25.0;
         OUTPUT_COMMAND_CHANNEL
             .sender()
             .send(OutputCommand::SetStartButtonLight(crate::LedState::Blink(
-                100, 100,
+                500, 500,
             )))
             .await;
     }
@@ -111,15 +127,7 @@ impl ReflowController {
     }
 
     async fn exit_finished_state(&mut self) {
-        self.status = Status::Idle;
-        self.heater_power = 0;
-        self.fan = false;
-        self.light = false;
-        self.target_temperature = 0.0;
-        OUTPUT_COMMAND_CHANNEL
-            .sender()
-            .send(OutputCommand::SetStartButtonLight(crate::LedState::LedOn))
-            .await;
+        self.enter_idle_state();
     }
 
     async fn enter_running_state(&mut self) {
@@ -161,9 +169,9 @@ impl ReflowController {
 
     async fn exit_running_state(&mut self) {
         self.heater_power = 0;
-        self.fan = false;
+        self.fan = true;
         self.light = false;
-        self.target_temperature = 0.0;
+        self.target_temperature = 25.0;
     }
 
     async fn enter_error_state(&mut self, message: &str) {
@@ -182,25 +190,11 @@ impl ReflowController {
             .await;
     }
 
-    fn enter_idle_state(&mut self) {
-        self.status = Status::Idle;
-        self.heater_power = 0;
-        self.fan = false;
-        self.light = false;
-        self.target_temperature = 0.0;
-    }
-
     async fn error(&mut self) {
         self.heater_power = 0;
         self.fan = false;
         self.light = false;
         self.target_temperature = 0.0;
-        OUTPUT_COMMAND_CHANNEL
-            .sender()
-            .send(OutputCommand::SetStartButtonLight(crate::LedState::Blink(
-                200, 200,
-            )))
-            .await;
     }
 
     fn exit_error_state(&mut self) {
@@ -221,10 +215,10 @@ impl ReflowController {
             fan: self.fan,
             light: self.light,
             heater_power: self.heater_power,
-            timer: if self.status == Status::Running {
-                self.profile_start_time.elapsed().as_secs() as u32
-            } else {
+            timer: if self.status == Status::Idle {
                 0
+            } else {
+                self.profile_start_time.elapsed().as_secs() as u32
             },
             current_profile: self.profile.name,
             current_step: self.profile.steps[self.current_step_index]
@@ -238,7 +232,7 @@ impl ReflowController {
     fn update_setpoint(&mut self) {
         #[cfg(feature = "ramp_setpoint")]
         {
-            if self.target_temperature == 0.0 {
+            if self.target_temperature < 26.0 {
                 self.target_temperature = self.current_temperature;
             }
 

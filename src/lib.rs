@@ -51,10 +51,16 @@ pub enum OutputCommand {
     SetStartButtonLight(LedState),
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
+pub enum HeaterCommand {
+    SetPower(u8),
+    SetFan(bool),
+}
+
 pub static INPUT_EVENT_CHANNEL: Channel<CriticalSectionRawMutex, Event, 3> = Channel::new();
 pub static OUTPUT_COMMAND_CHANNEL: Channel<CriticalSectionRawMutex, OutputCommand, 3> =
     Channel::new();
-pub static HEATER_POWER: Watch<CriticalSectionRawMutex, u8, 2> = Watch::new();
+pub static HEATER_POWER: Channel<CriticalSectionRawMutex, HeaterCommand, 2> = Channel::new();
 pub static CURRENT_STATE: Watch<CriticalSectionRawMutex, ReflowControllerState, 3> = Watch::new();
 
 #[derive(Debug, Clone, PartialEq, Format, Serialize, Deserialize)]
