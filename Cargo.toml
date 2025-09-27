@@ -64,3 +64,7 @@ heapless = { version = "0.8", features = ["serde"] }
 # Option B: JSON in no_std (writes into a fixed buffer you provide)
 serde-json-core = "0.6"
 embedded-hal-async = "1.0.0"
+
+# SD card support - will be added when hardware integration is ready
+# embedded-sdmmc = "0.8"
+# nb = "1.1"

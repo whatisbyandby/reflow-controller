@@ -1,13 +1,9 @@
 use heapless::{String, Vec};
-use embedded_hal_async::spi::SpiDevice;
-use embassy_embedded_hal::shared_bus::asynch::spi::SpiDevice as SharedSpiDevice;
-use defmt::{debug, error, info, warn};
+use defmt::{error, info, warn};
 
 use crate::profile::{Profile, Step, StepName};
 
-pub type SdSpi = SharedSpiDevice<embassy_rp::spi::Spi<'static, embassy_rp::spi::Blocking>, embassy_rp::gpio::Output<'static>>;
-
-#[derive(Debug)]
+#[derive(Debug, defmt::Format)]
 pub enum SdProfileError {
     SdCardError,
     FileNotFound,
@@ -17,21 +13,21 @@ pub enum SdProfileError {
 }
 
 pub struct SdProfileReader {
-    // Will be initialized when SD card support is added
-    _spi_device: Option<SdSpi>,
+    // For now, we'll keep this simple and just track if SD is initialized
+    initialized: bool,
 }
 
 impl SdProfileReader {
     pub fn new() -> Self {
         Self {
-            _spi_device: None,
+            initialized: false,
         }
     }
 
-    /// Initialize SD card interface
-    pub async fn init(&mut self, spi_device: SdSpi) -> Result<(), SdProfileError> {
-        self._spi_device = Some(spi_device);
-        info!("SD card interface initialized");
+    /// Initialize SD card interface - placeholder for now
+    pub async fn init(&mut self) -> Result<(), SdProfileError> {
+        self.initialized = true;
+        info!("SD card interface initialized (mock)");
         Ok(())
     }
 
@@ -39,9 +35,19 @@ impl SdProfileReader {
     pub async fn list_profiles(&self) -> Result<Vec<String<64>, 16>, SdProfileError> {
         // For now, return a mock list - will be implemented when SD card support is added
         let mut profiles = Vec::new();
-        let _ = profiles.push(String::from("lead_free.txt"));
-        let _ = profiles.push(String::from("leaded.txt"));
-        let _ = profiles.push(String::from("low_temp.txt"));
+
+        let mut profile1 = String::new();
+        let _ = profile1.push_str("lead_free.txt");
+        let _ = profiles.push(profile1);
+
+        let mut profile2 = String::new();
+        let _ = profile2.push_str("leaded.txt");
+        let _ = profiles.push(profile2);
+
+        let mut profile3 = String::new();
+        let _ = profile3.push_str("low_temp.txt");
+        let _ = profiles.push(profile3);
+
         Ok(profiles)
     }
 
@@ -85,18 +91,18 @@ impl SdProfileReader {
             }
 
             // Parse step: step_name,temperature,time
-            let parts: Vec<&str> = line.split(',').collect();
+            let parts: heapless::Vec<&str, 3> = line.split(',').collect();
             if parts.len() != 3 {
                 warn!("Invalid line format: {}", line);
                 continue;
             }
 
-            let step_name = match parts[0].trim().to_lowercase().as_str() {
-                "preheat" => StepName::Preheat,
-                "soak" => StepName::Soak,
-                "ramp" => StepName::Ramp,
-                "reflow" => StepName::Reflow,
-                "cooling" => StepName::Cooling,
+            let step_name = match parts[0].trim() {
+                "preheat" | "Preheat" | "PREHEAT" => StepName::Preheat,
+                "soak" | "Soak" | "SOAK" => StepName::Soak,
+                "ramp" | "Ramp" | "RAMP" => StepName::Ramp,
+                "reflow" | "Reflow" | "REFLOW" => StepName::Reflow,
+                "cooling" | "Cooling" | "COOLING" => StepName::Cooling,
                 _ => {
                     warn!("Unknown step name: {}", parts[0]);
                     continue;
@@ -141,25 +147,30 @@ impl SdProfileReader {
             steps[4].clone(),
         ];
 
-        // Since we can't store dynamic strings in the Profile struct (it uses &'static str),
-        // we'll need to use a predefined name or modify the Profile struct
-        let static_name = match name {
-            "lead_free.txt" => "Lead Free",
-            "leaded.txt" => "Leaded",
-            "low_temp.txt" => "Low Temperature",
-            _ => "Custom Profile",
-        };
+        // Use the parsed profile name or default based on filename
+        if profile_name.is_empty() {
+            let default_name = match name {
+                "lead_free.txt" => "Lead Free",
+                "leaded.txt" => "Leaded",
+                "low_temp.txt" => "Low Temperature",
+                _ => "Custom Profile",
+            };
+            let _ = profile_name.push_str(default_name);
+        }
 
         Ok(Profile {
-            name: static_name,
+            name: profile_name,
             steps: steps_array,
         })
     }
 
     // Mock profiles for testing
     fn create_lead_free_profile(&self) -> Profile {
+        let mut name = heapless::String::new();
+        let _ = name.push_str("Lead Free");
+
         Profile {
-            name: "Lead Free",
+            name,
             steps: [
                 Step {
                     step_name: StepName::Preheat,
@@ -174,7 +185,7 @@ impl SdProfileReader {
                 Step {
                     step_name: StepName::Ramp,
                     set_temperature: 217.0,
-                    target_time: 150,
+                    target_time: 210,
                 },
                 Step {
                     step_name: StepName::Reflow,
@@ -191,8 +202,11 @@ impl SdProfileReader {
     }
 
     fn create_leaded_profile(&self) -> Profile {
+        let mut name = heapless::String::new();
+        let _ = name.push_str("Leaded");
+
         Profile {
-            name: "Leaded",
+            name,
             steps: [
                 Step {
                     step_name: StepName::Preheat,
@@ -202,30 +216,33 @@ impl SdProfileReader {
                 Step {
                     step_name: StepName::Soak,
                     set_temperature: 150.0,
-                    target_time: 120,
+                    target_time: 150,
                 },
                 Step {
                     step_name: StepName::Ramp,
                     set_temperature: 183.0,
-                    target_time: 120,
+                    target_time: 180,
                 },
                 Step {
                     step_name: StepName::Reflow,
                     set_temperature: 215.0,
-                    target_time: 180,
+                    target_time: 210,
                 },
                 Step {
                     step_name: StepName::Cooling,
                     set_temperature: 183.0,
-                    target_time: 240,
+                    target_time: 270,
                 },
             ],
         }
     }
 
     fn create_low_temp_profile(&self) -> Profile {
+        let mut name = heapless::String::new();
+        let _ = name.push_str("Low Temperature");
+
         Profile {
-            name: "Low Temperature",
+            name,
             steps: [
                 Step {
                     step_name: StepName::Preheat,
@@ -235,36 +252,24 @@ impl SdProfileReader {
                 Step {
                     step_name: StepName::Soak,
                     set_temperature: 120.0,
-                    target_time: 90,
+                    target_time: 105,
                 },
                 Step {
                     step_name: StepName::Ramp,
                     set_temperature: 150.0,
-                    target_time: 90,
+                    target_time: 135,
                 },
                 Step {
                     step_name: StepName::Reflow,
                     set_temperature: 180.0,
-                    target_time: 120,
+                    target_time: 165,
                 },
                 Step {
                     step_name: StepName::Cooling,
                     set_temperature: 150.0,
-                    target_time: 180,
+                    target_time: 225,
                 },
             ],
         }
     }
 }
-
-/// Example profile file format:
-/// ```
-/// # Lead-free reflow profile
-/// name: Lead Free SAC305
-/// # Format: step_name,temperature_celsius,time_seconds
-/// preheat,150,90
-/// soak,180,180
-/// ramp,217,150
-/// reflow,245,240
-/// cooling,217,300
-/// ```

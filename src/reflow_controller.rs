@@ -5,13 +5,14 @@ use {defmt_rtt as _, panic_probe as _};
 
 use crate::{
     pid::PidController,
-    profile::{Profile, StepName, DEFAULT_PROFILE},
+    profile::{create_default_profile, Profile, StepName},
+    sd_profile_reader::{SdProfileError, SdProfileReader},
     HeaterCommand,
 };
 use crate::{temperature_sensor::CURRENT_TEMPERATURE, HEATER_POWER};
 use crate::{
     Event, OutputCommand, ReflowControllerState, Status, CURRENT_STATE, INPUT_EVENT_CHANNEL,
-    OUTPUT_COMMAND_CHANNEL,
+    OUTPUT_COMMAND_CHANNEL, PROFILE_LIST_CHANNEL, ACTIVE_PROFILE_CHANNEL,
 };
 
 pub struct ReflowController {
@@ -27,6 +28,7 @@ pub struct ReflowController {
     profile_start_time: Instant,
     pid_controller: PidController,
     error_message: String<256>,
+    sd_reader: SdProfileReader,
 }
 
 impl ReflowController {
@@ -38,12 +40,13 @@ impl ReflowController {
             fan: false,
             light: false,
             heater_power: 0,
-            profile: DEFAULT_PROFILE.clone(),
+            profile: create_default_profile(),
             current_step_index: 0,
             status: Status::Initializing,
             profile_start_time: Instant::now(),
             pid_controller: PidController::new(2.0, 0.5, 0.0, 0.1),
             error_message: String::new(),
+            sd_reader: SdProfileReader::new(),
         }
     }
 
@@ -217,7 +220,7 @@ impl ReflowController {
             } else {
                 self.profile_start_time.elapsed().as_secs() as u32
             },
-            current_profile: self.profile.name,
+            current_profile: self.profile.name.clone(),
             current_step: self.profile.steps[self.current_step_index]
                 .step_name
                 .to_str(),
@@ -292,11 +295,71 @@ impl ReflowController {
                     }
                 }
             }
+            Event::LoadProfile(filename) => {
+                if self.status == Status::Idle {
+                    info!("Loading profile: {}", filename.as_str());
+                    match self.sd_reader.read_profile(filename.as_str()).await {
+                        Ok(profile) => {
+                            info!("Successfully loaded profile: {}", profile.name.as_str());
+                            self.profile = profile.clone();
+                            // Send active profile over USB
+                            let sender = ACTIVE_PROFILE_CHANNEL.sender();
+                            sender.send(profile).await;
+                        }
+                        Err(err) => match err {
+                            SdProfileError::FileNotFound => {
+                                self.enter_error_state("Profile file not found").await;
+                            }
+                            SdProfileError::ParseError => {
+                                self.enter_error_state("Profile parse error").await;
+                            }
+                            SdProfileError::InvalidFormat => {
+                                self.enter_error_state("Invalid profile format").await;
+                            }
+                            SdProfileError::SdCardError => {
+                                self.enter_error_state("SD card error").await;
+                            }
+                            SdProfileError::TooManyProfiles => {
+                                self.enter_error_state("Too many profiles").await;
+                            }
+                        },
+                    }
+                } else {
+                    info!("Cannot load profile: not in idle state");
+                }
+            }
+            Event::ListProfilesRequest => {
+                info!("Listing available profiles");
+                match self.get_available_profiles().await {
+                    Ok(profiles) => {
+                        let sender = PROFILE_LIST_CHANNEL.sender();
+                        sender.send(profiles).await;
+                    }
+                    Err(err) => {
+                        info!("Error listing profiles: {:?}", err);
+                        // Send empty list on error
+                        let sender = PROFILE_LIST_CHANNEL.sender();
+                        let empty_list = heapless::Vec::new();
+                        sender.send(empty_list).await;
+                    }
+                }
+            }
         }
+        self.send_state();
     }
 
     async fn handle_new_temperature(&mut self, new_temperature: f32) {
         self.current_temperature = new_temperature;
+    }
+
+    pub async fn get_available_profiles(
+        &self,
+    ) -> Result<heapless::Vec<heapless::String<64>, 16>, SdProfileError> {
+        self.sd_reader.list_profiles().await
+    }
+
+    pub async fn init_sd_card(&mut self) -> Result<(), SdProfileError> {
+        self.sd_reader.init().await
     }
 }
 

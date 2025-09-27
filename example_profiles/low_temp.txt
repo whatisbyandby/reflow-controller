@@ -1,0 +1,12 @@
+# Low temperature reflow profile
+# For sensitive components and low-temperature solder paste
+name: Low Temperature Profile
+
+# Format: step_name,temperature_celsius,time_seconds
+# Step order must be: preheat, soak, ramp, reflow, cooling
+
+preheat,80,45
+soak,120,90
+ramp,150,90
+reflow,180,120
+cooling,150,180

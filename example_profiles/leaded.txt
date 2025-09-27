@@ -1,0 +1,12 @@
+# Leaded solder reflow profile
+# This profile is suitable for traditional tin-lead solder
+name: Leaded Solder Profile
+
+# Format: step_name,temperature_celsius,time_seconds
+# Step order must be: preheat, soak, ramp, reflow, cooling
+
+preheat,100,60
+soak,150,120
+ramp,183,120
+reflow,215,180
+cooling,183,240

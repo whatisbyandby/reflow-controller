@@ -1,0 +1,12 @@
+# Lead-free SAC305 reflow profile
+# This profile is suitable for lead-free solder paste (SAC305)
+name: Lead Free SAC305
+
+# Format: step_name,temperature_celsius,time_seconds
+# Step order must be: preheat, soak, ramp, reflow, cooling
+
+preheat,150,90
+soak,180,180
+ramp,217,150
+reflow,245,240
+cooling,217,300
