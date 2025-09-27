@@ -73,9 +73,6 @@ impl ReflowController {
                 .send(crate::HeaterCommand::SetPower(self.heater_power))
                 .await;
             self.send_state();
-            if self.profile_start_time.elapsed().as_secs() as u32 > 500 {
-                self.exit_finished_state().await;
-            }
             Timer::after(Duration::from_millis(1000)).await;
         }
     }
