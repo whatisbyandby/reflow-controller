@@ -8,7 +8,7 @@ use heapless::String;
 use serde::{Serialize, Deserialize};
 
 use crate::{Event, USBResources};
-use crate::{ReflowControllerState, CURRENT_STATE, INPUT_EVENT_CHANNEL, PROFILE_LIST_CHANNEL, ACTIVE_PROFILE_CHANNEL};
+use crate::{ReflowControllerState, CURRENT_STATE, INPUT_EVENT_CHANNEL, PROFILE_LIST_CHANNEL, ACTIVE_PROFILE_CHANNEL, SYSTEM_TICK_MILLIS};
 use crate::profile::Profile;
 use core::str;
 use defmt::unwrap;
@@ -144,6 +144,6 @@ pub async fn usb_task(spawner: Spawner, r: USBResources) {
         let new_state = receiver.get().await;
         let json = to_json_heapless(&new_state);
         log::info!("{}", json);
-        Timer::after_secs(1).await;
+        Timer::after_millis(SYSTEM_TICK_MILLIS.into()).await;
     }
 }

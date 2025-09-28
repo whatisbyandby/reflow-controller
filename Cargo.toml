@@ -6,6 +6,7 @@ edition = "2021"
 [features]
 ramp_setpoint = []
 mock_temperature_sensor = []
+std = []
 
 
 [dependencies]

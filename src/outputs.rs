@@ -1,4 +1,4 @@
-use crate::{LedState, OutputCommand, OutputResources, OUTPUT_COMMAND_CHANNEL};
+use crate::{LedState, OutputCommand, OutputResources, OUTPUT_COMMAND_CHANNEL, SYSTEM_TICK_MILLIS};
 use defmt::*;
 use embassy_executor::Spawner;
 use embassy_rp::gpio::{Level, Output};
@@ -9,7 +9,7 @@ pub static LED_STATE: Watch<CriticalSectionRawMutex, LedState, 1> = Watch::new()
 
 #[embassy_executor::task]
 pub async fn output_task(spawner: Spawner, r: OutputResources) {
-    Timer::after_millis(100).await;
+    Timer::after_millis(SYSTEM_TICK_MILLIS.into()).await;
 
     let mut fan = Output::new(r.fan, Level::Low);
     let mut light = Output::new(r.light, Level::Low);

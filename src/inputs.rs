@@ -7,7 +7,7 @@ use embassy_rp::{
 };
 use embassy_time::Timer;
 
-use crate::{Event, InputResources, INPUT_EVENT_CHANNEL};
+use crate::{Event, InputResources, INPUT_EVENT_CHANNEL, SYSTEM_TICK_MILLIS};
 
 #[embassy_executor::task]
 pub async fn interface_task(spawner: Spawner, r: InputResources) {
@@ -26,7 +26,7 @@ async fn button_a_task(pin: Peri<'static, PIN_12>) -> ! {
         button.wait_for_falling_edge().await;
         defmt::info!("Button A Pressed");
         // Handle button one press
-        Timer::after_millis(100).await; // Debounce delay
+        Timer::after_millis(SYSTEM_TICK_MILLIS.into()).await; // Debounce delay
     }
 }
 
@@ -37,7 +37,7 @@ async fn button_b_task(pin: Peri<'static, PIN_13>) -> ! {
         button.wait_for_falling_edge().await;
         defmt::info!("Button B Pressed");
         // Handle button one press
-        Timer::after_millis(100).await; // Debounce delay
+        Timer::after_millis(SYSTEM_TICK_MILLIS.into()).await; // Debounce delay
     }
 }
 
@@ -47,7 +47,7 @@ async fn button_x_task(pin: Peri<'static, PIN_14>) -> ! {
     loop {
         button.wait_for_falling_edge().await;
 
-        Timer::after_millis(100).await; // Debounce delay
+        Timer::after_millis(SYSTEM_TICK_MILLIS.into()).await; // Debounce delay
     }
 }
 
@@ -59,7 +59,7 @@ async fn button_y_task(pin: Peri<'static, PIN_15>) -> ! {
         let sender = INPUT_EVENT_CHANNEL.sender();
         defmt::info!("Button Y Pressed");
         sender.send(Event::ResetCommand).await;
-        Timer::after_millis(100).await; // Debounce delay
+        Timer::after_millis(SYSTEM_TICK_MILLIS.into()).await; // Debounce delay
     }
 }
 
@@ -70,7 +70,7 @@ async fn start_button_task(pin: Peri<'static, PIN_5>) -> ! {
         button.wait_for_falling_edge().await;
         defmt::info!("Start Button Pressed");
         INPUT_EVENT_CHANNEL.sender().send(Event::StartCommand).await;
-        Timer::after_millis(100).await; // Debounce delay
+        Timer::after_millis(SYSTEM_TICK_MILLIS.into()).await; // Debounce delay
     }
 }
 
@@ -95,7 +95,7 @@ async fn door_switch_task(pin: Peri<'static, PIN_4>) -> ! {
         // Wait for a change in the door switch state
         door_switch.wait_for_any_edge().await;
         defmt::info!("Door switch state changed");
-        Timer::after_millis(500).await; // Debounce delay
+        Timer::after_millis((SYSTEM_TICK_MILLIS * 5).into()).await; // Debounce delay (500ms equivalent)
 
         let new_state = door_switch.get_level();
 

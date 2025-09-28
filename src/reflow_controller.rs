@@ -1,5 +1,5 @@
 use defmt::info;
-use embassy_time::{Duration, Instant, Timer};
+use embassy_time::{Instant, Timer};
 use heapless::String;
 use {defmt_rtt as _, panic_probe as _};
 
@@ -11,8 +11,8 @@ use crate::{
 };
 use crate::{temperature_sensor::CURRENT_TEMPERATURE, HEATER_POWER};
 use crate::{
-    Event, OutputCommand, ReflowControllerState, Status, CURRENT_STATE, INPUT_EVENT_CHANNEL,
-    OUTPUT_COMMAND_CHANNEL, PROFILE_LIST_CHANNEL, ACTIVE_PROFILE_CHANNEL,
+    Event, OutputCommand, ReflowControllerState, Status, ACTIVE_PROFILE_CHANNEL, CURRENT_STATE,
+    INPUT_EVENT_CHANNEL, OUTPUT_COMMAND_CHANNEL, PROFILE_LIST_CHANNEL, SYSTEM_TICK_MILLIS,
 };
 
 pub struct ReflowController {
@@ -26,6 +26,7 @@ pub struct ReflowController {
     current_step_index: usize,
     status: Status,
     profile_start_time: Instant,
+    step_start_time: Instant,
     pid_controller: PidController,
     error_message: String<256>,
     sd_reader: SdProfileReader,
@@ -44,7 +45,8 @@ impl ReflowController {
             current_step_index: 0,
             status: Status::Initializing,
             profile_start_time: Instant::now(),
-            pid_controller: PidController::new(2.0, 0.5, 0.0, 0.1),
+            step_start_time: Instant::now(),
+            pid_controller: PidController::new(3.0, 0.5, 0.0),
             error_message: String::new(),
             sd_reader: SdProfileReader::new(),
         }
@@ -76,12 +78,12 @@ impl ReflowController {
                 .send(crate::HeaterCommand::SetPower(self.heater_power))
                 .await;
             self.send_state();
-            Timer::after(Duration::from_millis(1000)).await;
+            Timer::after_millis((SYSTEM_TICK_MILLIS * 10).into()).await;
         }
     }
 
     async fn init(&mut self) {
-        Timer::after_secs(1).await;
+        Timer::after_millis((SYSTEM_TICK_MILLIS * 10).into()).await; // 1 second in simulation time
         self.enter_idle_state();
     }
 
@@ -116,14 +118,15 @@ impl ReflowController {
         OUTPUT_COMMAND_CHANNEL
             .sender()
             .send(OutputCommand::SetStartButtonLight(crate::LedState::Blink(
-                500, 500,
+                SYSTEM_TICK_MILLIS * 5,
+                SYSTEM_TICK_MILLIS * 5,
             )))
             .await;
     }
 
     async fn finished(&mut self) {
         // Wait for user to reset
-        Timer::after_secs(1).await;
+        Timer::after_millis((SYSTEM_TICK_MILLIS * 10).into()).await; // 1 second in simulation time
     }
 
     async fn exit_finished_state(&mut self) {
@@ -132,18 +135,25 @@ impl ReflowController {
 
     async fn enter_running_state(&mut self) {
         self.status = Status::Running;
+        self.fan = false;
         self.profile_start_time = Instant::now();
         self.current_step_index = 0;
         self.update_setpoint();
-        self.pid_controller.reset();
+        // Reset PID integral term for clean profile start
+        self.pid_controller.reset_integral();
     }
 
     fn step_completed(&self) -> bool {
         let step = &self.profile.steps[self.current_step_index];
-        if step.step_name == StepName::Cooling {
-            return self.current_temperature <= step.set_temperature;
-        }
-        return self.current_temperature >= step.set_temperature;
+        let time_elapsed =
+            (self.step_start_time.elapsed().as_millis() as u32 / SYSTEM_TICK_MILLIS) as u32;
+        let step_end_time = step.step_time;
+        let temp_reached = if step.is_cooling {
+            self.current_temperature <= step.set_temperature
+        } else {
+            self.current_temperature >= (step.set_temperature - 1.0) // Allow small overshoot margin
+        };
+        time_elapsed >= step_end_time && temp_reached
     }
 
     async fn running(&mut self) {
@@ -152,9 +162,12 @@ impl ReflowController {
         if self.step_completed() {
             // Move to the next step if available
             if self.current_step_index + 1 < self.profile.steps.len() {
+                self.fan = self.profile.steps[self.current_step_index].has_fan;
                 self.current_step_index += 1;
+                self.step_start_time = Instant::now();
                 self.update_setpoint();
-                self.pid_controller.reset();
+                // Reset PID integral term for clean step transition
+                self.pid_controller.reset_integral();
             } else {
                 // Completed all steps
                 self.exit_running_state().await;
@@ -162,9 +175,9 @@ impl ReflowController {
                 return;
             }
         }
-        self.heater_power =
-            self.pid_controller
-                .update(self.target_temperature, self.current_temperature) as u8;
+        self.heater_power = self
+            .pid_controller
+            .update(self.target_temperature, self.current_temperature);
     }
 
     async fn exit_running_state(&mut self) {
@@ -185,7 +198,8 @@ impl ReflowController {
         OUTPUT_COMMAND_CHANNEL
             .sender()
             .send(OutputCommand::SetStartButtonLight(crate::LedState::Blink(
-                200, 200,
+                SYSTEM_TICK_MILLIS * 2,
+                SYSTEM_TICK_MILLIS * 2,
             )))
             .await;
     }
@@ -218,7 +232,7 @@ impl ReflowController {
             timer: if self.status == Status::Idle {
                 0
             } else {
-                self.profile_start_time.elapsed().as_secs() as u32
+                self.profile_start_time.elapsed().as_millis() as u32 / SYSTEM_TICK_MILLIS
             },
             current_profile: self.profile.name.clone(),
             current_step: self.profile.steps[self.current_step_index]
@@ -343,6 +357,20 @@ impl ReflowController {
                         sender.send(empty_list).await;
                     }
                 }
+            }
+            Event::SimulationReset => {
+                info!("Triggering simulation reset");
+                let heater_sender = HEATER_POWER.sender();
+                heater_sender.send(HeaterCommand::SimulationReset).await;
+            }
+            Event::UpdatePidParameters { kp, ki, kd } => {
+                info!("Updating PID parameters: Kp={}, Ki={}, Kd={}", kp, ki, kd);
+                // Update PID controller parameters with integral reset for stability
+                self.pid_controller.update_parameters(kp, ki, kd, true);
+
+                // Also send to heater task for logging (though it doesn't use PID directly)
+                let heater_sender = HEATER_POWER.sender();
+                heater_sender.send(HeaterCommand::UpdatePidParameters { kp, ki, kd }).await;
             }
         }
         self.send_state();

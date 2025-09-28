@@ -1,5 +1,5 @@
-use heapless::{String, Vec};
 use defmt::{error, info, warn};
+use heapless::{String, Vec};
 
 use crate::profile::{Profile, Step, StepName};
 
@@ -19,9 +19,7 @@ pub struct SdProfileReader {
 
 impl SdProfileReader {
     pub fn new() -> Self {
-        Self {
-            initialized: false,
-        }
+        Self { initialized: false }
     }
 
     /// Initialize SD card interface - placeholder for now
@@ -69,7 +67,7 @@ impl SdProfileReader {
 
     /// Parse profile content from text
     fn parse_profile_content(&self, content: &str, name: &str) -> Result<Profile, SdProfileError> {
-        let mut steps = Vec::<Step, 5>::new();
+        let mut steps = Vec::<Step, 6>::new();
         let mut profile_name = String::<32>::new();
         let _ = profile_name.push_str(name);
 
@@ -90,9 +88,9 @@ impl SdProfileReader {
                 continue;
             }
 
-            // Parse step: step_name,temperature,time
-            let parts: heapless::Vec<&str, 3> = line.split(',').collect();
-            if parts.len() != 3 {
+            // Parse step: step_name,temperature,target_time,step_time,max_rate,is_cooling
+            let parts: heapless::Vec<&str, 6> = line.split(',').collect();
+            if parts.len() != 6 {
                 warn!("Invalid line format: {}", line);
                 continue;
             }
@@ -101,7 +99,8 @@ impl SdProfileReader {
                 "preheat" | "Preheat" | "PREHEAT" => StepName::Preheat,
                 "soak" | "Soak" | "SOAK" => StepName::Soak,
                 "ramp" | "Ramp" | "RAMP" => StepName::Ramp,
-                "reflow" | "Reflow" | "REFLOW" => StepName::Reflow,
+                "reflow_ramp" | "ReflowRamp" | "REFLOW_RAMP" => StepName::ReflowRamp,
+                "reflow_cool" | "ReflowCool" | "REFLOW_COOL" => StepName::ReflowCool,
                 "cooling" | "Cooling" | "COOLING" => StepName::Cooling,
                 _ => {
                     warn!("Unknown step name: {}", parts[0]);
@@ -109,22 +108,39 @@ impl SdProfileReader {
                 }
             };
 
-            let temperature: f32 = parts[1].trim().parse()
-                .map_err(|_| {
-                    error!("Invalid temperature: {}", parts[1]);
-                    SdProfileError::ParseError
-                })?;
+            let temperature: f32 = parts[1].trim().parse().map_err(|_| {
+                error!("Invalid temperature: {}", parts[1]);
+                SdProfileError::ParseError
+            })?;
 
-            let time: u32 = parts[2].trim().parse()
-                .map_err(|_| {
-                    error!("Invalid time: {}", parts[2]);
-                    SdProfileError::ParseError
-                })?;
+            let target_time: u32 = parts[2].trim().parse().map_err(|_| {
+                error!("Invalid target_time: {}", parts[2]);
+                SdProfileError::ParseError
+            })?;
+
+            let step_time: u32 = parts[3].trim().parse().map_err(|_| {
+                error!("Invalid step_time: {}", parts[3]);
+                SdProfileError::ParseError
+            })?;
+
+            let max_rate: f32 = parts[4].trim().parse().map_err(|_| {
+                error!("Invalid max_rate: {}", parts[4]);
+                SdProfileError::ParseError
+            })?;
+
+            let is_cooling: bool = parts[5].trim().parse().map_err(|_| {
+                error!("Invalid is_cooling: {}", parts[5]);
+                SdProfileError::ParseError
+            })?;
 
             let step = Step {
                 step_name,
                 set_temperature: temperature,
-                target_time: time,
+                target_time,
+                step_time,
+                max_rate,
+                is_cooling,
+                has_fan: false, // Default to false; can be extended to parse if needed
             };
 
             if steps.push(step).is_err() {
@@ -133,18 +149,19 @@ impl SdProfileReader {
             }
         }
 
-        if steps.len() != 5 {
-            error!("Profile must have exactly 5 steps, found {}", steps.len());
+        if steps.len() != 6 {
+            error!("Profile must have exactly 6 steps, found {}", steps.len());
             return Err(SdProfileError::InvalidFormat);
         }
 
         // Convert Vec to array
-        let steps_array: [Step; 5] = [
+        let steps_array: [Step; 6] = [
             steps[0].clone(),
             steps[1].clone(),
             steps[2].clone(),
             steps[3].clone(),
             steps[4].clone(),
+            steps[5].clone(),
         ];
 
         // Use the parsed profile name or default based on filename
@@ -176,26 +193,55 @@ impl SdProfileReader {
                     step_name: StepName::Preheat,
                     set_temperature: 150.0,
                     target_time: 90,
+                    step_time: 90,
+                    max_rate: 2.0,
+                    is_cooling: false,
+                    has_fan: false,
                 },
                 Step {
                     step_name: StepName::Soak,
                     set_temperature: 180.0,
                     target_time: 180,
+                    step_time: 90,
+                    max_rate: 2.0,
+                    is_cooling: false,
+                    has_fan: false,
                 },
                 Step {
                     step_name: StepName::Ramp,
                     set_temperature: 217.0,
                     target_time: 210,
+                    step_time: 30,
+                    max_rate: 3.0,
+                    is_cooling: false,
+                    has_fan: false,
                 },
                 Step {
-                    step_name: StepName::Reflow,
+                    step_name: StepName::ReflowRamp,
                     set_temperature: 245.0,
                     target_time: 240,
+                    step_time: 30,
+                    max_rate: 2.0,
+                    is_cooling: false,
+                    has_fan: false,
+                },
+                Step {
+                    step_name: StepName::ReflowCool,
+                    set_temperature: 217.0,
+                    target_time: 270,
+                    step_time: 30,
+                    max_rate: 2.0,
+                    is_cooling: true,
+                    has_fan: false,
                 },
                 Step {
                     step_name: StepName::Cooling,
-                    set_temperature: 217.0,
-                    target_time: 300,
+                    set_temperature: 50.0,
+                    target_time: 330,
+                    step_time: 60,
+                    max_rate: 5.0,
+                    is_cooling: true,
+                    has_fan: true,
                 },
             ],
         }
@@ -211,27 +257,56 @@ impl SdProfileReader {
                 Step {
                     step_name: StepName::Preheat,
                     set_temperature: 100.0,
-                    target_time: 60,
+                    target_time: 180,
+                    step_time: 180,
+                    max_rate: 2.0,
+                    is_cooling: false,
+                    has_fan: false,
                 },
                 Step {
                     step_name: StepName::Soak,
                     set_temperature: 150.0,
-                    target_time: 150,
+                    target_time: 270,
+                    step_time: 90,
+                    max_rate: 2.0,
+                    is_cooling: false,
+                    has_fan: false,
                 },
                 Step {
                     step_name: StepName::Ramp,
                     set_temperature: 183.0,
-                    target_time: 180,
+                    target_time: 300,
+                    step_time: 30,
+                    max_rate: 3.0,
+                    is_cooling: false,
+                    has_fan: false,
                 },
                 Step {
-                    step_name: StepName::Reflow,
+                    step_name: StepName::ReflowRamp,
                     set_temperature: 215.0,
-                    target_time: 210,
+                    target_time: 330,
+                    step_time: 30,
+                    max_rate: 2.0,
+                    is_cooling: false,
+                    has_fan: false,
+                },
+                Step {
+                    step_name: StepName::ReflowCool,
+                    set_temperature: 183.0,
+                    target_time: 360,
+                    step_time: 30,
+                    max_rate: 2.0,
+                    is_cooling: true,
+                    has_fan: false,
                 },
                 Step {
                     step_name: StepName::Cooling,
-                    set_temperature: 183.0,
-                    target_time: 270,
+                    set_temperature: 50.0,
+                    target_time: 420,
+                    step_time: 60,
+                    max_rate: 5.0,
+                    is_cooling: true,
+                    has_fan: true,
                 },
             ],
         }
@@ -248,26 +323,55 @@ impl SdProfileReader {
                     step_name: StepName::Preheat,
                     set_temperature: 80.0,
                     target_time: 45,
+                    step_time: 45,
+                    max_rate: 2.0,
+                    is_cooling: false,
+                    has_fan: false,
                 },
                 Step {
                     step_name: StepName::Soak,
                     set_temperature: 120.0,
                     target_time: 105,
+                    step_time: 60,
+                    max_rate: 2.0,
+                    is_cooling: false,
+                    has_fan: false,
                 },
                 Step {
                     step_name: StepName::Ramp,
                     set_temperature: 150.0,
                     target_time: 135,
+                    step_time: 30,
+                    max_rate: 3.0,
+                    is_cooling: false,
+                    has_fan: false,
                 },
                 Step {
-                    step_name: StepName::Reflow,
+                    step_name: StepName::ReflowRamp,
                     set_temperature: 180.0,
                     target_time: 165,
+                    step_time: 30,
+                    max_rate: 2.0,
+                    is_cooling: false,
+                    has_fan: false,
+                },
+                Step {
+                    step_name: StepName::ReflowCool,
+                    set_temperature: 150.0,
+                    target_time: 195,
+                    step_time: 30,
+                    max_rate: 2.0,
+                    is_cooling: true,
+                    has_fan: false,
                 },
                 Step {
                     step_name: StepName::Cooling,
-                    set_temperature: 150.0,
-                    target_time: 225,
+                    set_temperature: 50.0,
+                    target_time: 255,
+                    step_time: 60,
+                    max_rate: 5.0,
+                    is_cooling: true,
+                    has_fan: true,
                 },
             ],
         }

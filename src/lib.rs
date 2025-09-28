@@ -14,6 +14,7 @@ use defmt::Format;
 pub mod temperature_sensor;
 pub mod usb_interface;
 pub static VERSION: &str = "v0.1";
+pub static SYSTEM_TICK_MILLIS: u32 = 100;
 
 use assign_resources::assign_resources;
 use embassy_rp::i2c::I2c;
@@ -29,26 +30,6 @@ use serde::{Deserialize, Serialize};
 
 pub type I2c0Bus = Mutex<NoopRawMutex, I2c<'static, I2C0, i2c::Async>>;
 
-pub async fn scan_i2c_bus<I2C, E>(i2c: &mut I2C) -> heapless::Vec<u8, 128>
-where
-    I2C: embedded_hal_async::i2c::I2c<Error = E>,
-{
-    let mut devices = heapless::Vec::new();
-
-    for addr in 0x08..=0x77 {
-        let result = i2c.write(addr, &[]).await;
-        if result.is_ok() {
-            let _ = devices.push(addr);
-        }
-    }
-
-    devices
-}
-
-pub async fn scan_shared_i2c_bus(i2c_bus: &I2c0Bus) -> heapless::Vec<u8, 128> {
-    let mut i2c = i2c_bus.lock().await;
-    scan_i2c_bus(&mut *i2c).await
-}
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum Event {
@@ -58,6 +39,8 @@ pub enum Event {
     DoorStateChanged(bool), // true = closed, false = opened
     LoadProfile(heapless::String<64>), // filename to load from SD card
     ListProfilesRequest,
+    SimulationReset,
+    UpdatePidParameters { kp: f32, ki: f32, kd: f32 },
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
@@ -75,10 +58,12 @@ pub enum OutputCommand {
     SetStartButtonLight(LedState),
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
+#[derive(Debug, Clone, Copy, PartialEq, Format)]
 pub enum HeaterCommand {
     SetPower(u8),
     SetFan(bool),
+    SimulationReset,
+    UpdatePidParameters { kp: f32, ki: f32, kd: f32 },
 }
 
 pub static INPUT_EVENT_CHANNEL: Channel<CriticalSectionRawMutex, Event, 3> = Channel::new();

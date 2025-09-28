@@ -11,8 +11,8 @@ use reflow_controller::heater::heater_task;
 
 use reflow_controller::inputs::interface_task;
 use reflow_controller::outputs::output_task;
-use reflow_controller::{scan_i2c_bus, scan_shared_i2c_bus, I2c0Bus, USBResources};
 use reflow_controller::{temperature_sensor::run_temperature_sensor, usb_interface::usb_task};
+use reflow_controller::{I2c0Bus, USBResources};
 use static_cell::StaticCell;
 use {defmt_rtt as _, panic_probe as _};
 
@@ -44,3 +44,5 @@ async fn main(spawner: Spawner) {
     spawner.spawn(unwrap!(usb_task(spawner, r.usb)));
     spawner.spawn(unwrap!(controller_task()));
 }
+
+#[cfg(feature = "std")]
