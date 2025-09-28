@@ -12,14 +12,14 @@ use reflow_controller::heater::heater_task;
 use reflow_controller::inputs::interface_task;
 use reflow_controller::outputs::output_task;
 use reflow_controller::{temperature_sensor::run_temperature_sensor, usb_interface::usb_task};
-use reflow_controller::{I2c0Bus, USBResources};
 use static_cell::StaticCell;
 use {defmt_rtt as _, panic_probe as _};
 
 use reflow_controller::reflow_controller::controller_task;
-use reflow_controller::{
-    split_resources, AssignedResources, I2CResources, InputResources, OutputResources,
+use reflow_controller::resources::{
+    AssignedResources, I2CResources, I2c0Bus, InputResources, OutputResources, USBResources,
 };
+use reflow_controller::split_resources;
 
 #[embassy_executor::main]
 async fn main(spawner: Spawner) {

@@ -5,16 +5,19 @@ use embassy_rp::rom_data::reset_to_usb_boot;
 use embassy_rp::usb::{Driver, InterruptHandler};
 use embassy_usb_logger::ReceiverHandler;
 use heapless::String;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
-use crate::{Event, USBResources};
-use crate::{ReflowControllerState, CURRENT_STATE, INPUT_EVENT_CHANNEL, PROFILE_LIST_CHANNEL, ACTIVE_PROFILE_CHANNEL, SYSTEM_TICK_MILLIS};
 use crate::profile::Profile;
+use crate::resources_rp2040::USBResources;
+use crate::Event;
+use crate::{
+    ReflowControllerState, ACTIVE_PROFILE_CHANNEL, CURRENT_STATE, INPUT_EVENT_CHANNEL,
+    PROFILE_LIST_CHANNEL, SYSTEM_TICK_MILLIS,
+};
 use core::str;
 use defmt::unwrap;
 use embassy_executor::Spawner;
 use embassy_time::Timer;
-use {defmt_rtt as _, panic_probe as _};
 
 // —— USB interrupt binding ——
 bind_interrupts!(struct Irqs {
@@ -125,7 +128,9 @@ async fn active_profile_task() {
     let receiver = ACTIVE_PROFILE_CHANNEL.receiver();
     loop {
         let profile = receiver.receive().await;
-        let response = ActiveProfileResponse { active_profile: profile };
+        let response = ActiveProfileResponse {
+            active_profile: profile,
+        };
         let json: heapless::String<2048> = to_string(&response).unwrap();
         log::info!("{}", json);
     }

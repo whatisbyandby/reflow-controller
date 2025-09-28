@@ -1,4 +1,7 @@
-use crate::{LedState, OutputCommand, OutputResources, OUTPUT_COMMAND_CHANNEL, SYSTEM_TICK_MILLIS};
+use crate::{
+    resources_rp2040::OutputResources, LedState, OutputCommand, OUTPUT_COMMAND_CHANNEL,
+    SYSTEM_TICK_MILLIS,
+};
 use defmt::*;
 use embassy_executor::Spawner;
 use embassy_rp::gpio::{Level, Output};

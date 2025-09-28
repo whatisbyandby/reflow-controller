@@ -1,56 +1,100 @@
 #![no_std]
 
-pub mod heater;
-pub mod inputs;
-pub mod mcp9600;
-pub mod outputs;
+#[cfg(feature = "rp2040")]
+pub mod inputs_rp2040;
+#[cfg(feature = "rp2040")]
+pub use inputs_rp2040 as inputs;
+
+#[cfg(feature = "rp2040")]
+pub use defmt as log;
+
+#[cfg(feature = "std")]
+pub use log;
+
+#[cfg(feature = "std")]
+pub mod inputs_std;
+#[cfg(feature = "std")]
+pub use inputs_std as inputs;
+
+#[cfg(feature = "rp2040")]
+pub mod outputs_rp2040;
+#[cfg(feature = "rp2040")]
+pub use outputs_rp2040 as outputs;
+
+#[cfg(feature = "std")]
+pub mod outputs_std;
+#[cfg(feature = "std")]
+pub use outputs_std as outputs;
+
 pub mod pid;
 pub mod profile;
 pub mod reflow_controller;
-pub mod relay;
 pub mod sd_profile_reader;
-use defmt::Format;
 
-pub mod temperature_sensor;
-pub mod usb_interface;
+#[cfg(feature = "rp2040")]
+pub mod resources_rp2040;
+#[cfg(feature = "rp2040")]
+pub use resources_rp2040 as resources;
+
+#[cfg(feature = "rp2040")]
+pub mod heater_rp2040;
+#[cfg(feature = "rp2040")]
+pub use heater_rp2040 as heater;
+
+#[cfg(feature = "std")]
+pub mod heater_std;
+#[cfg(feature = "std")]
+pub use heater_std as heater;
+
+#[cfg(feature = "rp2040")]
+pub mod temperature_sensor_mcp9600;
+#[cfg(feature = "rp2040")]
+pub use temperature_sensor_mcp9600 as temperature_sensor;
+
+#[cfg(feature = "std")]
+pub mod temperature_sensor_mock;
+#[cfg(feature = "std")]
+pub use temperature_sensor_mock as temperature_sensor;
+
+#[cfg(feature = "rp2040")]
+pub mod usb_interface_rp2040;
+#[cfg(feature = "rp2040")]
+pub use usb_interface_rp2040 as usb_interface;
+
+#[cfg(feature = "std")]
+pub mod usb_interface_std;
+#[cfg(feature = "std")]
+pub use usb_interface_std as usb_interface;
+
 pub static VERSION: &str = "v0.1";
 pub static SYSTEM_TICK_MILLIS: u32 = 100;
 
-use assign_resources::assign_resources;
-use embassy_rp::i2c::I2c;
-use embassy_rp::i2c::{self};
-use embassy_rp::peripherals;
-use embassy_rp::peripherals::I2C0;
-use embassy_rp::Peri;
 use embassy_sync::blocking_mutex::raw::NoopRawMutex;
 use embassy_sync::channel::Channel;
 use embassy_sync::watch::Watch;
 use embassy_sync::{blocking_mutex::raw::CriticalSectionRawMutex, mutex::Mutex};
 use serde::{Deserialize, Serialize};
 
-pub type I2c0Bus = Mutex<NoopRawMutex, I2c<'static, I2C0, i2c::Async>>;
-
-
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum Event {
     StartCommand,
     StopCommand,
     ResetCommand,
-    DoorStateChanged(bool), // true = closed, false = opened
+    DoorStateChanged(bool),            // true = closed, false = opened
     LoadProfile(heapless::String<64>), // filename to load from SD card
     ListProfilesRequest,
     SimulationReset,
     UpdatePidParameters { kp: f32, ki: f32, kd: f32 },
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum LedState {
     LedOn,
     LedOff,
     Blink(u32, u32),
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Format)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum OutputCommand {
     SetFan(bool),
     SetLight(bool),
@@ -58,7 +102,7 @@ pub enum OutputCommand {
     SetStartButtonLight(LedState),
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Format)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum HeaterCommand {
     SetPower(u8),
     SetFan(bool),
@@ -71,10 +115,15 @@ pub static OUTPUT_COMMAND_CHANNEL: Channel<CriticalSectionRawMutex, OutputComman
     Channel::new();
 pub static HEATER_POWER: Channel<CriticalSectionRawMutex, HeaterCommand, 2> = Channel::new();
 pub static CURRENT_STATE: Watch<CriticalSectionRawMutex, ReflowControllerState, 3> = Watch::new();
-pub static PROFILE_LIST_CHANNEL: Channel<CriticalSectionRawMutex, heapless::Vec<heapless::String<64>, 16>, 1> = Channel::new();
-pub static ACTIVE_PROFILE_CHANNEL: Channel<CriticalSectionRawMutex, profile::Profile, 1> = Channel::new();
+pub static PROFILE_LIST_CHANNEL: Channel<
+    CriticalSectionRawMutex,
+    heapless::Vec<heapless::String<64>, 16>,
+    1,
+> = Channel::new();
+pub static ACTIVE_PROFILE_CHANNEL: Channel<CriticalSectionRawMutex, profile::Profile, 1> =
+    Channel::new();
 
-#[derive(Debug, Clone, PartialEq, Format, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum Status {
     Initializing,
     Idle,
@@ -96,37 +145,4 @@ pub struct ReflowControllerState {
     pub current_step: &'static str,
     pub current_profile: heapless::String<32>,
     pub error_message: heapless::String<256>,
-}
-
-assign_resources! {
-    inputs: InputResources {
-        button_a: PIN_12,
-        button_b: PIN_13,
-        button_x: PIN_14,
-        button_y: PIN_15,
-        door_switch: PIN_4,
-        start_button: PIN_5,
-    },
-    outputs: OutputResources {
-        fan: PIN_17,
-        light: PIN_18,
-        buzzer: PIN_19,
-        start_button_light: PIN_3,
-    },
-    usb: USBResources {
-        usb: USB,
-    },
-    i2c: I2CResources {
-        i2c: I2C0,
-        sda: PIN_20,
-        scl: PIN_21,
-    },
-    // SD card resources - will be added when hardware integration is ready
-    // sd_card: SdCardResources {
-    //     spi: SPI0,
-    //     miso: PIN_16,
-    //     mosi: PIN_19,
-    //     clk: PIN_18,
-    //     cs: PIN_17,
-    // },
 }

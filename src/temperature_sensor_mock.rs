@@ -1,57 +1,17 @@
-use defmt::*;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;
 use embassy_sync::signal::Signal;
-use embassy_time::Timer;
-
-#[cfg(not(feature = "mock_temperature_sensor"))]
-use embassy_embedded_hal::shared_bus::asynch::i2c::I2cDevice;
-#[cfg(not(feature = "mock_temperature_sensor"))]
-use embassy_time::with_timeout;
-
-#[cfg(not(feature = "mock_temperature_sensor"))]
-use crate::mcp9600;
-use crate::I2c0Bus;
-use crate::SYSTEM_TICK_MILLIS;
 
 pub static CURRENT_TEMPERATURE: Signal<CriticalSectionRawMutex, f32> = Signal::new();
+use crate::log::*;
+use crate::SYSTEM_TICK_MILLIS;
+use embassy_time::Timer;
 
-#[cfg(not(feature = "mock_temperature_sensor"))]
 #[embassy_executor::task]
-pub async fn run_temperature_sensor(i2c_bus: &'static I2c0Bus) -> ! {
-    let i2c_dev = I2cDevice::new(i2c_bus);
-    let mut sensor = mcp9600::Mcp9600::new(i2c_dev);
-
-    info!("Starting temperature sensor task");
-
-    loop {
-        let temp_reading = with_timeout(
-            Duration::from_millis((SYSTEM_TICK_MILLIS * 2).into()),
-            sensor.read_hot_c(),
-        )
-        .await;
-        let temp = match temp_reading {
-            Ok(Ok(t)) => t,
-            Ok(Err(_)) => {
-                error!("Error reading temperature");
-                continue;
-            }
-            Err(_) => {
-                error!("Temperature read timed out");
-                continue;
-            }
-        };
-        CURRENT_TEMPERATURE.signal(temp);
-        Timer::after_millis((SYSTEM_TICK_MILLIS * 5).into()).await;
-    }
-}
-
-#[cfg(feature = "mock_temperature_sensor")]
-#[embassy_executor::task]
-pub async fn run_temperature_sensor(_i2c_bus: &'static I2c0Bus) -> ! {
+pub async fn run_temperature_sensor() -> ! {
     use crate::HeaterCommand;
     use crate::HEATER_POWER;
 
-    info!("Starting mock temperature sensor with thermal simulation");
+    // info!("Starting mock temperature sensor with thermal simulation");
 
     // Thermal simulation parameters - configurable for testing
     let mut current_temp = 25.0; // Start at room temperature
@@ -79,7 +39,7 @@ pub async fn run_temperature_sensor(_i2c_bus: &'static I2c0Bus) -> ! {
             HeaterCommand::SetPower(p) => current_heater_power = p as u32,
             HeaterCommand::SetFan(on) => fan_enabled = on,
             HeaterCommand::SimulationReset => {
-                info!("Resetting thermal simulation to initial state");
+                // info!("Resetting thermal simulation to initial state");
                 current_temp = 25.0; // Reset to room temperature
                 fan_enabled = false;
                 current_heater_power = 0;

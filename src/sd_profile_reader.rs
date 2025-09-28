@@ -1,9 +1,9 @@
-use defmt::{error, info, warn};
+use crate::log::*;
 use heapless::{String, Vec};
 
 use crate::profile::{Profile, Step, StepName};
 
-#[derive(Debug, defmt::Format)]
+#[derive(Debug, Format)]
 pub enum SdProfileError {
     SdCardError,
     FileNotFound,
@@ -25,7 +25,7 @@ impl SdProfileReader {
     /// Initialize SD card interface - placeholder for now
     pub async fn init(&mut self) -> Result<(), SdProfileError> {
         self.initialized = true;
-        info!("SD card interface initialized (mock)");
+        // info!("SD card interface initialized (mock)");
         Ok(())
     }
 
@@ -51,7 +51,7 @@ impl SdProfileReader {
 
     /// Read and parse a profile from SD card
     pub async fn read_profile(&self, filename: &str) -> Result<Profile, SdProfileError> {
-        info!("Reading profile: {}", filename);
+        // info!("Reading profile: {}", filename);
 
         // For now, return mock data based on filename - will be implemented when SD card support is added
         match filename {
@@ -59,7 +59,7 @@ impl SdProfileReader {
             "leaded.txt" => Ok(self.create_leaded_profile()),
             "low_temp.txt" => Ok(self.create_low_temp_profile()),
             _ => {
-                error!("Profile file not found: {}", filename);
+                // error!("Profile file not found: {}", filename);
                 Err(SdProfileError::FileNotFound)
             }
         }
@@ -91,7 +91,7 @@ impl SdProfileReader {
             // Parse step: step_name,temperature,target_time,step_time,max_rate,is_cooling
             let parts: heapless::Vec<&str, 6> = line.split(',').collect();
             if parts.len() != 6 {
-                warn!("Invalid line format: {}", line);
+                // warn!("Invalid line format: {}", line);
                 continue;
             }
 
@@ -103,33 +103,33 @@ impl SdProfileReader {
                 "reflow_cool" | "ReflowCool" | "REFLOW_COOL" => StepName::ReflowCool,
                 "cooling" | "Cooling" | "COOLING" => StepName::Cooling,
                 _ => {
-                    warn!("Unknown step name: {}", parts[0]);
+                    // warn!("Unknown step name: {}", parts[0]);
                     continue;
                 }
             };
 
             let temperature: f32 = parts[1].trim().parse().map_err(|_| {
-                error!("Invalid temperature: {}", parts[1]);
+                // error!("Invalid temperature: {}", parts[1]);
                 SdProfileError::ParseError
             })?;
 
             let target_time: u32 = parts[2].trim().parse().map_err(|_| {
-                error!("Invalid target_time: {}", parts[2]);
+                // error!("Invalid target_time: {}", parts[2]);
                 SdProfileError::ParseError
             })?;
 
             let step_time: u32 = parts[3].trim().parse().map_err(|_| {
-                error!("Invalid step_time: {}", parts[3]);
+                // error!("Invalid step_time: {}", parts[3]);
                 SdProfileError::ParseError
             })?;
 
             let max_rate: f32 = parts[4].trim().parse().map_err(|_| {
-                error!("Invalid max_rate: {}", parts[4]);
+                // error!("Invalid max_rate: {}", parts[4]);
                 SdProfileError::ParseError
             })?;
 
             let is_cooling: bool = parts[5].trim().parse().map_err(|_| {
-                error!("Invalid is_cooling: {}", parts[5]);
+                // error!("Invalid is_cooling: {}", parts[5]);
                 SdProfileError::ParseError
             })?;
 
@@ -144,13 +144,13 @@ impl SdProfileReader {
             };
 
             if steps.push(step).is_err() {
-                error!("Too many steps in profile");
+                // error!("Too many steps in profile");
                 return Err(SdProfileError::InvalidFormat);
             }
         }
 
         if steps.len() != 6 {
-            error!("Profile must have exactly 6 steps, found {}", steps.len());
+            // error!("Profile must have exactly 6 steps, found {}", steps.len());
             return Err(SdProfileError::InvalidFormat);
         }
 

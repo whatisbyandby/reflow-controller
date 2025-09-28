@@ -1,15 +1,18 @@
-use crate::{relay::RelayController, I2c0Bus, HEATER_POWER, SYSTEM_TICK_MILLIS};
+#[path = "./relay.rs"]
+mod relay;
+
+use crate::{resources_rp2040::I2c0Bus, HEATER_POWER, SYSTEM_TICK_MILLIS};
 use defmt::{error, info, warn, Debug2Format};
 use embassy_embedded_hal::shared_bus::asynch::i2c::I2cDevice;
 use embassy_time::Timer;
 use embedded_hal_async::i2c::I2c;
 
 async fn set_heater_relays<I2C, E>(
-    relay_controller: &mut RelayController<I2C, E>,
+    relay_controller: &mut relay::RelayController<I2C, E>,
     relay_2: bool,
     relay_3: bool,
     relay_4: bool,
-) -> Result<(), crate::relay::Error<E>>
+) -> Result<(), relay::Error<E>>
 where
     I2C: I2c<Error = E>,
 {
@@ -152,13 +155,12 @@ impl RelaySchedule {
 
         schedule
     }
-
 }
 
 async fn run_power_cycle<I2C, E>(
-    relay_controller: &mut RelayController<I2C, E>,
+    relay_controller: &mut relay::RelayController<I2C, E>,
     schedule: RelaySchedule,
-) -> Result<(), crate::relay::Error<E>>
+) -> Result<(), relay::Error<E>>
 where
     I2C: I2c<Error = E>,
     E: core::fmt::Debug,
@@ -170,7 +172,8 @@ where
             schedule.relay_2[slot],
             schedule.relay_3[slot],
             schedule.relay_4[slot],
-        ).await;
+        )
+        .await;
 
         result?;
 
@@ -182,9 +185,9 @@ where
 }
 
 async fn turn_all_off_with_retry<I2C, E>(
-    relay_controller: &mut RelayController<I2C, E>,
+    relay_controller: &mut relay::RelayController<I2C, E>,
     max_retries: usize,
-) -> Result<(), crate::relay::Error<E>>
+) -> Result<(), relay::Error<E>>
 where
     I2C: I2c<Error = E>,
     E: core::fmt::Debug,
@@ -209,10 +212,10 @@ where
 }
 
 async fn set_fan_with_retry<I2C, E>(
-    relay_controller: &mut RelayController<I2C, E>,
+    relay_controller: &mut relay::RelayController<I2C, E>,
     on: bool,
     max_retries: usize,
-) -> Result<(), crate::relay::Error<E>>
+) -> Result<(), relay::Error<E>>
 where
     I2C: I2c<Error = E>,
     E: core::fmt::Debug,
@@ -242,11 +245,11 @@ where
     }
 }
 
-#[cfg(not(feature = "mock_temperature_sensor"))]
+#[cfg(feature = "rp2040")]
 #[embassy_executor::task]
 pub async fn heater_task(i2c_bus: &'static I2c0Bus) {
     let i2c_dev = I2cDevice::new(i2c_bus);
-    let mut relay_controller = RelayController::new(i2c_dev);
+    let mut relay_controller = relay::RelayController::new(i2c_dev);
 
     if let Err(e) = relay_controller.all_off().await {
         error!("Failed to initialize heater relays: {}", Debug2Format(&e));
@@ -273,7 +276,6 @@ pub async fn heater_task(i2c_bus: &'static I2c0Bus) {
                     }
                 }
                 crate::HeaterCommand::SetFan(on) => {
-                    info!("Setting fan to {}", on);
                     let result = set_fan_with_retry(&mut relay_controller, on, 2).await;
 
                     if let Err(e) = result {
@@ -286,9 +288,13 @@ pub async fn heater_task(i2c_bus: &'static I2c0Bus) {
                     rotation_counter = 0;
                     last_schedule = RelaySchedule::new();
                     // Turn off all relays
-                    let result = set_heater_relays(&mut relay_controller, false, false, false).await;
+                    let result =
+                        set_heater_relays(&mut relay_controller, false, false, false).await;
                     if let Err(e) = result {
-                        error!("Failed to turn off heater relays during reset: {}", Debug2Format(&e));
+                        error!(
+                            "Failed to turn off heater relays during reset: {}",
+                            Debug2Format(&e)
+                        );
                     }
                 }
                 crate::HeaterCommand::UpdatePidParameters { kp, ki, kd } => {
@@ -336,10 +342,3 @@ pub async fn heater_task(i2c_bus: &'static I2c0Bus) {
         }
     }
 }
-
-#[cfg(feature = "mock_temperature_sensor")]
-#[embassy_executor::task]
-pub async fn heater_task(i2c_bus: &'static I2c0Bus) {
-    Timer::after_millis((SYSTEM_TICK_MILLIS* 10).into()).await;
-}
-

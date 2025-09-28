@@ -7,7 +7,7 @@ use embassy_rp::{
 };
 use embassy_time::Timer;
 
-use crate::{Event, InputResources, INPUT_EVENT_CHANNEL, SYSTEM_TICK_MILLIS};
+use crate::{resources_rp2040::InputResources, Event, INPUT_EVENT_CHANNEL, SYSTEM_TICK_MILLIS};
 
 #[embassy_executor::task]
 pub async fn interface_task(spawner: Spawner, r: InputResources) {

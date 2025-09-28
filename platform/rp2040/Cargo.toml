@@ -1,0 +1,74 @@
+[package]
+name = "reflow-controller-rp2040"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+ramp_setpoint = []
+mock_temperature_sensor = []
+std = []
+
+
+[dependencies]
+
+reflow-controller = { path = "../../", features = ["rp2040"] }
+
+embassy-embedded-hal = { version = "0.5.0", path = "../../../embassy/embassy-embedded-hal", features = [
+    "defmt",
+] }
+embassy-sync = { version = "0.7.2", path = "../../../embassy/embassy-sync", features = [
+    "defmt",
+] }
+embassy-executor = { version = "0.9.0", path = "../../../embassy/embassy-executor", features = [
+    "arch-cortex-m",
+    "executor-thread",
+    "executor-interrupt",
+    "defmt",
+] }
+embassy-time = { version = "0.5.0", path = "../../../embassy/embassy-time" }
+embassy-rp = { version = "0.8.0", path = "../../../embassy/embassy-rp", features = [
+    "defmt",
+    "unstable-pac",
+    "time-driver",
+    "critical-section-impl",
+    "rp2040",
+] }
+
+embassy-usb-logger = { version = "0.5.1", path = "../../../embassy/embassy-usb-logger" }
+embassy-futures = { version = "0.1.2", path = "../../../embassy/embassy-futures" }
+
+embedded-graphics = "0.8.1"
+assign-resources = "0.5.0"
+critical-section = "1.1"
+
+cortex-m = { version = "0.7.6", features = ["inline-asm"] }
+cortex-m-rt = "0.7.0"
+
+panic-probe = { version = "1.0.0", features = ["print-defmt"] }
+
+defmt = "1.0.1"
+defmt-rtt = "1.0.0"
+fixed = "1.23.1"
+fixed-macro = "1.2"
+bitflags = "2.4"
+
+display-interface-spi = "0.5.0"
+mipidsi = "0.8.0"
+display-interface = "0.5.0"
+log = "0.4"
+static_cell = "2.1"
+portable-atomic = { version = "1.5", features = ["critical-section"] }
+
+# Core Serde without std
+serde = { version = "1", default-features = false, features = ["derive"] }
+
+
+# Heapless collections with Serde impls
+heapless = { version = "0.8", features = ["serde"] }
+# Option B: JSON in no_std (writes into a fixed buffer you provide)
+serde-json-core = "0.6"
+embedded-hal-async = "1.0.0"
+
+# SD card support - will be added when hardware integration is ready
+# embedded-sdmmc = "0.8"
+# nb = "1.1"

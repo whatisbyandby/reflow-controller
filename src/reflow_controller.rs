@@ -1,7 +1,6 @@
-use defmt::info;
+use crate::log::*;
 use embassy_time::{Instant, Timer};
 use heapless::String;
-use {defmt_rtt as _, panic_probe as _};
 
 use crate::{
     pid::PidController,
@@ -370,7 +369,9 @@ impl ReflowController {
 
                 // Also send to heater task for logging (though it doesn't use PID directly)
                 let heater_sender = HEATER_POWER.sender();
-                heater_sender.send(HeaterCommand::UpdatePidParameters { kp, ki, kd }).await;
+                heater_sender
+                    .send(HeaterCommand::UpdatePidParameters { kp, ki, kd })
+                    .await;
             }
         }
         self.send_state();
