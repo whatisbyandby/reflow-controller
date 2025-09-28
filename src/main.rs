@@ -44,5 +44,3 @@ async fn main(spawner: Spawner) {
     spawner.spawn(unwrap!(usb_task(spawner, r.usb)));
     spawner.spawn(unwrap!(controller_task()));
 }
-
-#[cfg(feature = "std")]
