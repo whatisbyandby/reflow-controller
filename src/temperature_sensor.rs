@@ -1,7 +1,7 @@
 use defmt::*;
 use embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex;
 use embassy_sync::signal::Signal;
-use embassy_time::{Duration, Timer};
+use embassy_time::Timer;
 
 #[cfg(not(feature = "mock_temperature_sensor"))]
 use embassy_embedded_hal::shared_bus::asynch::i2c::I2cDevice;
@@ -60,7 +60,6 @@ pub async fn run_temperature_sensor(_i2c_bus: &'static I2c0Bus) -> ! {
     let thermal_mass = 0.3; // Factor affecting heat retention (0-1)
     let heat_loss_coefficient = 0.1; // Heat loss to ambient per degree difference
     let update_interval_ms = SYSTEM_TICK_MILLIS * 5;
-   
 
     let time_step = update_interval_ms as f32 / SYSTEM_TICK_MILLIS as f32 / 10.0;
 
@@ -84,6 +83,13 @@ pub async fn run_temperature_sensor(_i2c_bus: &'static I2c0Bus) -> ! {
                 current_temp = 25.0; // Reset to room temperature
                 fan_enabled = false;
                 current_heater_power = 0;
+            }
+            HeaterCommand::UpdatePidParameters {
+                kp: _,
+                ki: _,
+                kd: _,
+            } => {
+                // Ignore for simulation
             }
         };
 
