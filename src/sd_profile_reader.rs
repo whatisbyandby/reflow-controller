@@ -3,7 +3,7 @@ use heapless::{String, Vec};
 
 use crate::profile::{Profile, Step, StepName};
 
-#[derive(Debug, Format)]
+#[derive(Debug)]
 pub enum SdProfileError {
     SdCardError,
     FileNotFound,

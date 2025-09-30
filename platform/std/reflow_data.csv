@@ -1,0 +1,1903 @@
+time_ms,status,target_temp,current_temp,heater_power,step,profile,door_closed,fan,timer
+1602,Idle,25.00,25.00,0,Preheat,Default Profile,True,False,0
+1702,Idle,25.00,25.00,0,Preheat,Default Profile,True,False,0
+1802,Idle,25.00,25.00,0,Preheat,Default Profile,True,False,0
+1902,Idle,25.00,25.00,0,Preheat,Default Profile,True,False,0
+2003,Idle,25.00,25.00,0,Preheat,Default Profile,True,False,0
+2103,Idle,25.00,25.00,0,Preheat,Default Profile,True,False,0
+2203,Idle,25.00,25.00,0,Preheat,Default Profile,True,False,0
+2303,Idle,25.00,25.00,0,Preheat,Default Profile,True,False,0
+2403,Idle,25.00,25.00,0,Preheat,Default Profile,True,False,0
+2504,Running,150.00,25.00,100,Preheat,Default Profile,True,False,0
+2604,Running,150.00,25.00,100,Preheat,Default Profile,True,False,0
+2704,Running,150.00,25.00,100,Preheat,Default Profile,True,False,0
+2804,Running,150.00,25.00,100,Preheat,Default Profile,True,False,0
+2905,Running,150.00,25.00,100,Preheat,Default Profile,True,False,0
+3005,Running,150.00,25.00,100,Preheat,Default Profile,True,False,0
+3105,Running,150.00,25.00,100,Preheat,Default Profile,True,False,0
+3205,Running,150.00,25.00,100,Preheat,Default Profile,True,False,0
+3306,Running,150.00,25.00,100,Preheat,Default Profile,True,False,0
+3406,Running,150.00,25.00,100,Preheat,Default Profile,True,False,0
+3506,Running,150.00,29.50,100,Preheat,Default Profile,True,False,10
+3606,Running,150.00,29.50,100,Preheat,Default Profile,True,False,10
+3707,Running,150.00,29.50,100,Preheat,Default Profile,True,False,10
+3807,Running,150.00,29.50,100,Preheat,Default Profile,True,False,10
+3907,Running,150.00,29.50,100,Preheat,Default Profile,True,False,10
+4007,Running,150.00,29.50,100,Preheat,Default Profile,True,False,10
+4107,Running,150.00,29.50,100,Preheat,Default Profile,True,False,10
+4208,Running,150.00,29.50,100,Preheat,Default Profile,True,False,10
+4308,Running,150.00,29.50,100,Preheat,Default Profile,True,False,10
+4408,Running,150.00,29.50,100,Preheat,Default Profile,True,False,10
+4509,Running,150.00,38.30,100,Preheat,Default Profile,True,False,20
+4609,Running,150.00,38.30,100,Preheat,Default Profile,True,False,20
+4709,Running,150.00,38.30,100,Preheat,Default Profile,True,False,20
+4809,Running,150.00,38.30,100,Preheat,Default Profile,True,False,20
+4910,Running,150.00,38.30,100,Preheat,Default Profile,True,False,20
+5010,Running,150.00,38.30,100,Preheat,Default Profile,True,False,20
+5110,Running,150.00,38.30,100,Preheat,Default Profile,True,False,20
+5210,Running,150.00,38.30,100,Preheat,Default Profile,True,False,20
+5311,Running,150.00,38.30,100,Preheat,Default Profile,True,False,20
+5411,Running,150.00,38.30,100,Preheat,Default Profile,True,False,20
+5511,Running,150.00,46.84,100,Preheat,Default Profile,True,False,30
+5612,Running,150.00,46.84,100,Preheat,Default Profile,True,False,30
+5712,Running,150.00,46.84,100,Preheat,Default Profile,True,False,30
+5812,Running,150.00,46.84,100,Preheat,Default Profile,True,False,30
+5912,Running,150.00,46.84,100,Preheat,Default Profile,True,False,30
+6013,Running,150.00,46.84,100,Preheat,Default Profile,True,False,30
+6113,Running,150.00,46.84,100,Preheat,Default Profile,True,False,30
+6213,Running,150.00,46.84,100,Preheat,Default Profile,True,False,30
+6313,Running,150.00,46.84,100,Preheat,Default Profile,True,False,30
+6414,Running,150.00,46.84,100,Preheat,Default Profile,True,False,30
+6514,Running,150.00,55.12,100,Preheat,Default Profile,True,False,40
+6614,Running,150.00,55.12,100,Preheat,Default Profile,True,False,40
+6714,Running,150.00,55.12,100,Preheat,Default Profile,True,False,40
+6814,Running,150.00,55.12,100,Preheat,Default Profile,True,False,40
+6915,Running,150.00,55.12,100,Preheat,Default Profile,True,False,40
+7015,Running,150.00,55.12,100,Preheat,Default Profile,True,False,40
+7115,Running,150.00,55.12,100,Preheat,Default Profile,True,False,40
+7215,Running,150.00,55.12,100,Preheat,Default Profile,True,False,40
+7316,Running,150.00,55.12,100,Preheat,Default Profile,True,False,40
+7416,Running,150.00,55.12,100,Preheat,Default Profile,True,False,40
+7516,Running,150.00,63.15,100,Preheat,Default Profile,True,False,50
+7616,Running,150.00,63.15,100,Preheat,Default Profile,True,False,50
+7717,Running,150.00,63.15,100,Preheat,Default Profile,True,False,50
+7817,Running,150.00,63.15,100,Preheat,Default Profile,True,False,50
+7917,Running,150.00,63.15,100,Preheat,Default Profile,True,False,50
+8017,Running,150.00,63.15,100,Preheat,Default Profile,True,False,50
+8118,Running,150.00,63.15,100,Preheat,Default Profile,True,False,50
+8218,Running,150.00,63.15,100,Preheat,Default Profile,True,False,50
+8318,Running,150.00,63.15,100,Preheat,Default Profile,True,False,50
+8418,Running,150.00,63.15,100,Preheat,Default Profile,True,False,50
+8519,Running,150.00,70.95,100,Preheat,Default Profile,True,False,60
+8619,Running,150.00,70.95,100,Preheat,Default Profile,True,False,60
+8719,Running,150.00,70.95,100,Preheat,Default Profile,True,False,60
+8819,Running,150.00,70.95,100,Preheat,Default Profile,True,False,60
+8920,Running,150.00,70.95,100,Preheat,Default Profile,True,False,60
+9020,Running,150.00,70.95,100,Preheat,Default Profile,True,False,60
+9120,Running,150.00,70.95,100,Preheat,Default Profile,True,False,60
+9220,Running,150.00,70.95,100,Preheat,Default Profile,True,False,60
+9320,Running,150.00,70.95,100,Preheat,Default Profile,True,False,60
+9421,Running,150.00,70.95,100,Preheat,Default Profile,True,False,60
+9521,Running,150.00,78.52,100,Preheat,Default Profile,True,False,70
+9621,Running,150.00,78.52,100,Preheat,Default Profile,True,False,70
+9721,Running,150.00,78.52,100,Preheat,Default Profile,True,False,70
+9822,Running,150.00,78.52,100,Preheat,Default Profile,True,False,70
+9922,Running,150.00,78.52,100,Preheat,Default Profile,True,False,70
+10022,Running,150.00,78.52,100,Preheat,Default Profile,True,False,70
+10122,Running,150.00,78.52,100,Preheat,Default Profile,True,False,70
+10223,Running,150.00,78.52,100,Preheat,Default Profile,True,False,70
+10323,Running,150.00,78.52,100,Preheat,Default Profile,True,False,70
+10423,Running,150.00,78.52,100,Preheat,Default Profile,True,False,70
+10523,Running,150.00,85.86,100,Preheat,Default Profile,True,False,80
+10624,Running,150.00,85.86,100,Preheat,Default Profile,True,False,80
+10724,Running,150.00,85.86,100,Preheat,Default Profile,True,False,80
+10824,Running,150.00,85.86,100,Preheat,Default Profile,True,False,80
+10924,Running,150.00,85.86,100,Preheat,Default Profile,True,False,80
+11025,Running,150.00,85.86,100,Preheat,Default Profile,True,False,80
+11125,Running,150.00,85.86,100,Preheat,Default Profile,True,False,80
+11225,Running,150.00,85.86,100,Preheat,Default Profile,True,False,80
+11325,Running,150.00,85.86,100,Preheat,Default Profile,True,False,80
+11426,Running,150.00,85.86,100,Preheat,Default Profile,True,False,80
+11526,Running,150.00,92.98,100,Preheat,Default Profile,True,False,90
+11626,Running,150.00,92.98,100,Preheat,Default Profile,True,False,90
+11726,Running,150.00,92.98,100,Preheat,Default Profile,True,False,90
+11827,Running,150.00,92.98,100,Preheat,Default Profile,True,False,90
+11927,Running,150.00,92.98,100,Preheat,Default Profile,True,False,90
+12027,Running,150.00,92.98,100,Preheat,Default Profile,True,False,90
+12127,Running,150.00,92.98,100,Preheat,Default Profile,True,False,90
+12227,Running,150.00,92.98,100,Preheat,Default Profile,True,False,90
+12328,Running,150.00,92.98,100,Preheat,Default Profile,True,False,90
+12428,Running,150.00,92.98,100,Preheat,Default Profile,True,False,90
+12528,Running,150.00,99.88,100,Preheat,Default Profile,True,False,100
+12628,Running,150.00,99.88,100,Preheat,Default Profile,True,False,100
+12729,Running,150.00,99.88,100,Preheat,Default Profile,True,False,100
+12829,Running,150.00,99.88,100,Preheat,Default Profile,True,False,100
+12929,Running,150.00,99.88,100,Preheat,Default Profile,True,False,100
+13029,Running,150.00,99.88,100,Preheat,Default Profile,True,False,100
+13130,Running,150.00,99.88,100,Preheat,Default Profile,True,False,100
+13230,Running,150.00,99.88,100,Preheat,Default Profile,True,False,100
+13330,Running,150.00,99.88,100,Preheat,Default Profile,True,False,100
+13430,Running,150.00,99.88,100,Preheat,Default Profile,True,False,100
+13531,Running,150.00,106.59,100,Preheat,Default Profile,True,False,110
+13631,Running,150.00,106.59,100,Preheat,Default Profile,True,False,110
+13731,Running,150.00,106.59,100,Preheat,Default Profile,True,False,110
+13831,Running,150.00,106.59,100,Preheat,Default Profile,True,False,110
+13932,Running,150.00,106.59,100,Preheat,Default Profile,True,False,110
+14032,Running,150.00,106.59,100,Preheat,Default Profile,True,False,110
+14132,Running,150.00,106.59,100,Preheat,Default Profile,True,False,110
+14232,Running,150.00,106.59,100,Preheat,Default Profile,True,False,110
+14333,Running,150.00,106.59,100,Preheat,Default Profile,True,False,110
+14433,Running,150.00,106.59,100,Preheat,Default Profile,True,False,110
+14533,Running,150.00,113.09,100,Preheat,Default Profile,True,False,120
+14633,Running,150.00,113.09,100,Preheat,Default Profile,True,False,120
+14733,Running,150.00,113.09,100,Preheat,Default Profile,True,False,120
+14834,Running,150.00,113.09,100,Preheat,Default Profile,True,False,120
+14934,Running,150.00,113.09,100,Preheat,Default Profile,True,False,120
+15034,Running,150.00,113.09,100,Preheat,Default Profile,True,False,120
+15134,Running,150.00,113.09,100,Preheat,Default Profile,True,False,120
+15235,Running,150.00,113.09,100,Preheat,Default Profile,True,False,120
+15335,Running,150.00,113.09,100,Preheat,Default Profile,True,False,120
+15435,Running,150.00,113.09,100,Preheat,Default Profile,True,False,120
+15536,Running,150.00,119.40,100,Preheat,Default Profile,True,False,130
+15636,Running,150.00,119.40,100,Preheat,Default Profile,True,False,130
+15736,Running,150.00,119.40,100,Preheat,Default Profile,True,False,130
+15837,Running,150.00,119.40,100,Preheat,Default Profile,True,False,130
+15937,Running,150.00,119.40,100,Preheat,Default Profile,True,False,130
+16037,Running,150.00,119.40,100,Preheat,Default Profile,True,False,130
+16137,Running,150.00,119.40,100,Preheat,Default Profile,True,False,130
+16237,Running,150.00,119.40,100,Preheat,Default Profile,True,False,130
+16338,Running,150.00,119.40,100,Preheat,Default Profile,True,False,130
+16438,Running,150.00,119.40,100,Preheat,Default Profile,True,False,130
+16538,Running,150.00,125.52,100,Preheat,Default Profile,True,False,140
+16638,Running,150.00,125.52,100,Preheat,Default Profile,True,False,140
+16739,Running,150.00,125.52,100,Preheat,Default Profile,True,False,140
+16839,Running,150.00,125.52,100,Preheat,Default Profile,True,False,140
+16939,Running,150.00,125.52,100,Preheat,Default Profile,True,False,140
+17039,Running,150.00,125.52,100,Preheat,Default Profile,True,False,140
+17140,Running,150.00,125.52,100,Preheat,Default Profile,True,False,140
+17240,Running,150.00,125.52,100,Preheat,Default Profile,True,False,140
+17340,Running,150.00,125.52,100,Preheat,Default Profile,True,False,140
+17440,Running,150.00,125.52,100,Preheat,Default Profile,True,False,140
+17541,Running,150.00,131.46,81,Preheat,Default Profile,True,False,150
+17641,Running,150.00,131.46,81,Preheat,Default Profile,True,False,150
+17741,Running,150.00,131.46,81,Preheat,Default Profile,True,False,150
+17841,Running,150.00,131.46,81,Preheat,Default Profile,True,False,150
+17941,Running,150.00,131.46,81,Preheat,Default Profile,True,False,150
+18042,Running,150.00,131.46,81,Preheat,Default Profile,True,False,150
+18142,Running,150.00,131.46,81,Preheat,Default Profile,True,False,150
+18242,Running,150.00,131.46,81,Preheat,Default Profile,True,False,150
+18342,Running,150.00,131.46,81,Preheat,Default Profile,True,False,150
+18443,Running,150.00,131.46,81,Preheat,Default Profile,True,False,150
+18543,Running,150.00,136.37,69,Preheat,Default Profile,True,False,160
+18643,Running,150.00,136.37,69,Preheat,Default Profile,True,False,160
+18743,Running,150.00,136.37,69,Preheat,Default Profile,True,False,160
+18843,Running,150.00,136.37,69,Preheat,Default Profile,True,False,160
+18944,Running,150.00,136.37,69,Preheat,Default Profile,True,False,160
+19044,Running,150.00,136.37,69,Preheat,Default Profile,True,False,160
+19144,Running,150.00,136.37,69,Preheat,Default Profile,True,False,160
+19244,Running,150.00,136.37,69,Preheat,Default Profile,True,False,160
+19345,Running,150.00,136.37,69,Preheat,Default Profile,True,False,160
+19445,Running,150.00,136.37,69,Preheat,Default Profile,True,False,160
+19545,Running,150.00,139.75,61,Preheat,Default Profile,True,False,170
+19645,Running,150.00,139.75,61,Preheat,Default Profile,True,False,170
+19745,Running,150.00,139.75,61,Preheat,Default Profile,True,False,170
+19846,Running,150.00,139.75,61,Preheat,Default Profile,True,False,170
+19946,Running,150.00,139.75,61,Preheat,Default Profile,True,False,170
+20046,Running,150.00,139.75,61,Preheat,Default Profile,True,False,170
+20146,Running,150.00,139.75,61,Preheat,Default Profile,True,False,170
+20246,Running,150.00,139.75,61,Preheat,Default Profile,True,False,170
+20347,Running,150.00,139.75,61,Preheat,Default Profile,True,False,170
+20447,Running,150.00,139.75,61,Preheat,Default Profile,True,False,170
+20547,Running,150.00,142.14,55,Preheat,Default Profile,True,False,180
+20647,Running,150.00,142.14,55,Preheat,Default Profile,True,False,180
+20747,Running,150.00,142.14,55,Preheat,Default Profile,True,False,180
+20848,Running,150.00,142.14,55,Preheat,Default Profile,True,False,180
+20948,Running,150.00,142.14,55,Preheat,Default Profile,True,False,180
+21048,Running,150.00,142.14,55,Preheat,Default Profile,True,False,180
+21148,Running,150.00,142.14,55,Preheat,Default Profile,True,False,180
+21248,Running,150.00,142.14,55,Preheat,Default Profile,True,False,180
+21349,Running,150.00,142.14,55,Preheat,Default Profile,True,False,180
+21449,Running,150.00,142.14,55,Preheat,Default Profile,True,False,180
+21549,Running,150.00,143.83,52,Preheat,Default Profile,True,False,190
+21649,Running,150.00,143.83,52,Preheat,Default Profile,True,False,190
+21749,Running,150.00,143.83,52,Preheat,Default Profile,True,False,190
+21850,Running,150.00,143.83,52,Preheat,Default Profile,True,False,190
+21950,Running,150.00,143.83,52,Preheat,Default Profile,True,False,190
+22050,Running,150.00,143.83,52,Preheat,Default Profile,True,False,190
+22150,Running,150.00,143.83,52,Preheat,Default Profile,True,False,190
+22250,Running,150.00,143.83,52,Preheat,Default Profile,True,False,190
+22351,Running,150.00,143.83,52,Preheat,Default Profile,True,False,190
+22451,Running,150.00,143.83,52,Preheat,Default Profile,True,False,190
+22551,Running,150.00,145.07,49,Preheat,Default Profile,True,False,200
+22651,Running,150.00,145.07,49,Preheat,Default Profile,True,False,200
+22751,Running,150.00,145.07,49,Preheat,Default Profile,True,False,200
+22852,Running,150.00,145.07,49,Preheat,Default Profile,True,False,200
+22952,Running,150.00,145.07,49,Preheat,Default Profile,True,False,200
+23052,Running,150.00,145.07,49,Preheat,Default Profile,True,False,200
+23152,Running,150.00,145.07,49,Preheat,Default Profile,True,False,200
+23252,Running,150.00,145.07,49,Preheat,Default Profile,True,False,200
+23353,Running,150.00,145.07,49,Preheat,Default Profile,True,False,200
+23453,Running,150.00,145.07,49,Preheat,Default Profile,True,False,200
+23553,Running,150.00,146.00,48,Preheat,Default Profile,True,False,210
+23653,Running,150.00,146.00,48,Preheat,Default Profile,True,False,210
+23754,Running,150.00,146.00,48,Preheat,Default Profile,True,False,210
+23854,Running,150.00,146.00,48,Preheat,Default Profile,True,False,210
+23954,Running,150.00,146.00,48,Preheat,Default Profile,True,False,210
+24054,Running,150.00,146.00,48,Preheat,Default Profile,True,False,210
+24154,Running,150.00,146.00,48,Preheat,Default Profile,True,False,210
+24255,Running,150.00,146.00,48,Preheat,Default Profile,True,False,210
+24355,Running,150.00,146.00,48,Preheat,Default Profile,True,False,210
+24455,Running,150.00,146.00,48,Preheat,Default Profile,True,False,210
+24555,Running,150.00,146.73,47,Preheat,Default Profile,True,False,220
+24655,Running,150.00,146.73,47,Preheat,Default Profile,True,False,220
+24756,Running,150.00,146.73,47,Preheat,Default Profile,True,False,220
+24856,Running,150.00,146.73,47,Preheat,Default Profile,True,False,220
+24956,Running,150.00,146.73,47,Preheat,Default Profile,True,False,220
+25056,Running,150.00,146.73,47,Preheat,Default Profile,True,False,220
+25156,Running,150.00,146.73,47,Preheat,Default Profile,True,False,220
+25257,Running,150.00,146.73,47,Preheat,Default Profile,True,False,220
+25357,Running,150.00,146.73,47,Preheat,Default Profile,True,False,220
+25457,Running,150.00,146.73,47,Preheat,Default Profile,True,False,220
+25557,Running,150.00,147.35,45,Preheat,Default Profile,True,False,230
+25657,Running,150.00,147.35,45,Preheat,Default Profile,True,False,230
+25758,Running,150.00,147.35,45,Preheat,Default Profile,True,False,230
+25858,Running,150.00,147.35,45,Preheat,Default Profile,True,False,230
+25958,Running,150.00,147.35,45,Preheat,Default Profile,True,False,230
+26058,Running,150.00,147.35,45,Preheat,Default Profile,True,False,230
+26158,Running,150.00,147.35,45,Preheat,Default Profile,True,False,230
+26259,Running,150.00,147.35,45,Preheat,Default Profile,True,False,230
+26359,Running,150.00,147.35,45,Preheat,Default Profile,True,False,230
+26459,Running,150.00,147.35,45,Preheat,Default Profile,True,False,230
+26559,Running,150.00,147.82,45,Preheat,Default Profile,True,False,240
+26660,Running,150.00,147.82,45,Preheat,Default Profile,True,False,240
+26760,Running,150.00,147.82,45,Preheat,Default Profile,True,False,240
+26860,Running,150.00,147.82,45,Preheat,Default Profile,True,False,240
+26960,Running,150.00,147.82,45,Preheat,Default Profile,True,False,240
+27061,Running,150.00,147.82,45,Preheat,Default Profile,True,False,240
+27161,Running,150.00,147.82,45,Preheat,Default Profile,True,False,240
+27261,Running,150.00,147.82,45,Preheat,Default Profile,True,False,240
+27361,Running,150.00,147.82,45,Preheat,Default Profile,True,False,240
+27462,Running,150.00,147.82,45,Preheat,Default Profile,True,False,240
+27562,Running,150.00,148.18,44,Preheat,Default Profile,True,False,250
+27662,Running,150.00,148.18,44,Preheat,Default Profile,True,False,250
+27762,Running,150.00,148.18,44,Preheat,Default Profile,True,False,250
+27863,Running,150.00,148.18,44,Preheat,Default Profile,True,False,250
+27963,Running,150.00,148.18,44,Preheat,Default Profile,True,False,250
+28063,Running,150.00,148.18,44,Preheat,Default Profile,True,False,250
+28163,Running,150.00,148.18,44,Preheat,Default Profile,True,False,250
+28263,Running,150.00,148.18,44,Preheat,Default Profile,True,False,250
+28364,Running,150.00,148.18,44,Preheat,Default Profile,True,False,250
+28464,Running,150.00,148.18,44,Preheat,Default Profile,True,False,250
+28564,Running,150.00,148.49,44,Preheat,Default Profile,True,False,260
+28664,Running,150.00,148.49,44,Preheat,Default Profile,True,False,260
+28765,Running,150.00,148.49,44,Preheat,Default Profile,True,False,260
+28865,Running,150.00,148.49,44,Preheat,Default Profile,True,False,260
+28965,Running,150.00,148.49,44,Preheat,Default Profile,True,False,260
+29065,Running,150.00,148.49,44,Preheat,Default Profile,True,False,260
+29166,Running,150.00,148.49,44,Preheat,Default Profile,True,False,260
+29266,Running,150.00,148.49,44,Preheat,Default Profile,True,False,260
+29366,Running,150.00,148.49,44,Preheat,Default Profile,True,False,260
+29466,Running,150.00,148.49,44,Preheat,Default Profile,True,False,260
+29567,Running,150.00,148.74,43,Preheat,Default Profile,True,False,270
+29667,Running,150.00,148.74,43,Preheat,Default Profile,True,False,270
+29767,Running,150.00,148.74,43,Preheat,Default Profile,True,False,270
+29867,Running,150.00,148.74,43,Preheat,Default Profile,True,False,270
+29968,Running,150.00,148.74,43,Preheat,Default Profile,True,False,270
+30068,Running,150.00,148.74,43,Preheat,Default Profile,True,False,270
+30168,Running,150.00,148.74,43,Preheat,Default Profile,True,False,270
+30268,Running,150.00,148.74,43,Preheat,Default Profile,True,False,270
+30369,Running,150.00,148.74,43,Preheat,Default Profile,True,False,270
+30469,Running,150.00,148.74,43,Preheat,Default Profile,True,False,270
+30569,Running,150.00,148.94,43,Preheat,Default Profile,True,False,280
+30669,Running,150.00,148.94,43,Preheat,Default Profile,True,False,280
+30770,Running,150.00,148.94,43,Preheat,Default Profile,True,False,280
+30870,Running,150.00,148.94,43,Preheat,Default Profile,True,False,280
+30970,Running,150.00,148.94,43,Preheat,Default Profile,True,False,280
+31070,Running,150.00,148.94,43,Preheat,Default Profile,True,False,280
+31171,Running,150.00,148.94,43,Preheat,Default Profile,True,False,280
+31271,Running,150.00,148.94,43,Preheat,Default Profile,True,False,280
+31371,Running,150.00,148.94,43,Preheat,Default Profile,True,False,280
+31471,Running,150.00,148.94,43,Preheat,Default Profile,True,False,280
+31572,Running,175.00,149.09,100,Soak,Default Profile,True,False,290
+31672,Running,175.00,149.09,100,Soak,Default Profile,True,False,290
+31772,Running,175.00,149.09,100,Soak,Default Profile,True,False,290
+31872,Running,175.00,149.09,100,Soak,Default Profile,True,False,290
+31973,Running,175.00,149.09,100,Soak,Default Profile,True,False,290
+32073,Running,175.00,149.09,100,Soak,Default Profile,True,False,290
+32173,Running,175.00,149.09,100,Soak,Default Profile,True,False,290
+32273,Running,175.00,149.09,100,Soak,Default Profile,True,False,290
+32373,Running,175.00,149.09,100,Soak,Default Profile,True,False,290
+32474,Running,175.00,149.09,100,Soak,Default Profile,True,False,290
+32574,Running,175.00,151.80,100,Soak,Default Profile,True,False,300
+32674,Running,175.00,151.80,100,Soak,Default Profile,True,False,300
+32775,Running,175.00,151.80,100,Soak,Default Profile,True,False,300
+32875,Running,175.00,151.80,100,Soak,Default Profile,True,False,300
+32975,Running,175.00,151.80,100,Soak,Default Profile,True,False,300
+33075,Running,175.00,151.80,100,Soak,Default Profile,True,False,300
+33176,Running,175.00,151.80,100,Soak,Default Profile,True,False,300
+33276,Running,175.00,151.80,100,Soak,Default Profile,True,False,300
+33376,Running,175.00,151.80,100,Soak,Default Profile,True,False,300
+33476,Running,175.00,151.80,100,Soak,Default Profile,True,False,300
+33576,Running,175.00,156.96,79,Soak,Default Profile,True,False,310
+33677,Running,175.00,156.96,79,Soak,Default Profile,True,False,310
+33777,Running,175.00,156.96,79,Soak,Default Profile,True,False,310
+33877,Running,175.00,156.96,79,Soak,Default Profile,True,False,310
+33977,Running,175.00,156.96,79,Soak,Default Profile,True,False,310
+34078,Running,175.00,156.96,79,Soak,Default Profile,True,False,310
+34178,Running,175.00,156.96,79,Soak,Default Profile,True,False,310
+34278,Running,175.00,156.96,79,Soak,Default Profile,True,False,310
+34378,Running,175.00,156.96,79,Soak,Default Profile,True,False,310
+34478,Running,175.00,156.96,79,Soak,Default Profile,True,False,310
+34579,Running,175.00,161.02,70,Soak,Default Profile,True,False,320
+34679,Running,175.00,161.02,70,Soak,Default Profile,True,False,320
+34779,Running,175.00,161.02,70,Soak,Default Profile,True,False,320
+34879,Running,175.00,161.02,70,Soak,Default Profile,True,False,320
+34980,Running,175.00,161.02,70,Soak,Default Profile,True,False,320
+35080,Running,175.00,161.02,70,Soak,Default Profile,True,False,320
+35180,Running,175.00,161.02,70,Soak,Default Profile,True,False,320
+35280,Running,175.00,161.02,70,Soak,Default Profile,True,False,320
+35381,Running,175.00,161.02,70,Soak,Default Profile,True,False,320
+35481,Running,175.00,161.02,70,Soak,Default Profile,True,False,320
+35581,Running,175.00,163.62,66,Soak,Default Profile,True,False,330
+35681,Running,175.00,163.62,66,Soak,Default Profile,True,False,330
+35781,Running,175.00,163.62,66,Soak,Default Profile,True,False,330
+35882,Running,175.00,163.62,66,Soak,Default Profile,True,False,330
+35982,Running,175.00,163.62,66,Soak,Default Profile,True,False,330
+36082,Running,175.00,163.62,66,Soak,Default Profile,True,False,330
+36182,Running,175.00,163.62,66,Soak,Default Profile,True,False,330
+36283,Running,175.00,163.62,66,Soak,Default Profile,True,False,330
+36383,Running,175.00,163.62,66,Soak,Default Profile,True,False,330
+36483,Running,175.00,163.62,66,Soak,Default Profile,True,False,330
+36584,Running,175.00,165.57,63,Soak,Default Profile,True,False,340
+36684,Running,175.00,165.57,63,Soak,Default Profile,True,False,340
+36784,Running,175.00,165.57,63,Soak,Default Profile,True,False,340
+36884,Running,175.00,165.57,63,Soak,Default Profile,True,False,340
+36984,Running,175.00,165.57,63,Soak,Default Profile,True,False,340
+37085,Running,175.00,165.57,63,Soak,Default Profile,True,False,340
+37185,Running,175.00,165.57,63,Soak,Default Profile,True,False,340
+37285,Running,175.00,165.57,63,Soak,Default Profile,True,False,340
+37385,Running,175.00,165.57,63,Soak,Default Profile,True,False,340
+37486,Running,175.00,165.57,63,Soak,Default Profile,True,False,340
+37586,Running,175.00,167.14,60,Soak,Default Profile,True,False,350
+37686,Running,175.00,167.14,60,Soak,Default Profile,True,False,350
+37786,Running,175.00,167.14,60,Soak,Default Profile,True,False,350
+37887,Running,175.00,167.14,60,Soak,Default Profile,True,False,350
+37987,Running,175.00,167.14,60,Soak,Default Profile,True,False,350
+38087,Running,175.00,167.14,60,Soak,Default Profile,True,False,350
+38187,Running,175.00,167.14,60,Soak,Default Profile,True,False,350
+38288,Running,175.00,167.14,60,Soak,Default Profile,True,False,350
+38388,Running,175.00,167.14,60,Soak,Default Profile,True,False,350
+38488,Running,175.00,167.14,60,Soak,Default Profile,True,False,350
+38588,Running,175.00,168.40,59,Soak,Default Profile,True,False,360
+38689,Running,175.00,168.40,59,Soak,Default Profile,True,False,360
+38789,Running,175.00,168.40,59,Soak,Default Profile,True,False,360
+38889,Running,175.00,168.40,59,Soak,Default Profile,True,False,360
+38989,Running,175.00,168.40,59,Soak,Default Profile,True,False,360
+39089,Running,175.00,168.40,59,Soak,Default Profile,True,False,360
+39190,Running,175.00,168.40,59,Soak,Default Profile,True,False,360
+39290,Running,175.00,168.40,59,Soak,Default Profile,True,False,360
+39390,Running,175.00,168.40,59,Soak,Default Profile,True,False,360
+39490,Running,175.00,168.40,59,Soak,Default Profile,True,False,360
+39591,Running,175.00,169.45,58,Soak,Default Profile,True,False,370
+39691,Running,175.00,169.45,58,Soak,Default Profile,True,False,370
+39791,Running,175.00,169.45,58,Soak,Default Profile,True,False,370
+39891,Running,175.00,169.45,58,Soak,Default Profile,True,False,370
+39992,Running,175.00,169.45,58,Soak,Default Profile,True,False,370
+40092,Running,175.00,169.45,58,Soak,Default Profile,True,False,370
+40192,Running,175.00,169.45,58,Soak,Default Profile,True,False,370
+40292,Running,175.00,169.45,58,Soak,Default Profile,True,False,370
+40393,Running,175.00,169.45,58,Soak,Default Profile,True,False,370
+40493,Running,175.00,169.45,58,Soak,Default Profile,True,False,370
+40593,Running,175.00,170.37,56,Soak,Default Profile,True,False,380
+40693,Running,175.00,170.37,56,Soak,Default Profile,True,False,380
+40794,Running,175.00,170.37,56,Soak,Default Profile,True,False,380
+40894,Running,175.00,170.37,56,Soak,Default Profile,True,False,380
+40994,Running,175.00,170.37,56,Soak,Default Profile,True,False,380
+41094,Running,175.00,170.37,56,Soak,Default Profile,True,False,380
+41195,Running,175.00,170.37,56,Soak,Default Profile,True,False,380
+41295,Running,175.00,170.37,56,Soak,Default Profile,True,False,380
+41395,Running,175.00,170.37,56,Soak,Default Profile,True,False,380
+41496,Running,175.00,170.37,56,Soak,Default Profile,True,False,380
+41596,Running,175.00,171.14,55,Soak,Default Profile,True,False,390
+41696,Running,175.00,171.14,55,Soak,Default Profile,True,False,390
+41796,Running,175.00,171.14,55,Soak,Default Profile,True,False,390
+41897,Running,175.00,171.14,55,Soak,Default Profile,True,False,390
+41997,Running,175.00,171.14,55,Soak,Default Profile,True,False,390
+42097,Running,175.00,171.14,55,Soak,Default Profile,True,False,390
+42197,Running,175.00,171.14,55,Soak,Default Profile,True,False,390
+42298,Running,175.00,171.14,55,Soak,Default Profile,True,False,390
+42398,Running,175.00,171.14,55,Soak,Default Profile,True,False,390
+42498,Running,175.00,171.14,55,Soak,Default Profile,True,False,390
+42599,Running,175.00,171.74,54,Soak,Default Profile,True,False,400
+42699,Running,175.00,171.74,54,Soak,Default Profile,True,False,400
+42799,Running,175.00,171.74,54,Soak,Default Profile,True,False,400
+42900,Running,175.00,171.74,54,Soak,Default Profile,True,False,400
+43000,Running,175.00,171.74,54,Soak,Default Profile,True,False,400
+43100,Running,175.00,171.74,54,Soak,Default Profile,True,False,400
+43200,Running,175.00,171.74,54,Soak,Default Profile,True,False,400
+43301,Running,175.00,171.74,54,Soak,Default Profile,True,False,400
+43401,Running,175.00,171.74,54,Soak,Default Profile,True,False,400
+43501,Running,175.00,171.74,54,Soak,Default Profile,True,False,400
+43601,Running,175.00,172.24,54,Soak,Default Profile,True,False,410
+43702,Running,175.00,172.24,54,Soak,Default Profile,True,False,410
+43802,Running,175.00,172.24,54,Soak,Default Profile,True,False,410
+43902,Running,175.00,172.24,54,Soak,Default Profile,True,False,410
+44003,Running,175.00,172.24,54,Soak,Default Profile,True,False,410
+44103,Running,175.00,172.24,54,Soak,Default Profile,True,False,410
+44203,Running,175.00,172.24,54,Soak,Default Profile,True,False,410
+44303,Running,175.00,172.24,54,Soak,Default Profile,True,False,410
+44404,Running,175.00,172.24,54,Soak,Default Profile,True,False,410
+44504,Running,175.00,172.24,54,Soak,Default Profile,True,False,410
+44604,Running,175.00,172.68,53,Soak,Default Profile,True,False,420
+44704,Running,175.00,172.68,53,Soak,Default Profile,True,False,420
+44805,Running,175.00,172.68,53,Soak,Default Profile,True,False,420
+44905,Running,175.00,172.68,53,Soak,Default Profile,True,False,420
+45005,Running,175.00,172.68,53,Soak,Default Profile,True,False,420
+45105,Running,175.00,172.68,53,Soak,Default Profile,True,False,420
+45206,Running,175.00,172.68,53,Soak,Default Profile,True,False,420
+45306,Running,175.00,172.68,53,Soak,Default Profile,True,False,420
+45406,Running,175.00,172.68,53,Soak,Default Profile,True,False,420
+45506,Running,175.00,173.06,53,Soak,Default Profile,True,False,430
+45606,Running,175.00,173.06,53,Soak,Default Profile,True,False,430
+45707,Running,175.00,173.06,53,Soak,Default Profile,True,False,430
+45807,Running,175.00,173.06,53,Soak,Default Profile,True,False,430
+45907,Running,175.00,173.06,53,Soak,Default Profile,True,False,430
+46007,Running,175.00,173.06,53,Soak,Default Profile,True,False,430
+46108,Running,175.00,173.06,53,Soak,Default Profile,True,False,430
+46208,Running,175.00,173.06,53,Soak,Default Profile,True,False,430
+46308,Running,175.00,173.06,53,Soak,Default Profile,True,False,430
+46408,Running,175.00,173.06,53,Soak,Default Profile,True,False,430
+46508,Running,175.00,173.39,52,Soak,Default Profile,True,False,440
+46609,Running,175.00,173.39,52,Soak,Default Profile,True,False,440
+46709,Running,175.00,173.39,52,Soak,Default Profile,True,False,440
+46809,Running,175.00,173.39,52,Soak,Default Profile,True,False,440
+46909,Running,175.00,173.39,52,Soak,Default Profile,True,False,440
+47010,Running,175.00,173.39,52,Soak,Default Profile,True,False,440
+47110,Running,175.00,173.39,52,Soak,Default Profile,True,False,440
+47210,Running,175.00,173.39,52,Soak,Default Profile,True,False,440
+47310,Running,175.00,173.39,52,Soak,Default Profile,True,False,440
+47411,Running,175.00,173.39,52,Soak,Default Profile,True,False,440
+47511,Running,175.00,173.66,52,Soak,Default Profile,True,False,450
+47611,Running,175.00,173.66,52,Soak,Default Profile,True,False,450
+47711,Running,175.00,173.66,52,Soak,Default Profile,True,False,450
+47811,Running,175.00,173.66,52,Soak,Default Profile,True,False,450
+47912,Running,175.00,173.66,52,Soak,Default Profile,True,False,450
+48012,Running,175.00,173.66,52,Soak,Default Profile,True,False,450
+48112,Running,175.00,173.66,52,Soak,Default Profile,True,False,450
+48212,Running,175.00,173.66,52,Soak,Default Profile,True,False,450
+48312,Running,175.00,173.66,52,Soak,Default Profile,True,False,450
+48413,Running,175.00,173.66,52,Soak,Default Profile,True,False,450
+48513,Running,175.00,173.88,52,Soak,Default Profile,True,False,460
+48613,Running,175.00,173.88,52,Soak,Default Profile,True,False,460
+48713,Running,175.00,173.88,52,Soak,Default Profile,True,False,460
+48814,Running,175.00,173.88,52,Soak,Default Profile,True,False,460
+48914,Running,175.00,173.88,52,Soak,Default Profile,True,False,460
+49014,Running,175.00,173.88,52,Soak,Default Profile,True,False,460
+49114,Running,175.00,173.88,52,Soak,Default Profile,True,False,460
+49214,Running,175.00,173.88,52,Soak,Default Profile,True,False,460
+49315,Running,175.00,173.88,52,Soak,Default Profile,True,False,460
+49415,Running,175.00,173.88,52,Soak,Default Profile,True,False,460
+49515,Running,230.00,174.09,100,Ramp,Default Profile,True,False,470
+49615,Running,230.00,174.09,100,Ramp,Default Profile,True,False,470
+49715,Running,230.00,174.09,100,Ramp,Default Profile,True,False,470
+49816,Running,230.00,174.09,100,Ramp,Default Profile,True,False,470
+49916,Running,230.00,174.09,100,Ramp,Default Profile,True,False,470
+50016,Running,230.00,174.09,100,Ramp,Default Profile,True,False,470
+50116,Running,230.00,174.09,100,Ramp,Default Profile,True,False,470
+50217,Running,230.00,174.09,100,Ramp,Default Profile,True,False,470
+50317,Running,230.00,174.09,100,Ramp,Default Profile,True,False,470
+50417,Running,230.00,174.09,100,Ramp,Default Profile,True,False,470
+50517,Running,230.00,176.46,100,Ramp,Default Profile,True,False,480
+50618,Running,230.00,176.46,100,Ramp,Default Profile,True,False,480
+50718,Running,230.00,176.46,100,Ramp,Default Profile,True,False,480
+50818,Running,230.00,176.46,100,Ramp,Default Profile,True,False,480
+50918,Running,230.00,176.46,100,Ramp,Default Profile,True,False,480
+51018,Running,230.00,176.46,100,Ramp,Default Profile,True,False,480
+51119,Running,230.00,176.46,100,Ramp,Default Profile,True,False,480
+51219,Running,230.00,176.46,100,Ramp,Default Profile,True,False,480
+51319,Running,230.00,176.46,100,Ramp,Default Profile,True,False,480
+51419,Running,230.00,176.46,100,Ramp,Default Profile,True,False,480
+51520,Running,230.00,180.88,100,Ramp,Default Profile,True,False,490
+51620,Running,230.00,180.88,100,Ramp,Default Profile,True,False,490
+51720,Running,230.00,180.88,100,Ramp,Default Profile,True,False,490
+51820,Running,230.00,180.88,100,Ramp,Default Profile,True,False,490
+51920,Running,230.00,180.88,100,Ramp,Default Profile,True,False,490
+52021,Running,230.00,180.88,100,Ramp,Default Profile,True,False,490
+52121,Running,230.00,180.88,100,Ramp,Default Profile,True,False,490
+52221,Running,230.00,180.88,100,Ramp,Default Profile,True,False,490
+52321,Running,230.00,180.88,100,Ramp,Default Profile,True,False,490
+52422,Running,230.00,180.88,100,Ramp,Default Profile,True,False,490
+52522,Running,230.00,185.17,100,Ramp,Default Profile,True,False,500
+52622,Running,230.00,185.17,100,Ramp,Default Profile,True,False,500
+52722,Running,230.00,185.17,100,Ramp,Default Profile,True,False,500
+52823,Running,230.00,185.17,100,Ramp,Default Profile,True,False,500
+52923,Running,230.00,185.17,100,Ramp,Default Profile,True,False,500
+53023,Running,230.00,185.17,100,Ramp,Default Profile,True,False,500
+53123,Running,230.00,185.17,100,Ramp,Default Profile,True,False,500
+53223,Running,230.00,185.17,100,Ramp,Default Profile,True,False,500
+53324,Running,230.00,185.17,100,Ramp,Default Profile,True,False,500
+53424,Running,230.00,185.17,100,Ramp,Default Profile,True,False,500
+53524,Running,230.00,189.34,100,Ramp,Default Profile,True,False,510
+53624,Running,230.00,189.34,100,Ramp,Default Profile,True,False,510
+53725,Running,230.00,189.34,100,Ramp,Default Profile,True,False,510
+53825,Running,230.00,189.34,100,Ramp,Default Profile,True,False,510
+53925,Running,230.00,189.34,100,Ramp,Default Profile,True,False,510
+54025,Running,230.00,189.34,100,Ramp,Default Profile,True,False,510
+54126,Running,230.00,189.34,100,Ramp,Default Profile,True,False,510
+54226,Running,230.00,189.34,100,Ramp,Default Profile,True,False,510
+54326,Running,230.00,189.34,100,Ramp,Default Profile,True,False,510
+54426,Running,230.00,189.34,100,Ramp,Default Profile,True,False,510
+54527,Running,230.00,193.38,100,Ramp,Default Profile,True,False,520
+54627,Running,230.00,193.38,100,Ramp,Default Profile,True,False,520
+54727,Running,230.00,193.38,100,Ramp,Default Profile,True,False,520
+54827,Running,230.00,193.38,100,Ramp,Default Profile,True,False,520
+54928,Running,230.00,193.38,100,Ramp,Default Profile,True,False,520
+55028,Running,230.00,193.38,100,Ramp,Default Profile,True,False,520
+55128,Running,230.00,193.38,100,Ramp,Default Profile,True,False,520
+55229,Running,230.00,193.38,100,Ramp,Default Profile,True,False,520
+55329,Running,230.00,193.38,100,Ramp,Default Profile,True,False,520
+55429,Running,230.00,193.38,100,Ramp,Default Profile,True,False,520
+55529,Running,230.00,197.30,100,Ramp,Default Profile,True,False,530
+55630,Running,230.00,197.30,100,Ramp,Default Profile,True,False,530
+55730,Running,230.00,197.30,100,Ramp,Default Profile,True,False,530
+55830,Running,230.00,197.30,100,Ramp,Default Profile,True,False,530
+55930,Running,230.00,197.30,100,Ramp,Default Profile,True,False,530
+56030,Running,230.00,197.30,100,Ramp,Default Profile,True,False,530
+56131,Running,230.00,197.30,100,Ramp,Default Profile,True,False,530
+56231,Running,230.00,197.30,100,Ramp,Default Profile,True,False,530
+56331,Running,230.00,197.30,100,Ramp,Default Profile,True,False,530
+56431,Running,230.00,197.30,100,Ramp,Default Profile,True,False,530
+56532,Running,230.00,201.10,100,Ramp,Default Profile,True,False,540
+56632,Running,230.00,201.10,100,Ramp,Default Profile,True,False,540
+56732,Running,230.00,201.10,100,Ramp,Default Profile,True,False,540
+56832,Running,230.00,201.10,100,Ramp,Default Profile,True,False,540
+56932,Running,230.00,201.10,100,Ramp,Default Profile,True,False,540
+57033,Running,230.00,201.10,100,Ramp,Default Profile,True,False,540
+57133,Running,230.00,201.10,100,Ramp,Default Profile,True,False,540
+57233,Running,230.00,201.10,100,Ramp,Default Profile,True,False,540
+57333,Running,230.00,201.10,100,Ramp,Default Profile,True,False,540
+57434,Running,230.00,201.10,100,Ramp,Default Profile,True,False,540
+57534,Running,230.00,204.79,100,Ramp,Default Profile,True,False,550
+57634,Running,230.00,204.79,100,Ramp,Default Profile,True,False,550
+57734,Running,230.00,204.79,100,Ramp,Default Profile,True,False,550
+57834,Running,230.00,204.79,100,Ramp,Default Profile,True,False,550
+57935,Running,230.00,204.79,100,Ramp,Default Profile,True,False,550
+58035,Running,230.00,204.79,100,Ramp,Default Profile,True,False,550
+58135,Running,230.00,204.79,100,Ramp,Default Profile,True,False,550
+58235,Running,230.00,204.79,100,Ramp,Default Profile,True,False,550
+58336,Running,230.00,204.79,100,Ramp,Default Profile,True,False,550
+58436,Running,230.00,204.79,100,Ramp,Default Profile,True,False,550
+58536,Running,230.00,208.37,95,Ramp,Default Profile,True,False,560
+58636,Running,230.00,208.37,95,Ramp,Default Profile,True,False,560
+58736,Running,230.00,208.37,95,Ramp,Default Profile,True,False,560
+58837,Running,230.00,208.37,95,Ramp,Default Profile,True,False,560
+58937,Running,230.00,208.37,95,Ramp,Default Profile,True,False,560
+59037,Running,230.00,208.37,95,Ramp,Default Profile,True,False,560
+59137,Running,230.00,208.37,95,Ramp,Default Profile,True,False,560
+59238,Running,230.00,208.37,95,Ramp,Default Profile,True,False,560
+59338,Running,230.00,208.37,95,Ramp,Default Profile,True,False,560
+59438,Running,230.00,208.37,95,Ramp,Default Profile,True,False,560
+59538,Running,230.00,211.62,91,Ramp,Default Profile,True,False,570
+59638,Running,230.00,211.62,91,Ramp,Default Profile,True,False,570
+59739,Running,230.00,211.62,91,Ramp,Default Profile,True,False,570
+59839,Running,230.00,211.62,91,Ramp,Default Profile,True,False,570
+59939,Running,230.00,211.62,91,Ramp,Default Profile,True,False,570
+60039,Running,230.00,211.62,91,Ramp,Default Profile,True,False,570
+60140,Running,230.00,211.62,91,Ramp,Default Profile,True,False,570
+60240,Running,230.00,211.62,91,Ramp,Default Profile,True,False,570
+60340,Running,230.00,211.62,91,Ramp,Default Profile,True,False,570
+60440,Running,230.00,211.62,91,Ramp,Default Profile,True,False,570
+60541,Running,230.00,214.37,88,Ramp,Default Profile,True,False,580
+60641,Running,230.00,214.37,88,Ramp,Default Profile,True,False,580
+60741,Running,230.00,214.37,88,Ramp,Default Profile,True,False,580
+60841,Running,230.00,214.37,88,Ramp,Default Profile,True,False,580
+60941,Running,230.00,214.37,88,Ramp,Default Profile,True,False,580
+61042,Running,230.00,214.37,88,Ramp,Default Profile,True,False,580
+61142,Running,230.00,214.37,88,Ramp,Default Profile,True,False,580
+61242,Running,230.00,214.37,88,Ramp,Default Profile,True,False,580
+61342,Running,230.00,214.37,88,Ramp,Default Profile,True,False,580
+61443,Running,230.00,214.37,88,Ramp,Default Profile,True,False,580
+61543,Running,230.00,216.72,86,Ramp,Default Profile,True,False,590
+61643,Running,230.00,216.72,86,Ramp,Default Profile,True,False,590
+61743,Running,230.00,216.72,86,Ramp,Default Profile,True,False,590
+61843,Running,230.00,216.72,86,Ramp,Default Profile,True,False,590
+61944,Running,230.00,216.72,86,Ramp,Default Profile,True,False,590
+62044,Running,230.00,216.72,86,Ramp,Default Profile,True,False,590
+62144,Running,230.00,216.72,86,Ramp,Default Profile,True,False,590
+62244,Running,230.00,216.72,86,Ramp,Default Profile,True,False,590
+62345,Running,230.00,216.72,86,Ramp,Default Profile,True,False,590
+62445,Running,230.00,216.72,86,Ramp,Default Profile,True,False,590
+62545,Running,230.00,218.79,83,Ramp,Default Profile,True,False,600
+62645,Running,230.00,218.79,83,Ramp,Default Profile,True,False,600
+62746,Running,230.00,218.79,83,Ramp,Default Profile,True,False,600
+62846,Running,230.00,218.79,83,Ramp,Default Profile,True,False,600
+62946,Running,230.00,218.79,83,Ramp,Default Profile,True,False,600
+63046,Running,230.00,218.79,83,Ramp,Default Profile,True,False,600
+63146,Running,230.00,218.79,83,Ramp,Default Profile,True,False,600
+63246,Running,230.00,218.79,83,Ramp,Default Profile,True,False,600
+63347,Running,230.00,218.79,83,Ramp,Default Profile,True,False,600
+63447,Running,230.00,218.79,83,Ramp,Default Profile,True,False,600
+63547,Running,230.00,220.56,81,Ramp,Default Profile,True,False,610
+63647,Running,230.00,220.56,81,Ramp,Default Profile,True,False,610
+63747,Running,230.00,220.56,81,Ramp,Default Profile,True,False,610
+63847,Running,230.00,220.56,81,Ramp,Default Profile,True,False,610
+63948,Running,230.00,220.56,81,Ramp,Default Profile,True,False,610
+64048,Running,230.00,220.56,81,Ramp,Default Profile,True,False,610
+64148,Running,230.00,220.56,81,Ramp,Default Profile,True,False,610
+64248,Running,230.00,220.56,81,Ramp,Default Profile,True,False,610
+64348,Running,230.00,220.56,81,Ramp,Default Profile,True,False,610
+64448,Running,230.00,220.56,81,Ramp,Default Profile,True,False,610
+64549,Running,230.00,222.07,79,Ramp,Default Profile,True,False,620
+64649,Running,230.00,222.07,79,Ramp,Default Profile,True,False,620
+64749,Running,230.00,222.07,79,Ramp,Default Profile,True,False,620
+64849,Running,230.00,222.07,79,Ramp,Default Profile,True,False,620
+64949,Running,230.00,222.07,79,Ramp,Default Profile,True,False,620
+65050,Running,230.00,222.07,79,Ramp,Default Profile,True,False,620
+65150,Running,230.00,222.07,79,Ramp,Default Profile,True,False,620
+65250,Running,230.00,222.07,79,Ramp,Default Profile,True,False,620
+65350,Running,230.00,222.07,79,Ramp,Default Profile,True,False,620
+65450,Running,230.00,222.07,79,Ramp,Default Profile,True,False,620
+65551,Running,230.00,223.34,78,Ramp,Default Profile,True,False,630
+65651,Running,230.00,223.34,78,Ramp,Default Profile,True,False,630
+65751,Running,230.00,223.34,78,Ramp,Default Profile,True,False,630
+65851,Running,230.00,223.34,78,Ramp,Default Profile,True,False,630
+65951,Running,230.00,223.34,78,Ramp,Default Profile,True,False,630
+66051,Running,230.00,223.34,78,Ramp,Default Profile,True,False,630
+66152,Running,230.00,223.34,78,Ramp,Default Profile,True,False,630
+66252,Running,230.00,223.34,78,Ramp,Default Profile,True,False,630
+66352,Running,230.00,223.34,78,Ramp,Default Profile,True,False,630
+66452,Running,230.00,223.34,78,Ramp,Default Profile,True,False,630
+66552,Running,230.00,224.45,76,Ramp,Default Profile,True,False,640
+66653,Running,230.00,224.45,76,Ramp,Default Profile,True,False,640
+66753,Running,230.00,224.45,76,Ramp,Default Profile,True,False,640
+66853,Running,230.00,224.45,76,Ramp,Default Profile,True,False,640
+66953,Running,230.00,224.45,76,Ramp,Default Profile,True,False,640
+67053,Running,230.00,224.45,76,Ramp,Default Profile,True,False,640
+67153,Running,230.00,224.45,76,Ramp,Default Profile,True,False,640
+67254,Running,230.00,224.45,76,Ramp,Default Profile,True,False,640
+67354,Running,230.00,224.45,76,Ramp,Default Profile,True,False,640
+67454,Running,230.00,224.45,76,Ramp,Default Profile,True,False,640
+67554,Running,230.00,225.39,75,Ramp,Default Profile,True,False,650
+67654,Running,230.00,225.39,75,Ramp,Default Profile,True,False,650
+67755,Running,230.00,225.39,75,Ramp,Default Profile,True,False,650
+67855,Running,230.00,225.39,75,Ramp,Default Profile,True,False,650
+67955,Running,230.00,225.39,75,Ramp,Default Profile,True,False,650
+68055,Running,230.00,225.39,75,Ramp,Default Profile,True,False,650
+68155,Running,230.00,225.39,75,Ramp,Default Profile,True,False,650
+68256,Running,230.00,225.39,75,Ramp,Default Profile,True,False,650
+68356,Running,230.00,225.39,75,Ramp,Default Profile,True,False,650
+68456,Running,230.00,225.39,75,Ramp,Default Profile,True,False,650
+68556,Running,230.00,226.17,74,Ramp,Default Profile,True,False,660
+68657,Running,230.00,226.17,74,Ramp,Default Profile,True,False,660
+68757,Running,230.00,226.17,74,Ramp,Default Profile,True,False,660
+68857,Running,230.00,226.17,74,Ramp,Default Profile,True,False,660
+68957,Running,230.00,226.17,74,Ramp,Default Profile,True,False,660
+69058,Running,230.00,226.17,74,Ramp,Default Profile,True,False,660
+69158,Running,230.00,226.17,74,Ramp,Default Profile,True,False,660
+69258,Running,230.00,226.17,74,Ramp,Default Profile,True,False,660
+69358,Running,230.00,226.17,74,Ramp,Default Profile,True,False,660
+69459,Running,230.00,226.17,74,Ramp,Default Profile,True,False,660
+69559,Running,230.00,226.83,73,Ramp,Default Profile,True,False,670
+69659,Running,230.00,226.83,73,Ramp,Default Profile,True,False,670
+69759,Running,230.00,226.83,73,Ramp,Default Profile,True,False,670
+69859,Running,230.00,226.83,73,Ramp,Default Profile,True,False,670
+69960,Running,230.00,226.83,73,Ramp,Default Profile,True,False,670
+70060,Running,230.00,226.83,73,Ramp,Default Profile,True,False,670
+70160,Running,230.00,226.83,73,Ramp,Default Profile,True,False,670
+70260,Running,230.00,226.83,73,Ramp,Default Profile,True,False,670
+70360,Running,230.00,226.83,73,Ramp,Default Profile,True,False,670
+70461,Running,230.00,226.83,73,Ramp,Default Profile,True,False,670
+70561,Running,230.00,227.39,72,Ramp,Default Profile,True,False,680
+70662,Running,230.00,227.39,72,Ramp,Default Profile,True,False,680
+70762,Running,230.00,227.39,72,Ramp,Default Profile,True,False,680
+70862,Running,230.00,227.39,72,Ramp,Default Profile,True,False,680
+70962,Running,230.00,227.39,72,Ramp,Default Profile,True,False,680
+71062,Running,230.00,227.39,72,Ramp,Default Profile,True,False,680
+71163,Running,230.00,227.39,72,Ramp,Default Profile,True,False,680
+71263,Running,230.00,227.39,72,Ramp,Default Profile,True,False,680
+71363,Running,230.00,227.39,72,Ramp,Default Profile,True,False,680
+71463,Running,230.00,227.39,72,Ramp,Default Profile,True,False,680
+71563,Running,230.00,227.84,71,Ramp,Default Profile,True,False,690
+71663,Running,230.00,227.84,71,Ramp,Default Profile,True,False,690
+71764,Running,230.00,227.84,71,Ramp,Default Profile,True,False,690
+71864,Running,230.00,227.84,71,Ramp,Default Profile,True,False,690
+71964,Running,230.00,227.84,71,Ramp,Default Profile,True,False,690
+72064,Running,230.00,227.84,71,Ramp,Default Profile,True,False,690
+72164,Running,230.00,227.84,71,Ramp,Default Profile,True,False,690
+72265,Running,230.00,227.84,71,Ramp,Default Profile,True,False,690
+72365,Running,230.00,227.84,71,Ramp,Default Profile,True,False,690
+72465,Running,230.00,227.84,71,Ramp,Default Profile,True,False,690
+72565,Running,230.00,228.19,71,Ramp,Default Profile,True,False,700
+72665,Running,230.00,228.19,71,Ramp,Default Profile,True,False,700
+72766,Running,230.00,228.19,71,Ramp,Default Profile,True,False,700
+72866,Running,230.00,228.19,71,Ramp,Default Profile,True,False,700
+72966,Running,230.00,228.19,71,Ramp,Default Profile,True,False,700
+73066,Running,230.00,228.19,71,Ramp,Default Profile,True,False,700
+73166,Running,230.00,228.19,71,Ramp,Default Profile,True,False,700
+73266,Running,230.00,228.19,71,Ramp,Default Profile,True,False,700
+73367,Running,230.00,228.19,71,Ramp,Default Profile,True,False,700
+73467,Running,230.00,228.19,71,Ramp,Default Profile,True,False,700
+73567,Running,230.00,228.48,70,Ramp,Default Profile,True,False,710
+73667,Running,230.00,228.48,70,Ramp,Default Profile,True,False,710
+73767,Running,230.00,228.48,70,Ramp,Default Profile,True,False,710
+73868,Running,230.00,228.48,70,Ramp,Default Profile,True,False,710
+73968,Running,230.00,228.48,70,Ramp,Default Profile,True,False,710
+74068,Running,230.00,228.48,70,Ramp,Default Profile,True,False,710
+74168,Running,230.00,228.48,70,Ramp,Default Profile,True,False,710
+74268,Running,230.00,228.48,70,Ramp,Default Profile,True,False,710
+74368,Running,230.00,228.48,70,Ramp,Default Profile,True,False,710
+74469,Running,230.00,228.48,70,Ramp,Default Profile,True,False,710
+74569,Running,230.00,228.72,70,Ramp,Default Profile,True,False,720
+74669,Running,230.00,228.72,70,Ramp,Default Profile,True,False,720
+74769,Running,230.00,228.72,70,Ramp,Default Profile,True,False,720
+74869,Running,230.00,228.72,70,Ramp,Default Profile,True,False,720
+74970,Running,230.00,228.72,70,Ramp,Default Profile,True,False,720
+75070,Running,230.00,228.72,70,Ramp,Default Profile,True,False,720
+75170,Running,230.00,228.72,70,Ramp,Default Profile,True,False,720
+75270,Running,230.00,228.72,70,Ramp,Default Profile,True,False,720
+75371,Running,230.00,228.72,70,Ramp,Default Profile,True,False,720
+75471,Running,230.00,228.72,70,Ramp,Default Profile,True,False,720
+75571,Running,230.00,228.91,70,Ramp,Default Profile,True,False,730
+75671,Running,230.00,228.91,70,Ramp,Default Profile,True,False,730
+75772,Running,230.00,228.91,70,Ramp,Default Profile,True,False,730
+75872,Running,230.00,228.91,70,Ramp,Default Profile,True,False,730
+75972,Running,230.00,228.91,70,Ramp,Default Profile,True,False,730
+76072,Running,230.00,228.91,70,Ramp,Default Profile,True,False,730
+76173,Running,230.00,228.91,70,Ramp,Default Profile,True,False,730
+76273,Running,230.00,228.91,70,Ramp,Default Profile,True,False,730
+76373,Running,230.00,228.91,70,Ramp,Default Profile,True,False,730
+76473,Running,230.00,228.91,70,Ramp,Default Profile,True,False,730
+76574,Running,240.00,229.09,48,Reflow Ramp,Default Profile,True,False,740
+76674,Running,240.00,229.09,48,Reflow Ramp,Default Profile,True,False,740
+76774,Running,240.00,229.09,48,Reflow Ramp,Default Profile,True,False,740
+76874,Running,240.00,229.09,48,Reflow Ramp,Default Profile,True,False,740
+76975,Running,240.00,229.09,48,Reflow Ramp,Default Profile,True,False,740
+77075,Running,240.00,229.09,48,Reflow Ramp,Default Profile,True,False,740
+77175,Running,240.00,229.09,48,Reflow Ramp,Default Profile,True,False,740
+77275,Running,240.00,229.09,48,Reflow Ramp,Default Profile,True,False,740
+77375,Running,240.00,229.09,48,Reflow Ramp,Default Profile,True,False,740
+77476,Running,240.00,229.09,48,Reflow Ramp,Default Profile,True,False,740
+77576,Running,240.00,228.27,57,Reflow Ramp,Default Profile,True,False,750
+77676,Running,240.00,228.27,57,Reflow Ramp,Default Profile,True,False,750
+77777,Running,240.00,228.27,57,Reflow Ramp,Default Profile,True,False,750
+77877,Running,240.00,228.27,57,Reflow Ramp,Default Profile,True,False,750
+77977,Running,240.00,228.27,57,Reflow Ramp,Default Profile,True,False,750
+78077,Running,240.00,228.27,57,Reflow Ramp,Default Profile,True,False,750
+78178,Running,240.00,228.27,57,Reflow Ramp,Default Profile,True,False,750
+78278,Running,240.00,228.27,57,Reflow Ramp,Default Profile,True,False,750
+78378,Running,240.00,228.27,57,Reflow Ramp,Default Profile,True,False,750
+78478,Running,240.00,228.27,57,Reflow Ramp,Default Profile,True,False,750
+78578,Running,240.00,226.91,68,Reflow Ramp,Default Profile,True,False,760
+78679,Running,240.00,226.91,68,Reflow Ramp,Default Profile,True,False,760
+78779,Running,240.00,226.91,68,Reflow Ramp,Default Profile,True,False,760
+78879,Running,240.00,226.91,68,Reflow Ramp,Default Profile,True,False,760
+78979,Running,240.00,226.91,68,Reflow Ramp,Default Profile,True,False,760
+79080,Running,240.00,226.91,68,Reflow Ramp,Default Profile,True,False,760
+79180,Running,240.00,226.91,68,Reflow Ramp,Default Profile,True,False,760
+79280,Running,240.00,226.91,68,Reflow Ramp,Default Profile,True,False,760
+79380,Running,240.00,226.91,68,Reflow Ramp,Default Profile,True,False,760
+79481,Running,240.00,226.91,68,Reflow Ramp,Default Profile,True,False,760
+79581,Running,240.00,226.49,77,Reflow Ramp,Default Profile,True,False,770
+79681,Running,240.00,226.49,77,Reflow Ramp,Default Profile,True,False,770
+79781,Running,240.00,226.49,77,Reflow Ramp,Default Profile,True,False,770
+79882,Running,240.00,226.49,77,Reflow Ramp,Default Profile,True,False,770
+79982,Running,240.00,226.49,77,Reflow Ramp,Default Profile,True,False,770
+80082,Running,240.00,226.49,77,Reflow Ramp,Default Profile,True,False,770
+80182,Running,240.00,226.49,77,Reflow Ramp,Default Profile,True,False,770
+80283,Running,240.00,226.49,77,Reflow Ramp,Default Profile,True,False,770
+80383,Running,240.00,226.49,77,Reflow Ramp,Default Profile,True,False,770
+80483,Running,240.00,226.49,77,Reflow Ramp,Default Profile,True,False,770
+80583,Running,240.00,226.97,81,Reflow Ramp,Default Profile,True,False,780
+80684,Running,240.00,226.97,81,Reflow Ramp,Default Profile,True,False,780
+80784,Running,240.00,226.97,81,Reflow Ramp,Default Profile,True,False,780
+80884,Running,240.00,226.97,81,Reflow Ramp,Default Profile,True,False,780
+80984,Running,240.00,226.97,81,Reflow Ramp,Default Profile,True,False,780
+81085,Running,240.00,226.97,81,Reflow Ramp,Default Profile,True,False,780
+81185,Running,240.00,226.97,81,Reflow Ramp,Default Profile,True,False,780
+81285,Running,240.00,226.97,81,Reflow Ramp,Default Profile,True,False,780
+81385,Running,240.00,226.97,81,Reflow Ramp,Default Profile,True,False,780
+81486,Running,240.00,226.97,81,Reflow Ramp,Default Profile,True,False,780
+81586,Running,240.00,228.02,83,Reflow Ramp,Default Profile,True,False,790
+81686,Running,240.00,228.02,83,Reflow Ramp,Default Profile,True,False,790
+81786,Running,240.00,228.02,83,Reflow Ramp,Default Profile,True,False,790
+81887,Running,240.00,228.02,83,Reflow Ramp,Default Profile,True,False,790
+81987,Running,240.00,228.02,83,Reflow Ramp,Default Profile,True,False,790
+82087,Running,240.00,228.02,83,Reflow Ramp,Default Profile,True,False,790
+82187,Running,240.00,228.02,83,Reflow Ramp,Default Profile,True,False,790
+82288,Running,240.00,228.02,83,Reflow Ramp,Default Profile,True,False,790
+82388,Running,240.00,228.02,83,Reflow Ramp,Default Profile,True,False,790
+82488,Running,240.00,228.02,83,Reflow Ramp,Default Profile,True,False,790
+82588,Running,240.00,229.30,84,Reflow Ramp,Default Profile,True,False,800
+82688,Running,240.00,229.30,84,Reflow Ramp,Default Profile,True,False,800
+82789,Running,240.00,229.30,84,Reflow Ramp,Default Profile,True,False,800
+82889,Running,240.00,229.30,84,Reflow Ramp,Default Profile,True,False,800
+82989,Running,240.00,229.30,84,Reflow Ramp,Default Profile,True,False,800
+83089,Running,240.00,229.30,84,Reflow Ramp,Default Profile,True,False,800
+83190,Running,240.00,229.30,84,Reflow Ramp,Default Profile,True,False,800
+83290,Running,240.00,229.30,84,Reflow Ramp,Default Profile,True,False,800
+83390,Running,240.00,229.30,84,Reflow Ramp,Default Profile,True,False,800
+83490,Running,240.00,229.30,84,Reflow Ramp,Default Profile,True,False,800
+83591,Running,240.00,230.67,83,Reflow Ramp,Default Profile,True,False,810
+83691,Running,240.00,230.67,83,Reflow Ramp,Default Profile,True,False,810
+83791,Running,240.00,230.67,83,Reflow Ramp,Default Profile,True,False,810
+83891,Running,240.00,230.67,83,Reflow Ramp,Default Profile,True,False,810
+83992,Running,240.00,230.67,83,Reflow Ramp,Default Profile,True,False,810
+84092,Running,240.00,230.67,83,Reflow Ramp,Default Profile,True,False,810
+84192,Running,240.00,230.67,83,Reflow Ramp,Default Profile,True,False,810
+84292,Running,240.00,230.67,83,Reflow Ramp,Default Profile,True,False,810
+84393,Running,240.00,230.67,83,Reflow Ramp,Default Profile,True,False,810
+84493,Running,240.00,230.67,83,Reflow Ramp,Default Profile,True,False,810
+84593,Running,240.00,232.01,82,Reflow Ramp,Default Profile,True,False,820
+84693,Running,240.00,232.01,82,Reflow Ramp,Default Profile,True,False,820
+84794,Running,240.00,232.01,82,Reflow Ramp,Default Profile,True,False,820
+84894,Running,240.00,232.01,82,Reflow Ramp,Default Profile,True,False,820
+84994,Running,240.00,232.01,82,Reflow Ramp,Default Profile,True,False,820
+85094,Running,240.00,232.01,82,Reflow Ramp,Default Profile,True,False,820
+85195,Running,240.00,232.01,82,Reflow Ramp,Default Profile,True,False,820
+85295,Running,240.00,232.01,82,Reflow Ramp,Default Profile,True,False,820
+85395,Running,240.00,232.01,82,Reflow Ramp,Default Profile,True,False,820
+85495,Running,240.00,232.01,82,Reflow Ramp,Default Profile,True,False,820
+85596,Running,240.00,233.21,80,Reflow Ramp,Default Profile,True,False,830
+85696,Running,240.00,233.21,80,Reflow Ramp,Default Profile,True,False,830
+85796,Running,240.00,233.21,80,Reflow Ramp,Default Profile,True,False,830
+85896,Running,240.00,233.21,80,Reflow Ramp,Default Profile,True,False,830
+85997,Running,240.00,233.21,80,Reflow Ramp,Default Profile,True,False,830
+86097,Running,240.00,233.21,80,Reflow Ramp,Default Profile,True,False,830
+86197,Running,240.00,233.21,80,Reflow Ramp,Default Profile,True,False,830
+86297,Running,240.00,233.21,80,Reflow Ramp,Default Profile,True,False,830
+86398,Running,240.00,233.21,80,Reflow Ramp,Default Profile,True,False,830
+86498,Running,240.00,233.21,80,Reflow Ramp,Default Profile,True,False,830
+86598,Running,240.00,234.25,79,Reflow Ramp,Default Profile,True,False,840
+86698,Running,240.00,234.25,79,Reflow Ramp,Default Profile,True,False,840
+86799,Running,240.00,234.25,79,Reflow Ramp,Default Profile,True,False,840
+86899,Running,240.00,234.25,79,Reflow Ramp,Default Profile,True,False,840
+86999,Running,240.00,234.25,79,Reflow Ramp,Default Profile,True,False,840
+87099,Running,240.00,234.25,79,Reflow Ramp,Default Profile,True,False,840
+87199,Running,240.00,234.25,79,Reflow Ramp,Default Profile,True,False,840
+87300,Running,240.00,234.25,79,Reflow Ramp,Default Profile,True,False,840
+87400,Running,240.00,234.25,79,Reflow Ramp,Default Profile,True,False,840
+87500,Running,240.00,234.25,79,Reflow Ramp,Default Profile,True,False,840
+87600,Running,240.00,235.12,78,Reflow Ramp,Default Profile,True,False,850
+87701,Running,240.00,235.12,78,Reflow Ramp,Default Profile,True,False,850
+87801,Running,240.00,235.12,78,Reflow Ramp,Default Profile,True,False,850
+87901,Running,240.00,235.12,78,Reflow Ramp,Default Profile,True,False,850
+88001,Running,240.00,235.12,78,Reflow Ramp,Default Profile,True,False,850
+88102,Running,240.00,235.12,78,Reflow Ramp,Default Profile,True,False,850
+88202,Running,240.00,235.12,78,Reflow Ramp,Default Profile,True,False,850
+88302,Running,240.00,235.12,78,Reflow Ramp,Default Profile,True,False,850
+88402,Running,240.00,235.12,78,Reflow Ramp,Default Profile,True,False,850
+88503,Running,240.00,235.12,78,Reflow Ramp,Default Profile,True,False,850
+88603,Running,240.00,235.88,77,Reflow Ramp,Default Profile,True,False,860
+88703,Running,240.00,235.88,77,Reflow Ramp,Default Profile,True,False,860
+88803,Running,240.00,235.88,77,Reflow Ramp,Default Profile,True,False,860
+88904,Running,240.00,235.88,77,Reflow Ramp,Default Profile,True,False,860
+89004,Running,240.00,235.88,77,Reflow Ramp,Default Profile,True,False,860
+89104,Running,240.00,235.88,77,Reflow Ramp,Default Profile,True,False,860
+89204,Running,240.00,235.88,77,Reflow Ramp,Default Profile,True,False,860
+89305,Running,240.00,235.88,77,Reflow Ramp,Default Profile,True,False,860
+89405,Running,240.00,235.88,77,Reflow Ramp,Default Profile,True,False,860
+89505,Running,240.00,235.88,77,Reflow Ramp,Default Profile,True,False,860
+89605,Running,240.00,236.52,77,Reflow Ramp,Default Profile,True,False,870
+89705,Running,240.00,236.52,77,Reflow Ramp,Default Profile,True,False,870
+89806,Running,240.00,236.52,77,Reflow Ramp,Default Profile,True,False,870
+89906,Running,240.00,236.52,77,Reflow Ramp,Default Profile,True,False,870
+90006,Running,240.00,236.52,77,Reflow Ramp,Default Profile,True,False,870
+90106,Running,240.00,236.52,77,Reflow Ramp,Default Profile,True,False,870
+90207,Running,240.00,236.52,77,Reflow Ramp,Default Profile,True,False,870
+90307,Running,240.00,236.52,77,Reflow Ramp,Default Profile,True,False,870
+90407,Running,240.00,236.52,77,Reflow Ramp,Default Profile,True,False,870
+90507,Running,240.00,236.52,77,Reflow Ramp,Default Profile,True,False,870
+90608,Running,240.00,237.10,76,Reflow Ramp,Default Profile,True,False,880
+90708,Running,240.00,237.10,76,Reflow Ramp,Default Profile,True,False,880
+90808,Running,240.00,237.10,76,Reflow Ramp,Default Profile,True,False,880
+90908,Running,240.00,237.10,76,Reflow Ramp,Default Profile,True,False,880
+91009,Running,240.00,237.10,76,Reflow Ramp,Default Profile,True,False,880
+91109,Running,240.00,237.10,76,Reflow Ramp,Default Profile,True,False,880
+91209,Running,240.00,237.10,76,Reflow Ramp,Default Profile,True,False,880
+91309,Running,240.00,237.10,76,Reflow Ramp,Default Profile,True,False,880
+91410,Running,240.00,237.10,76,Reflow Ramp,Default Profile,True,False,880
+91510,Running,240.00,237.10,76,Reflow Ramp,Default Profile,True,False,880
+91610,Running,240.00,237.62,75,Reflow Ramp,Default Profile,True,False,890
+91710,Running,240.00,237.62,75,Reflow Ramp,Default Profile,True,False,890
+91810,Running,240.00,237.62,75,Reflow Ramp,Default Profile,True,False,890
+91911,Running,240.00,237.62,75,Reflow Ramp,Default Profile,True,False,890
+92011,Running,240.00,237.62,75,Reflow Ramp,Default Profile,True,False,890
+92111,Running,240.00,237.62,75,Reflow Ramp,Default Profile,True,False,890
+92211,Running,240.00,237.62,75,Reflow Ramp,Default Profile,True,False,890
+92312,Running,240.00,237.62,75,Reflow Ramp,Default Profile,True,False,890
+92412,Running,240.00,237.62,75,Reflow Ramp,Default Profile,True,False,890
+92512,Running,240.00,238.03,74,Reflow Ramp,Default Profile,True,False,900
+92612,Running,240.00,238.03,74,Reflow Ramp,Default Profile,True,False,900
+92713,Running,240.00,238.03,74,Reflow Ramp,Default Profile,True,False,900
+92813,Running,240.00,238.03,74,Reflow Ramp,Default Profile,True,False,900
+92913,Running,240.00,238.03,74,Reflow Ramp,Default Profile,True,False,900
+93013,Running,240.00,238.03,74,Reflow Ramp,Default Profile,True,False,900
+93114,Running,240.00,238.03,74,Reflow Ramp,Default Profile,True,False,900
+93214,Running,240.00,238.03,74,Reflow Ramp,Default Profile,True,False,900
+93314,Running,240.00,238.03,74,Reflow Ramp,Default Profile,True,False,900
+93414,Running,240.00,238.03,74,Reflow Ramp,Default Profile,True,False,900
+93515,Running,240.00,238.35,74,Reflow Ramp,Default Profile,True,False,910
+93615,Running,240.00,238.35,74,Reflow Ramp,Default Profile,True,False,910
+93715,Running,240.00,238.35,74,Reflow Ramp,Default Profile,True,False,910
+93815,Running,240.00,238.35,74,Reflow Ramp,Default Profile,True,False,910
+93916,Running,240.00,238.35,74,Reflow Ramp,Default Profile,True,False,910
+94016,Running,240.00,238.35,74,Reflow Ramp,Default Profile,True,False,910
+94116,Running,240.00,238.35,74,Reflow Ramp,Default Profile,True,False,910
+94216,Running,240.00,238.35,74,Reflow Ramp,Default Profile,True,False,910
+94317,Running,240.00,238.35,74,Reflow Ramp,Default Profile,True,False,910
+94417,Running,240.00,238.35,74,Reflow Ramp,Default Profile,True,False,910
+94517,Running,240.00,238.60,74,Reflow Ramp,Default Profile,True,False,920
+94618,Running,240.00,238.60,74,Reflow Ramp,Default Profile,True,False,920
+94718,Running,240.00,238.60,74,Reflow Ramp,Default Profile,True,False,920
+94818,Running,240.00,238.60,74,Reflow Ramp,Default Profile,True,False,920
+94918,Running,240.00,238.60,74,Reflow Ramp,Default Profile,True,False,920
+95019,Running,240.00,238.60,74,Reflow Ramp,Default Profile,True,False,920
+95119,Running,240.00,238.60,74,Reflow Ramp,Default Profile,True,False,920
+95219,Running,240.00,238.60,74,Reflow Ramp,Default Profile,True,False,920
+95319,Running,240.00,238.60,74,Reflow Ramp,Default Profile,True,False,920
+95420,Running,240.00,238.60,74,Reflow Ramp,Default Profile,True,False,920
+95520,Running,240.00,238.86,73,Reflow Ramp,Default Profile,True,False,930
+95620,Running,240.00,238.86,73,Reflow Ramp,Default Profile,True,False,930
+95720,Running,240.00,238.86,73,Reflow Ramp,Default Profile,True,False,930
+95821,Running,240.00,238.86,73,Reflow Ramp,Default Profile,True,False,930
+95921,Running,240.00,238.86,73,Reflow Ramp,Default Profile,True,False,930
+96021,Running,240.00,238.86,73,Reflow Ramp,Default Profile,True,False,930
+96121,Running,240.00,238.86,73,Reflow Ramp,Default Profile,True,False,930
+96222,Running,240.00,238.86,73,Reflow Ramp,Default Profile,True,False,930
+96322,Running,240.00,238.86,73,Reflow Ramp,Default Profile,True,False,930
+96422,Running,240.00,238.86,73,Reflow Ramp,Default Profile,True,False,930
+96522,Running,217.00,239.05,0,Reflow Cool,Default Profile,True,False,940
+96623,Running,217.00,239.05,0,Reflow Cool,Default Profile,True,False,940
+96723,Running,217.00,239.05,0,Reflow Cool,Default Profile,True,False,940
+96823,Running,217.00,239.05,0,Reflow Cool,Default Profile,True,False,940
+96923,Running,217.00,239.05,0,Reflow Cool,Default Profile,True,False,940
+97024,Running,217.00,239.05,0,Reflow Cool,Default Profile,True,False,940
+97124,Running,217.00,239.05,0,Reflow Cool,Default Profile,True,False,940
+97224,Running,217.00,239.05,0,Reflow Cool,Default Profile,True,False,940
+97324,Running,217.00,239.05,0,Reflow Cool,Default Profile,True,False,940
+97425,Running,217.00,239.05,0,Reflow Cool,Default Profile,True,False,940
+97525,Running,217.00,235.92,0,Reflow Cool,Default Profile,True,False,950
+97625,Running,217.00,235.92,0,Reflow Cool,Default Profile,True,False,950
+97725,Running,217.00,235.92,0,Reflow Cool,Default Profile,True,False,950
+97826,Running,217.00,235.92,0,Reflow Cool,Default Profile,True,False,950
+97926,Running,217.00,235.92,0,Reflow Cool,Default Profile,True,False,950
+98026,Running,217.00,235.92,0,Reflow Cool,Default Profile,True,False,950
+98127,Running,217.00,235.92,0,Reflow Cool,Default Profile,True,False,950
+98227,Running,217.00,235.92,0,Reflow Cool,Default Profile,True,False,950
+98327,Running,217.00,235.92,0,Reflow Cool,Default Profile,True,False,950
+98427,Running,217.00,235.92,0,Reflow Cool,Default Profile,True,False,950
+98528,Running,217.00,229.64,0,Reflow Cool,Default Profile,True,False,960
+98628,Running,217.00,229.64,0,Reflow Cool,Default Profile,True,False,960
+98728,Running,217.00,229.64,0,Reflow Cool,Default Profile,True,False,960
+98828,Running,217.00,229.64,0,Reflow Cool,Default Profile,True,False,960
+98929,Running,217.00,229.64,0,Reflow Cool,Default Profile,True,False,960
+99029,Running,217.00,229.64,0,Reflow Cool,Default Profile,True,False,960
+99129,Running,217.00,229.64,0,Reflow Cool,Default Profile,True,False,960
+99229,Running,217.00,229.64,0,Reflow Cool,Default Profile,True,False,960
+99330,Running,217.00,229.64,0,Reflow Cool,Default Profile,True,False,960
+99430,Running,217.00,229.64,0,Reflow Cool,Default Profile,True,False,960
+99530,Running,217.00,223.54,0,Reflow Cool,Default Profile,True,False,970
+99630,Running,217.00,223.54,0,Reflow Cool,Default Profile,True,False,970
+99730,Running,217.00,223.54,0,Reflow Cool,Default Profile,True,False,970
+99831,Running,217.00,223.54,0,Reflow Cool,Default Profile,True,False,970
+99931,Running,217.00,223.54,0,Reflow Cool,Default Profile,True,False,970
+100031,Running,217.00,223.54,0,Reflow Cool,Default Profile,True,False,970
+100131,Running,217.00,223.54,0,Reflow Cool,Default Profile,True,False,970
+100231,Running,217.00,223.54,0,Reflow Cool,Default Profile,True,False,970
+100332,Running,217.00,223.54,0,Reflow Cool,Default Profile,True,False,970
+100432,Running,217.00,223.54,0,Reflow Cool,Default Profile,True,False,970
+100532,Running,217.00,217.63,0,Reflow Cool,Default Profile,True,False,980
+100632,Running,217.00,217.63,0,Reflow Cool,Default Profile,True,False,980
+100732,Running,217.00,217.63,0,Reflow Cool,Default Profile,True,False,980
+100833,Running,217.00,217.63,0,Reflow Cool,Default Profile,True,False,980
+100933,Running,217.00,217.63,0,Reflow Cool,Default Profile,True,False,980
+101033,Running,217.00,217.63,0,Reflow Cool,Default Profile,True,False,980
+101133,Running,217.00,217.63,0,Reflow Cool,Default Profile,True,False,980
+101234,Running,217.00,217.63,0,Reflow Cool,Default Profile,True,False,980
+101334,Running,217.00,217.63,0,Reflow Cool,Default Profile,True,False,980
+101434,Running,217.00,217.63,0,Reflow Cool,Default Profile,True,False,980
+101534,Running,50.00,211.90,0,Cooling,Default Profile,True,False,990
+101635,Running,50.00,211.90,0,Cooling,Default Profile,True,False,990
+101735,Running,50.00,211.90,0,Cooling,Default Profile,True,False,990
+101835,Running,50.00,211.90,0,Cooling,Default Profile,True,False,990
+101935,Running,50.00,211.90,0,Cooling,Default Profile,True,False,990
+102035,Running,50.00,211.90,0,Cooling,Default Profile,True,False,990
+102136,Running,50.00,211.90,0,Cooling,Default Profile,True,False,990
+102236,Running,50.00,211.90,0,Cooling,Default Profile,True,False,990
+102336,Running,50.00,211.90,0,Cooling,Default Profile,True,False,990
+102436,Running,50.00,211.90,0,Cooling,Default Profile,True,False,990
+102537,Running,50.00,206.33,0,Cooling,Default Profile,True,False,1000
+102637,Running,50.00,206.33,0,Cooling,Default Profile,True,False,1000
+102737,Running,50.00,206.33,0,Cooling,Default Profile,True,False,1000
+102838,Running,50.00,206.33,0,Cooling,Default Profile,True,False,1000
+102938,Running,50.00,206.33,0,Cooling,Default Profile,True,False,1000
+103038,Running,50.00,206.33,0,Cooling,Default Profile,True,False,1000
+103138,Running,50.00,206.33,0,Cooling,Default Profile,True,False,1000
+103239,Running,50.00,206.33,0,Cooling,Default Profile,True,False,1000
+103339,Running,50.00,206.33,0,Cooling,Default Profile,True,False,1000
+103439,Running,50.00,206.33,0,Cooling,Default Profile,True,False,1000
+103539,Running,50.00,200.94,0,Cooling,Default Profile,True,False,1010
+103640,Running,50.00,200.94,0,Cooling,Default Profile,True,False,1010
+103740,Running,50.00,200.94,0,Cooling,Default Profile,True,False,1010
+103840,Running,50.00,200.94,0,Cooling,Default Profile,True,False,1010
+103940,Running,50.00,200.94,0,Cooling,Default Profile,True,False,1010
+104041,Running,50.00,200.94,0,Cooling,Default Profile,True,False,1010
+104141,Running,50.00,200.94,0,Cooling,Default Profile,True,False,1010
+104241,Running,50.00,200.94,0,Cooling,Default Profile,True,False,1010
+104342,Running,50.00,200.94,0,Cooling,Default Profile,True,False,1010
+104442,Running,50.00,200.94,0,Cooling,Default Profile,True,False,1010
+104542,Running,50.00,195.70,0,Cooling,Default Profile,True,False,1020
+104642,Running,50.00,195.70,0,Cooling,Default Profile,True,False,1020
+104743,Running,50.00,195.70,0,Cooling,Default Profile,True,False,1020
+104843,Running,50.00,195.70,0,Cooling,Default Profile,True,False,1020
+104943,Running,50.00,195.70,0,Cooling,Default Profile,True,False,1020
+105043,Running,50.00,195.70,0,Cooling,Default Profile,True,False,1020
+105144,Running,50.00,195.70,0,Cooling,Default Profile,True,False,1020
+105244,Running,50.00,195.70,0,Cooling,Default Profile,True,False,1020
+105344,Running,50.00,195.70,0,Cooling,Default Profile,True,False,1020
+105445,Running,50.00,195.70,0,Cooling,Default Profile,True,False,1020
+105545,Running,50.00,190.62,0,Cooling,Default Profile,True,False,1030
+105645,Running,50.00,190.62,0,Cooling,Default Profile,True,False,1030
+105745,Running,50.00,190.62,0,Cooling,Default Profile,True,False,1030
+105846,Running,50.00,190.62,0,Cooling,Default Profile,True,False,1030
+105946,Running,50.00,190.62,0,Cooling,Default Profile,True,False,1030
+106046,Running,50.00,190.62,0,Cooling,Default Profile,True,False,1030
+106146,Running,50.00,190.62,0,Cooling,Default Profile,True,False,1030
+106247,Running,50.00,190.62,0,Cooling,Default Profile,True,False,1030
+106347,Running,50.00,190.62,0,Cooling,Default Profile,True,False,1030
+106447,Running,50.00,190.62,0,Cooling,Default Profile,True,False,1030
+106547,Running,50.00,185.69,0,Cooling,Default Profile,True,False,1040
+106648,Running,50.00,185.69,0,Cooling,Default Profile,True,False,1040
+106748,Running,50.00,185.69,0,Cooling,Default Profile,True,False,1040
+106848,Running,50.00,185.69,0,Cooling,Default Profile,True,False,1040
+106948,Running,50.00,185.69,0,Cooling,Default Profile,True,False,1040
+107049,Running,50.00,185.69,0,Cooling,Default Profile,True,False,1040
+107149,Running,50.00,185.69,0,Cooling,Default Profile,True,False,1040
+107249,Running,50.00,185.69,0,Cooling,Default Profile,True,False,1040
+107349,Running,50.00,185.69,0,Cooling,Default Profile,True,False,1040
+107449,Running,50.00,185.69,0,Cooling,Default Profile,True,False,1040
+107550,Running,50.00,180.90,0,Cooling,Default Profile,True,False,1050
+107650,Running,50.00,180.90,0,Cooling,Default Profile,True,False,1050
+107750,Running,50.00,180.90,0,Cooling,Default Profile,True,False,1050
+107850,Running,50.00,180.90,0,Cooling,Default Profile,True,False,1050
+107950,Running,50.00,180.90,0,Cooling,Default Profile,True,False,1050
+108051,Running,50.00,180.90,0,Cooling,Default Profile,True,False,1050
+108151,Running,50.00,180.90,0,Cooling,Default Profile,True,False,1050
+108251,Running,50.00,180.90,0,Cooling,Default Profile,True,False,1050
+108351,Running,50.00,180.90,0,Cooling,Default Profile,True,False,1050
+108451,Running,50.00,180.90,0,Cooling,Default Profile,True,False,1050
+108552,Running,50.00,176.26,0,Cooling,Default Profile,True,False,1060
+108652,Running,50.00,176.26,0,Cooling,Default Profile,True,False,1060
+108752,Running,50.00,176.26,0,Cooling,Default Profile,True,False,1060
+108852,Running,50.00,176.26,0,Cooling,Default Profile,True,False,1060
+108952,Running,50.00,176.26,0,Cooling,Default Profile,True,False,1060
+109052,Running,50.00,176.26,0,Cooling,Default Profile,True,False,1060
+109153,Running,50.00,176.26,0,Cooling,Default Profile,True,False,1060
+109253,Running,50.00,176.26,0,Cooling,Default Profile,True,False,1060
+109353,Running,50.00,176.26,0,Cooling,Default Profile,True,False,1060
+109453,Running,50.00,176.26,0,Cooling,Default Profile,True,False,1060
+109553,Running,50.00,171.76,0,Cooling,Default Profile,True,False,1070
+109653,Running,50.00,171.76,0,Cooling,Default Profile,True,False,1070
+109754,Running,50.00,171.76,0,Cooling,Default Profile,True,False,1070
+109854,Running,50.00,171.76,0,Cooling,Default Profile,True,False,1070
+109954,Running,50.00,171.76,0,Cooling,Default Profile,True,False,1070
+110054,Running,50.00,171.76,0,Cooling,Default Profile,True,False,1070
+110154,Running,50.00,171.76,0,Cooling,Default Profile,True,False,1070
+110254,Running,50.00,171.76,0,Cooling,Default Profile,True,False,1070
+110354,Running,50.00,171.76,0,Cooling,Default Profile,True,False,1070
+110455,Running,50.00,171.76,0,Cooling,Default Profile,True,False,1070
+110555,Running,50.00,167.39,0,Cooling,Default Profile,True,False,1080
+110655,Running,50.00,167.39,0,Cooling,Default Profile,True,False,1080
+110755,Running,50.00,167.39,0,Cooling,Default Profile,True,False,1080
+110855,Running,50.00,167.39,0,Cooling,Default Profile,True,False,1080
+110955,Running,50.00,167.39,0,Cooling,Default Profile,True,False,1080
+111056,Running,50.00,167.39,0,Cooling,Default Profile,True,False,1080
+111156,Running,50.00,167.39,0,Cooling,Default Profile,True,False,1080
+111256,Running,50.00,167.39,0,Cooling,Default Profile,True,False,1080
+111356,Running,50.00,167.39,0,Cooling,Default Profile,True,False,1080
+111456,Running,50.00,167.39,0,Cooling,Default Profile,True,False,1080
+111557,Running,50.00,163.15,0,Cooling,Default Profile,True,False,1090
+111657,Running,50.00,163.15,0,Cooling,Default Profile,True,False,1090
+111757,Running,50.00,163.15,0,Cooling,Default Profile,True,False,1090
+111857,Running,50.00,163.15,0,Cooling,Default Profile,True,False,1090
+111957,Running,50.00,163.15,0,Cooling,Default Profile,True,False,1090
+112057,Running,50.00,163.15,0,Cooling,Default Profile,True,False,1090
+112158,Running,50.00,163.15,0,Cooling,Default Profile,True,False,1090
+112258,Running,50.00,163.15,0,Cooling,Default Profile,True,False,1090
+112358,Running,50.00,163.15,0,Cooling,Default Profile,True,False,1090
+112458,Running,50.00,163.15,0,Cooling,Default Profile,True,False,1090
+112559,Running,50.00,159.04,0,Cooling,Default Profile,True,False,1100
+112659,Running,50.00,159.04,0,Cooling,Default Profile,True,False,1100
+112759,Running,50.00,159.04,0,Cooling,Default Profile,True,False,1100
+112860,Running,50.00,159.04,0,Cooling,Default Profile,True,False,1100
+112961,Running,50.00,159.04,0,Cooling,Default Profile,True,False,1100
+113061,Running,50.00,159.04,0,Cooling,Default Profile,True,False,1100
+113161,Running,50.00,159.04,0,Cooling,Default Profile,True,False,1100
+113261,Running,50.00,159.04,0,Cooling,Default Profile,True,False,1100
+113362,Running,50.00,159.04,0,Cooling,Default Profile,True,False,1100
+113462,Running,50.00,159.04,0,Cooling,Default Profile,True,False,1100
+113562,Running,50.00,155.05,0,Cooling,Default Profile,True,False,1110
+113662,Running,50.00,155.05,0,Cooling,Default Profile,True,False,1110
+113763,Running,50.00,155.05,0,Cooling,Default Profile,True,False,1110
+113863,Running,50.00,155.05,0,Cooling,Default Profile,True,False,1110
+113963,Running,50.00,155.05,0,Cooling,Default Profile,True,False,1110
+114063,Running,50.00,155.05,0,Cooling,Default Profile,True,False,1110
+114163,Running,50.00,155.05,0,Cooling,Default Profile,True,False,1110
+114264,Running,50.00,155.05,0,Cooling,Default Profile,True,False,1110
+114364,Running,50.00,155.05,0,Cooling,Default Profile,True,False,1110
+114464,Running,50.00,155.05,0,Cooling,Default Profile,True,False,1110
+114565,Running,50.00,151.18,0,Cooling,Default Profile,True,False,1120
+114665,Running,50.00,151.18,0,Cooling,Default Profile,True,False,1120
+114765,Running,50.00,151.18,0,Cooling,Default Profile,True,False,1120
+114865,Running,50.00,151.18,0,Cooling,Default Profile,True,False,1120
+114966,Running,50.00,151.18,0,Cooling,Default Profile,True,False,1120
+115066,Running,50.00,151.18,0,Cooling,Default Profile,True,False,1120
+115166,Running,50.00,151.18,0,Cooling,Default Profile,True,False,1120
+115266,Running,50.00,151.18,0,Cooling,Default Profile,True,False,1120
+115367,Running,50.00,151.18,0,Cooling,Default Profile,True,False,1120
+115467,Running,50.00,151.18,0,Cooling,Default Profile,True,False,1120
+115567,Running,50.00,147.42,0,Cooling,Default Profile,True,False,1130
+115667,Running,50.00,147.42,0,Cooling,Default Profile,True,False,1130
+115768,Running,50.00,147.42,0,Cooling,Default Profile,True,False,1130
+115868,Running,50.00,147.42,0,Cooling,Default Profile,True,False,1130
+115968,Running,50.00,147.42,0,Cooling,Default Profile,True,False,1130
+116068,Running,50.00,147.42,0,Cooling,Default Profile,True,False,1130
+116168,Running,50.00,147.42,0,Cooling,Default Profile,True,False,1130
+116269,Running,50.00,147.42,0,Cooling,Default Profile,True,False,1130
+116369,Running,50.00,147.42,0,Cooling,Default Profile,True,False,1130
+116469,Running,50.00,147.42,0,Cooling,Default Profile,True,False,1130
+116569,Running,50.00,143.78,0,Cooling,Default Profile,True,False,1140
+116670,Running,50.00,143.78,0,Cooling,Default Profile,True,False,1140
+116770,Running,50.00,143.78,0,Cooling,Default Profile,True,False,1140
+116870,Running,50.00,143.78,0,Cooling,Default Profile,True,False,1140
+116970,Running,50.00,143.78,0,Cooling,Default Profile,True,False,1140
+117070,Running,50.00,143.78,0,Cooling,Default Profile,True,False,1140
+117171,Running,50.00,143.78,0,Cooling,Default Profile,True,False,1140
+117271,Running,50.00,143.78,0,Cooling,Default Profile,True,False,1140
+117371,Running,50.00,143.78,0,Cooling,Default Profile,True,False,1140
+117471,Running,50.00,143.78,0,Cooling,Default Profile,True,False,1140
+117571,Running,50.00,140.24,0,Cooling,Default Profile,True,False,1150
+117672,Running,50.00,140.24,0,Cooling,Default Profile,True,False,1150
+117772,Running,50.00,140.24,0,Cooling,Default Profile,True,False,1150
+117872,Running,50.00,140.24,0,Cooling,Default Profile,True,False,1150
+117972,Running,50.00,140.24,0,Cooling,Default Profile,True,False,1150
+118073,Running,50.00,140.24,0,Cooling,Default Profile,True,False,1150
+118173,Running,50.00,140.24,0,Cooling,Default Profile,True,False,1150
+118273,Running,50.00,140.24,0,Cooling,Default Profile,True,False,1150
+118373,Running,50.00,140.24,0,Cooling,Default Profile,True,False,1150
+118473,Running,50.00,140.24,0,Cooling,Default Profile,True,False,1150
+118574,Running,50.00,136.81,0,Cooling,Default Profile,True,False,1160
+118674,Running,50.00,136.81,0,Cooling,Default Profile,True,False,1160
+118774,Running,50.00,136.81,0,Cooling,Default Profile,True,False,1160
+118874,Running,50.00,136.81,0,Cooling,Default Profile,True,False,1160
+118975,Running,50.00,136.81,0,Cooling,Default Profile,True,False,1160
+119075,Running,50.00,136.81,0,Cooling,Default Profile,True,False,1160
+119175,Running,50.00,136.81,0,Cooling,Default Profile,True,False,1160
+119275,Running,50.00,136.81,0,Cooling,Default Profile,True,False,1160
+119375,Running,50.00,136.81,0,Cooling,Default Profile,True,False,1160
+119476,Running,50.00,136.81,0,Cooling,Default Profile,True,False,1160
+119576,Running,50.00,133.48,0,Cooling,Default Profile,True,False,1170
+119676,Running,50.00,133.48,0,Cooling,Default Profile,True,False,1170
+119776,Running,50.00,133.48,0,Cooling,Default Profile,True,False,1170
+119877,Running,50.00,133.48,0,Cooling,Default Profile,True,False,1170
+119977,Running,50.00,133.48,0,Cooling,Default Profile,True,False,1170
+120077,Running,50.00,133.48,0,Cooling,Default Profile,True,False,1170
+120177,Running,50.00,133.48,0,Cooling,Default Profile,True,False,1170
+120277,Running,50.00,133.48,0,Cooling,Default Profile,True,False,1170
+120378,Running,50.00,133.48,0,Cooling,Default Profile,True,False,1170
+120478,Running,50.00,133.48,0,Cooling,Default Profile,True,False,1170
+120578,Running,50.00,130.25,0,Cooling,Default Profile,True,False,1180
+120678,Running,50.00,130.25,0,Cooling,Default Profile,True,False,1180
+120779,Running,50.00,130.25,0,Cooling,Default Profile,True,False,1180
+120879,Running,50.00,130.25,0,Cooling,Default Profile,True,False,1180
+120979,Running,50.00,130.25,0,Cooling,Default Profile,True,False,1180
+121079,Running,50.00,130.25,0,Cooling,Default Profile,True,False,1180
+121179,Running,50.00,130.25,0,Cooling,Default Profile,True,False,1180
+121280,Running,50.00,130.25,0,Cooling,Default Profile,True,False,1180
+121380,Running,50.00,130.25,0,Cooling,Default Profile,True,False,1180
+121480,Running,50.00,130.25,0,Cooling,Default Profile,True,False,1180
+121580,Running,50.00,127.12,0,Cooling,Default Profile,True,False,1190
+121681,Running,50.00,127.12,0,Cooling,Default Profile,True,False,1190
+121781,Running,50.00,127.12,0,Cooling,Default Profile,True,False,1190
+121881,Running,50.00,127.12,0,Cooling,Default Profile,True,False,1190
+121981,Running,50.00,127.12,0,Cooling,Default Profile,True,False,1190
+122081,Running,50.00,127.12,0,Cooling,Default Profile,True,False,1190
+122182,Running,50.00,127.12,0,Cooling,Default Profile,True,False,1190
+122282,Running,50.00,127.12,0,Cooling,Default Profile,True,False,1190
+122382,Running,50.00,127.12,0,Cooling,Default Profile,True,False,1190
+122482,Running,50.00,127.12,0,Cooling,Default Profile,True,False,1190
+122583,Running,50.00,124.08,0,Cooling,Default Profile,True,False,1200
+122683,Running,50.00,124.08,0,Cooling,Default Profile,True,False,1200
+122783,Running,50.00,124.08,0,Cooling,Default Profile,True,False,1200
+122883,Running,50.00,124.08,0,Cooling,Default Profile,True,False,1200
+122983,Running,50.00,124.08,0,Cooling,Default Profile,True,False,1200
+123084,Running,50.00,124.08,0,Cooling,Default Profile,True,False,1200
+123184,Running,50.00,124.08,0,Cooling,Default Profile,True,False,1200
+123284,Running,50.00,124.08,0,Cooling,Default Profile,True,False,1200
+123384,Running,50.00,124.08,0,Cooling,Default Profile,True,False,1200
+123485,Running,50.00,124.08,0,Cooling,Default Profile,True,False,1200
+123585,Running,50.00,121.13,0,Cooling,Default Profile,True,False,1210
+123685,Running,50.00,121.13,0,Cooling,Default Profile,True,False,1210
+123785,Running,50.00,121.13,0,Cooling,Default Profile,True,False,1210
+123885,Running,50.00,121.13,0,Cooling,Default Profile,True,False,1210
+123986,Running,50.00,121.13,0,Cooling,Default Profile,True,False,1210
+124086,Running,50.00,121.13,0,Cooling,Default Profile,True,False,1210
+124186,Running,50.00,121.13,0,Cooling,Default Profile,True,False,1210
+124286,Running,50.00,121.13,0,Cooling,Default Profile,True,False,1210
+124387,Running,50.00,121.13,0,Cooling,Default Profile,True,False,1210
+124487,Running,50.00,121.13,0,Cooling,Default Profile,True,False,1210
+124587,Running,50.00,118.27,0,Cooling,Default Profile,True,False,1220
+124687,Running,50.00,118.27,0,Cooling,Default Profile,True,False,1220
+124787,Running,50.00,118.27,0,Cooling,Default Profile,True,False,1220
+124888,Running,50.00,118.27,0,Cooling,Default Profile,True,False,1220
+124988,Running,50.00,118.27,0,Cooling,Default Profile,True,False,1220
+125088,Running,50.00,118.27,0,Cooling,Default Profile,True,False,1220
+125188,Running,50.00,118.27,0,Cooling,Default Profile,True,False,1220
+125289,Running,50.00,118.27,0,Cooling,Default Profile,True,False,1220
+125389,Running,50.00,118.27,0,Cooling,Default Profile,True,False,1220
+125489,Running,50.00,118.27,0,Cooling,Default Profile,True,False,1220
+125589,Running,50.00,115.49,0,Cooling,Default Profile,True,False,1230
+125689,Running,50.00,115.49,0,Cooling,Default Profile,True,False,1230
+125790,Running,50.00,115.49,0,Cooling,Default Profile,True,False,1230
+125890,Running,50.00,115.49,0,Cooling,Default Profile,True,False,1230
+125990,Running,50.00,115.49,0,Cooling,Default Profile,True,False,1230
+126090,Running,50.00,115.49,0,Cooling,Default Profile,True,False,1230
+126191,Running,50.00,115.49,0,Cooling,Default Profile,True,False,1230
+126291,Running,50.00,115.49,0,Cooling,Default Profile,True,False,1230
+126391,Running,50.00,115.49,0,Cooling,Default Profile,True,False,1230
+126491,Running,50.00,115.49,0,Cooling,Default Profile,True,False,1230
+126591,Running,50.00,112.80,0,Cooling,Default Profile,True,False,1240
+126692,Running,50.00,112.80,0,Cooling,Default Profile,True,False,1240
+126792,Running,50.00,112.80,0,Cooling,Default Profile,True,False,1240
+126892,Running,50.00,112.80,0,Cooling,Default Profile,True,False,1240
+126992,Running,50.00,112.80,0,Cooling,Default Profile,True,False,1240
+127093,Running,50.00,112.80,0,Cooling,Default Profile,True,False,1240
+127193,Running,50.00,112.80,0,Cooling,Default Profile,True,False,1240
+127293,Running,50.00,112.80,0,Cooling,Default Profile,True,False,1240
+127393,Running,50.00,112.80,0,Cooling,Default Profile,True,False,1240
+127493,Running,50.00,112.80,0,Cooling,Default Profile,True,False,1240
+127594,Running,50.00,110.19,0,Cooling,Default Profile,True,False,1250
+127694,Running,50.00,110.19,0,Cooling,Default Profile,True,False,1250
+127794,Running,50.00,110.19,0,Cooling,Default Profile,True,False,1250
+127894,Running,50.00,110.19,0,Cooling,Default Profile,True,False,1250
+127995,Running,50.00,110.19,0,Cooling,Default Profile,True,False,1250
+128095,Running,50.00,110.19,0,Cooling,Default Profile,True,False,1250
+128195,Running,50.00,110.19,0,Cooling,Default Profile,True,False,1250
+128295,Running,50.00,110.19,0,Cooling,Default Profile,True,False,1250
+128395,Running,50.00,110.19,0,Cooling,Default Profile,True,False,1250
+128496,Running,50.00,110.19,0,Cooling,Default Profile,True,False,1250
+128596,Running,50.00,107.65,0,Cooling,Default Profile,True,False,1260
+128696,Running,50.00,107.65,0,Cooling,Default Profile,True,False,1260
+128796,Running,50.00,107.65,0,Cooling,Default Profile,True,False,1260
+128897,Running,50.00,107.65,0,Cooling,Default Profile,True,False,1260
+128997,Running,50.00,107.65,0,Cooling,Default Profile,True,False,1260
+129097,Running,50.00,107.65,0,Cooling,Default Profile,True,False,1260
+129197,Running,50.00,107.65,0,Cooling,Default Profile,True,False,1260
+129297,Running,50.00,107.65,0,Cooling,Default Profile,True,False,1260
+129398,Running,50.00,107.65,0,Cooling,Default Profile,True,False,1260
+129498,Running,50.00,107.65,0,Cooling,Default Profile,True,False,1260
+129598,Running,50.00,105.19,0,Cooling,Default Profile,True,False,1270
+129698,Running,50.00,105.19,0,Cooling,Default Profile,True,False,1270
+129799,Running,50.00,105.19,0,Cooling,Default Profile,True,False,1270
+129899,Running,50.00,105.19,0,Cooling,Default Profile,True,False,1270
+129999,Running,50.00,105.19,0,Cooling,Default Profile,True,False,1270
+130099,Running,50.00,105.19,0,Cooling,Default Profile,True,False,1270
+130199,Running,50.00,105.19,0,Cooling,Default Profile,True,False,1270
+130300,Running,50.00,105.19,0,Cooling,Default Profile,True,False,1270
+130400,Running,50.00,105.19,0,Cooling,Default Profile,True,False,1270
+130500,Running,50.00,105.19,0,Cooling,Default Profile,True,False,1270
+130600,Running,50.00,102.80,0,Cooling,Default Profile,True,False,1280
+130701,Running,50.00,102.80,0,Cooling,Default Profile,True,False,1280
+130801,Running,50.00,102.80,0,Cooling,Default Profile,True,False,1280
+130901,Running,50.00,102.80,0,Cooling,Default Profile,True,False,1280
+131001,Running,50.00,102.80,0,Cooling,Default Profile,True,False,1280
+131101,Running,50.00,102.80,0,Cooling,Default Profile,True,False,1280
+131202,Running,50.00,102.80,0,Cooling,Default Profile,True,False,1280
+131302,Running,50.00,102.80,0,Cooling,Default Profile,True,False,1280
+131402,Running,50.00,102.80,0,Cooling,Default Profile,True,False,1280
+131502,Running,50.00,102.80,0,Cooling,Default Profile,True,False,1280
+131603,Running,50.00,100.49,0,Cooling,Default Profile,True,False,1290
+131703,Running,50.00,100.49,0,Cooling,Default Profile,True,False,1290
+131803,Running,50.00,100.49,0,Cooling,Default Profile,True,False,1290
+131903,Running,50.00,100.49,0,Cooling,Default Profile,True,False,1290
+132004,Running,50.00,100.49,0,Cooling,Default Profile,True,False,1290
+132104,Running,50.00,100.49,0,Cooling,Default Profile,True,False,1290
+132204,Running,50.00,100.49,0,Cooling,Default Profile,True,False,1290
+132304,Running,50.00,100.49,0,Cooling,Default Profile,True,False,1290
+132405,Running,50.00,100.49,0,Cooling,Default Profile,True,False,1290
+132505,Running,50.00,100.49,0,Cooling,Default Profile,True,False,1290
+132605,Running,50.00,98.24,0,Cooling,Default Profile,True,False,1300
+132706,Running,50.00,98.24,0,Cooling,Default Profile,True,False,1300
+132806,Running,50.00,98.24,0,Cooling,Default Profile,True,False,1300
+132906,Running,50.00,98.24,0,Cooling,Default Profile,True,False,1300
+133006,Running,50.00,98.24,0,Cooling,Default Profile,True,False,1300
+133106,Running,50.00,98.24,0,Cooling,Default Profile,True,False,1300
+133207,Running,50.00,98.24,0,Cooling,Default Profile,True,False,1300
+133307,Running,50.00,98.24,0,Cooling,Default Profile,True,False,1300
+133407,Running,50.00,98.24,0,Cooling,Default Profile,True,False,1300
+133507,Running,50.00,98.24,0,Cooling,Default Profile,True,False,1300
+133608,Running,50.00,96.06,0,Cooling,Default Profile,True,False,1310
+133708,Running,50.00,96.06,0,Cooling,Default Profile,True,False,1310
+133808,Running,50.00,96.06,0,Cooling,Default Profile,True,False,1310
+133908,Running,50.00,96.06,0,Cooling,Default Profile,True,False,1310
+134009,Running,50.00,96.06,0,Cooling,Default Profile,True,False,1310
+134109,Running,50.00,96.06,0,Cooling,Default Profile,True,False,1310
+134209,Running,50.00,96.06,0,Cooling,Default Profile,True,False,1310
+134309,Running,50.00,96.06,0,Cooling,Default Profile,True,False,1310
+134410,Running,50.00,96.06,0,Cooling,Default Profile,True,False,1310
+134510,Running,50.00,96.06,0,Cooling,Default Profile,True,False,1310
+134611,Running,50.00,93.95,0,Cooling,Default Profile,True,False,1320
+134711,Running,50.00,93.95,0,Cooling,Default Profile,True,False,1320
+134811,Running,50.00,93.95,0,Cooling,Default Profile,True,False,1320
+134911,Running,50.00,93.95,0,Cooling,Default Profile,True,False,1320
+135012,Running,50.00,93.95,0,Cooling,Default Profile,True,False,1320
+135112,Running,50.00,93.95,0,Cooling,Default Profile,True,False,1320
+135212,Running,50.00,93.95,0,Cooling,Default Profile,True,False,1320
+135312,Running,50.00,93.95,0,Cooling,Default Profile,True,False,1320
+135413,Running,50.00,93.95,0,Cooling,Default Profile,True,False,1320
+135513,Running,50.00,93.95,0,Cooling,Default Profile,True,False,1320
+135613,Running,50.00,91.90,0,Cooling,Default Profile,True,False,1330
+135713,Running,50.00,91.90,0,Cooling,Default Profile,True,False,1330
+135814,Running,50.00,91.90,0,Cooling,Default Profile,True,False,1330
+135914,Running,50.00,91.90,0,Cooling,Default Profile,True,False,1330
+136014,Running,50.00,91.90,0,Cooling,Default Profile,True,False,1330
+136114,Running,50.00,91.90,0,Cooling,Default Profile,True,False,1330
+136215,Running,50.00,91.90,0,Cooling,Default Profile,True,False,1330
+136315,Running,50.00,91.90,0,Cooling,Default Profile,True,False,1330
+136415,Running,50.00,91.90,0,Cooling,Default Profile,True,False,1330
+136515,Running,50.00,89.91,0,Cooling,Default Profile,True,False,1340
+136616,Running,50.00,89.91,0,Cooling,Default Profile,True,False,1340
+136716,Running,50.00,89.91,0,Cooling,Default Profile,True,False,1340
+136816,Running,50.00,89.91,0,Cooling,Default Profile,True,False,1340
+136916,Running,50.00,89.91,0,Cooling,Default Profile,True,False,1340
+137017,Running,50.00,89.91,0,Cooling,Default Profile,True,False,1340
+137117,Running,50.00,89.91,0,Cooling,Default Profile,True,False,1340
+137217,Running,50.00,89.91,0,Cooling,Default Profile,True,False,1340
+137317,Running,50.00,89.91,0,Cooling,Default Profile,True,False,1340
+137418,Running,50.00,89.91,0,Cooling,Default Profile,True,False,1340
+137518,Running,50.00,87.98,0,Cooling,Default Profile,True,False,1350
+137618,Running,50.00,87.98,0,Cooling,Default Profile,True,False,1350
+137718,Running,50.00,87.98,0,Cooling,Default Profile,True,False,1350
+137818,Running,50.00,87.98,0,Cooling,Default Profile,True,False,1350
+137919,Running,50.00,87.98,0,Cooling,Default Profile,True,False,1350
+138019,Running,50.00,87.98,0,Cooling,Default Profile,True,False,1350
+138119,Running,50.00,87.98,0,Cooling,Default Profile,True,False,1350
+138219,Running,50.00,87.98,0,Cooling,Default Profile,True,False,1350
+138320,Running,50.00,87.98,0,Cooling,Default Profile,True,False,1350
+138420,Running,50.00,87.98,0,Cooling,Default Profile,True,False,1350
+138520,Running,50.00,86.11,0,Cooling,Default Profile,True,False,1360
+138620,Running,50.00,86.11,0,Cooling,Default Profile,True,False,1360
+138721,Running,50.00,86.11,0,Cooling,Default Profile,True,False,1360
+138821,Running,50.00,86.11,0,Cooling,Default Profile,True,False,1360
+138921,Running,50.00,86.11,0,Cooling,Default Profile,True,False,1360
+139021,Running,50.00,86.11,0,Cooling,Default Profile,True,False,1360
+139121,Running,50.00,86.11,0,Cooling,Default Profile,True,False,1360
+139222,Running,50.00,86.11,0,Cooling,Default Profile,True,False,1360
+139322,Running,50.00,86.11,0,Cooling,Default Profile,True,False,1360
+139422,Running,50.00,86.11,0,Cooling,Default Profile,True,False,1360
+139522,Running,50.00,84.29,0,Cooling,Default Profile,True,False,1370
+139623,Running,50.00,84.29,0,Cooling,Default Profile,True,False,1370
+139723,Running,50.00,84.29,0,Cooling,Default Profile,True,False,1370
+139823,Running,50.00,84.29,0,Cooling,Default Profile,True,False,1370
+139923,Running,50.00,84.29,0,Cooling,Default Profile,True,False,1370
+140024,Running,50.00,84.29,0,Cooling,Default Profile,True,False,1370
+140124,Running,50.00,84.29,0,Cooling,Default Profile,True,False,1370
+140224,Running,50.00,84.29,0,Cooling,Default Profile,True,False,1370
+140324,Running,50.00,84.29,0,Cooling,Default Profile,True,False,1370
+140425,Running,50.00,84.29,0,Cooling,Default Profile,True,False,1370
+140525,Running,50.00,82.52,0,Cooling,Default Profile,True,False,1380
+140625,Running,50.00,82.52,0,Cooling,Default Profile,True,False,1380
+140725,Running,50.00,82.52,0,Cooling,Default Profile,True,False,1380
+140826,Running,50.00,82.52,0,Cooling,Default Profile,True,False,1380
+140926,Running,50.00,82.52,0,Cooling,Default Profile,True,False,1380
+141026,Running,50.00,82.52,0,Cooling,Default Profile,True,False,1380
+141126,Running,50.00,82.52,0,Cooling,Default Profile,True,False,1380
+141227,Running,50.00,82.52,0,Cooling,Default Profile,True,False,1380
+141327,Running,50.00,82.52,0,Cooling,Default Profile,True,False,1380
+141427,Running,50.00,82.52,0,Cooling,Default Profile,True,False,1380
+141528,Running,50.00,80.81,0,Cooling,Default Profile,True,False,1390
+141628,Running,50.00,80.81,0,Cooling,Default Profile,True,False,1390
+141728,Running,50.00,80.81,0,Cooling,Default Profile,True,False,1390
+141828,Running,50.00,80.81,0,Cooling,Default Profile,True,False,1390
+141929,Running,50.00,80.81,0,Cooling,Default Profile,True,False,1390
+142029,Running,50.00,80.81,0,Cooling,Default Profile,True,False,1390
+142129,Running,50.00,80.81,0,Cooling,Default Profile,True,False,1390
+142230,Running,50.00,80.81,0,Cooling,Default Profile,True,False,1390
+142330,Running,50.00,80.81,0,Cooling,Default Profile,True,False,1390
+142430,Running,50.00,80.81,0,Cooling,Default Profile,True,False,1390
+142530,Running,50.00,79.15,0,Cooling,Default Profile,True,False,1400
+142630,Running,50.00,79.15,0,Cooling,Default Profile,True,False,1400
+142731,Running,50.00,79.15,0,Cooling,Default Profile,True,False,1400
+142831,Running,50.00,79.15,0,Cooling,Default Profile,True,False,1400
+142931,Running,50.00,79.15,0,Cooling,Default Profile,True,False,1400
+143032,Running,50.00,79.15,0,Cooling,Default Profile,True,False,1400
+143132,Running,50.00,79.15,0,Cooling,Default Profile,True,False,1400
+143232,Running,50.00,79.15,0,Cooling,Default Profile,True,False,1400
+143332,Running,50.00,79.15,0,Cooling,Default Profile,True,False,1400
+143433,Running,50.00,79.15,0,Cooling,Default Profile,True,False,1400
+143533,Running,50.00,77.54,0,Cooling,Default Profile,True,False,1410
+143633,Running,50.00,77.54,0,Cooling,Default Profile,True,False,1410
+143733,Running,50.00,77.54,0,Cooling,Default Profile,True,False,1410
+143834,Running,50.00,77.54,0,Cooling,Default Profile,True,False,1410
+143934,Running,50.00,77.54,0,Cooling,Default Profile,True,False,1410
+144034,Running,50.00,77.54,0,Cooling,Default Profile,True,False,1410
+144134,Running,50.00,77.54,0,Cooling,Default Profile,True,False,1410
+144235,Running,50.00,77.54,0,Cooling,Default Profile,True,False,1410
+144335,Running,50.00,77.54,0,Cooling,Default Profile,True,False,1410
+144435,Running,50.00,77.54,0,Cooling,Default Profile,True,False,1410
+144535,Running,50.00,75.98,0,Cooling,Default Profile,True,False,1420
+144636,Running,50.00,75.98,0,Cooling,Default Profile,True,False,1420
+144736,Running,50.00,75.98,0,Cooling,Default Profile,True,False,1420
+144836,Running,50.00,75.98,0,Cooling,Default Profile,True,False,1420
+144936,Running,50.00,75.98,0,Cooling,Default Profile,True,False,1420
+145037,Running,50.00,75.98,0,Cooling,Default Profile,True,False,1420
+145137,Running,50.00,75.98,0,Cooling,Default Profile,True,False,1420
+145237,Running,50.00,75.98,0,Cooling,Default Profile,True,False,1420
+145337,Running,50.00,75.98,0,Cooling,Default Profile,True,False,1420
+145438,Running,50.00,75.98,0,Cooling,Default Profile,True,False,1420
+145538,Running,50.00,74.46,0,Cooling,Default Profile,True,False,1430
+145638,Running,50.00,74.46,0,Cooling,Default Profile,True,False,1430
+145738,Running,50.00,74.46,0,Cooling,Default Profile,True,False,1430
+145839,Running,50.00,74.46,0,Cooling,Default Profile,True,False,1430
+145939,Running,50.00,74.46,0,Cooling,Default Profile,True,False,1430
+146039,Running,50.00,74.46,0,Cooling,Default Profile,True,False,1430
+146139,Running,50.00,74.46,0,Cooling,Default Profile,True,False,1430
+146240,Running,50.00,74.46,0,Cooling,Default Profile,True,False,1430
+146340,Running,50.00,74.46,0,Cooling,Default Profile,True,False,1430
+146440,Running,50.00,74.46,0,Cooling,Default Profile,True,False,1430
+146541,Running,50.00,72.99,0,Cooling,Default Profile,True,False,1440
+146641,Running,50.00,72.99,0,Cooling,Default Profile,True,False,1440
+146741,Running,50.00,72.99,0,Cooling,Default Profile,True,False,1440
+146841,Running,50.00,72.99,0,Cooling,Default Profile,True,False,1440
+146942,Running,50.00,72.99,0,Cooling,Default Profile,True,False,1440
+147042,Running,50.00,72.99,0,Cooling,Default Profile,True,False,1440
+147142,Running,50.00,72.99,0,Cooling,Default Profile,True,False,1440
+147242,Running,50.00,72.99,0,Cooling,Default Profile,True,False,1440
+147343,Running,50.00,72.99,0,Cooling,Default Profile,True,False,1440
+147443,Running,50.00,72.99,0,Cooling,Default Profile,True,False,1440
+147543,Running,50.00,71.56,0,Cooling,Default Profile,True,False,1450
+147643,Running,50.00,71.56,0,Cooling,Default Profile,True,False,1450
+147743,Running,50.00,71.56,0,Cooling,Default Profile,True,False,1450
+147844,Running,50.00,71.56,0,Cooling,Default Profile,True,False,1450
+147944,Running,50.00,71.56,0,Cooling,Default Profile,True,False,1450
+148044,Running,50.00,71.56,0,Cooling,Default Profile,True,False,1450
+148145,Running,50.00,71.56,0,Cooling,Default Profile,True,False,1450
+148245,Running,50.00,71.56,0,Cooling,Default Profile,True,False,1450
+148345,Running,50.00,71.56,0,Cooling,Default Profile,True,False,1450
+148446,Running,50.00,71.56,0,Cooling,Default Profile,True,False,1450
+148546,Running,50.00,70.18,0,Cooling,Default Profile,True,False,1460
+148646,Running,50.00,70.18,0,Cooling,Default Profile,True,False,1460
+148746,Running,50.00,70.18,0,Cooling,Default Profile,True,False,1460
+148847,Running,50.00,70.18,0,Cooling,Default Profile,True,False,1460
+148947,Running,50.00,70.18,0,Cooling,Default Profile,True,False,1460
+149047,Running,50.00,70.18,0,Cooling,Default Profile,True,False,1460
+149147,Running,50.00,70.18,0,Cooling,Default Profile,True,False,1460
+149248,Running,50.00,70.18,0,Cooling,Default Profile,True,False,1460
+149348,Running,50.00,70.18,0,Cooling,Default Profile,True,False,1460
+149448,Running,50.00,70.18,0,Cooling,Default Profile,True,False,1460
+149549,Running,50.00,68.83,0,Cooling,Default Profile,True,False,1470
+149649,Running,50.00,68.83,0,Cooling,Default Profile,True,False,1470
+149749,Running,50.00,68.83,0,Cooling,Default Profile,True,False,1470
+149849,Running,50.00,68.83,0,Cooling,Default Profile,True,False,1470
+149950,Running,50.00,68.83,0,Cooling,Default Profile,True,False,1470
+150050,Running,50.00,68.83,0,Cooling,Default Profile,True,False,1470
+150150,Running,50.00,68.83,0,Cooling,Default Profile,True,False,1470
+150250,Running,50.00,68.83,0,Cooling,Default Profile,True,False,1470
+150350,Running,50.00,68.83,0,Cooling,Default Profile,True,False,1470
+150451,Running,50.00,68.83,0,Cooling,Default Profile,True,False,1470
+150551,Running,50.00,67.53,0,Cooling,Default Profile,True,False,1480
+150651,Running,50.00,67.53,0,Cooling,Default Profile,True,False,1480
+150751,Running,50.00,67.53,0,Cooling,Default Profile,True,False,1480
+150852,Running,50.00,67.53,0,Cooling,Default Profile,True,False,1480
+150952,Running,50.00,67.53,0,Cooling,Default Profile,True,False,1480
+151052,Running,50.00,67.53,0,Cooling,Default Profile,True,False,1480
+151153,Running,50.00,67.53,0,Cooling,Default Profile,True,False,1480
+151253,Running,50.00,67.53,0,Cooling,Default Profile,True,False,1480
+151353,Running,50.00,67.53,0,Cooling,Default Profile,True,False,1480
+151453,Running,50.00,67.53,0,Cooling,Default Profile,True,False,1480
+151554,Running,50.00,66.26,0,Cooling,Default Profile,True,False,1490
+151654,Running,50.00,66.26,0,Cooling,Default Profile,True,False,1490
+151754,Running,50.00,66.26,0,Cooling,Default Profile,True,False,1490
+151854,Running,50.00,66.26,0,Cooling,Default Profile,True,False,1490
+151955,Running,50.00,66.26,0,Cooling,Default Profile,True,False,1490
+152055,Running,50.00,66.26,0,Cooling,Default Profile,True,False,1490
+152155,Running,50.00,66.26,0,Cooling,Default Profile,True,False,1490
+152256,Running,50.00,66.26,0,Cooling,Default Profile,True,False,1490
+152356,Running,50.00,66.26,0,Cooling,Default Profile,True,False,1490
+152456,Running,50.00,66.26,0,Cooling,Default Profile,True,False,1490
+152556,Running,50.00,65.04,0,Cooling,Default Profile,True,False,1500
+152657,Running,50.00,65.04,0,Cooling,Default Profile,True,False,1500
+152757,Running,50.00,65.04,0,Cooling,Default Profile,True,False,1500
+152857,Running,50.00,65.04,0,Cooling,Default Profile,True,False,1500
+152958,Running,50.00,65.04,0,Cooling,Default Profile,True,False,1500
+153058,Running,50.00,65.04,0,Cooling,Default Profile,True,False,1500
+153158,Running,50.00,65.04,0,Cooling,Default Profile,True,False,1500
+153258,Running,50.00,65.04,0,Cooling,Default Profile,True,False,1500
+153359,Running,50.00,65.04,0,Cooling,Default Profile,True,False,1500
+153459,Running,50.00,65.04,0,Cooling,Default Profile,True,False,1500
+153559,Running,50.00,63.85,0,Cooling,Default Profile,True,False,1510
+153659,Running,50.00,63.85,0,Cooling,Default Profile,True,False,1510
+153760,Running,50.00,63.85,0,Cooling,Default Profile,True,False,1510
+153860,Running,50.00,63.85,0,Cooling,Default Profile,True,False,1510
+153960,Running,50.00,63.85,0,Cooling,Default Profile,True,False,1510
+154061,Running,50.00,63.85,0,Cooling,Default Profile,True,False,1510
+154161,Running,50.00,63.85,0,Cooling,Default Profile,True,False,1510
+154261,Running,50.00,63.85,0,Cooling,Default Profile,True,False,1510
+154361,Running,50.00,63.85,0,Cooling,Default Profile,True,False,1510
+154462,Running,50.00,63.85,0,Cooling,Default Profile,True,False,1510
+154562,Running,50.00,62.69,0,Cooling,Default Profile,True,False,1520
+154662,Running,50.00,62.69,0,Cooling,Default Profile,True,False,1520
+154763,Running,50.00,62.69,0,Cooling,Default Profile,True,False,1520
+154863,Running,50.00,62.69,0,Cooling,Default Profile,True,False,1520
+154963,Running,50.00,62.69,0,Cooling,Default Profile,True,False,1520
+155063,Running,50.00,62.69,0,Cooling,Default Profile,True,False,1520
+155164,Running,50.00,62.69,0,Cooling,Default Profile,True,False,1520
+155264,Running,50.00,62.69,0,Cooling,Default Profile,True,False,1520
+155364,Running,50.00,62.69,0,Cooling,Default Profile,True,False,1520
+155465,Running,50.00,62.69,0,Cooling,Default Profile,True,False,1520
+155565,Running,50.00,61.57,0,Cooling,Default Profile,True,False,1530
+155665,Running,50.00,61.57,0,Cooling,Default Profile,True,False,1530
+155765,Running,50.00,61.57,0,Cooling,Default Profile,True,False,1530
+155866,Running,50.00,61.57,0,Cooling,Default Profile,True,False,1530
+155966,Running,50.00,61.57,0,Cooling,Default Profile,True,False,1530
+156066,Running,50.00,61.57,0,Cooling,Default Profile,True,False,1530
+156167,Running,50.00,61.57,0,Cooling,Default Profile,True,False,1530
+156267,Running,50.00,61.57,0,Cooling,Default Profile,True,False,1530
+156367,Running,50.00,61.57,0,Cooling,Default Profile,True,False,1530
+156467,Running,50.00,61.57,0,Cooling,Default Profile,True,False,1530
+156568,Running,50.00,60.48,0,Cooling,Default Profile,True,False,1540
+156668,Running,50.00,60.48,0,Cooling,Default Profile,True,False,1540
+156768,Running,50.00,60.48,0,Cooling,Default Profile,True,False,1540
+156868,Running,50.00,60.48,0,Cooling,Default Profile,True,False,1540
+156969,Running,50.00,60.48,0,Cooling,Default Profile,True,False,1540
+157069,Running,50.00,60.48,0,Cooling,Default Profile,True,False,1540
+157169,Running,50.00,60.48,0,Cooling,Default Profile,True,False,1540
+157269,Running,50.00,60.48,0,Cooling,Default Profile,True,False,1540
+157370,Running,50.00,60.48,0,Cooling,Default Profile,True,False,1540
+157470,Running,50.00,60.48,0,Cooling,Default Profile,True,False,1540
+157570,Running,50.00,59.43,0,Cooling,Default Profile,True,False,1550
+157670,Running,50.00,59.43,0,Cooling,Default Profile,True,False,1550
+157771,Running,50.00,59.43,0,Cooling,Default Profile,True,False,1550
+157871,Running,50.00,59.43,0,Cooling,Default Profile,True,False,1550
+157971,Running,50.00,59.43,0,Cooling,Default Profile,True,False,1550
+158071,Running,50.00,59.43,0,Cooling,Default Profile,True,False,1550
+158172,Running,50.00,59.43,0,Cooling,Default Profile,True,False,1550
+158272,Running,50.00,59.43,0,Cooling,Default Profile,True,False,1550
+158372,Running,50.00,59.43,0,Cooling,Default Profile,True,False,1550
+158472,Running,50.00,59.43,0,Cooling,Default Profile,True,False,1550
+158573,Running,50.00,58.40,0,Cooling,Default Profile,True,False,1560
+158673,Running,50.00,58.40,0,Cooling,Default Profile,True,False,1560
+158773,Running,50.00,58.40,0,Cooling,Default Profile,True,False,1560
+158873,Running,50.00,58.40,0,Cooling,Default Profile,True,False,1560
+158974,Running,50.00,58.40,0,Cooling,Default Profile,True,False,1560
+159074,Running,50.00,58.40,0,Cooling,Default Profile,True,False,1560
+159174,Running,50.00,58.40,0,Cooling,Default Profile,True,False,1560
+159274,Running,50.00,58.40,0,Cooling,Default Profile,True,False,1560
+159375,Running,50.00,58.40,0,Cooling,Default Profile,True,False,1560
+159475,Running,50.00,58.40,0,Cooling,Default Profile,True,False,1560
+159575,Running,50.00,57.41,0,Cooling,Default Profile,True,False,1570
+159675,Running,50.00,57.41,0,Cooling,Default Profile,True,False,1570
+159776,Running,50.00,57.41,0,Cooling,Default Profile,True,False,1570
+159876,Running,50.00,57.41,0,Cooling,Default Profile,True,False,1570
+159976,Running,50.00,57.41,0,Cooling,Default Profile,True,False,1570
+160076,Running,50.00,57.41,0,Cooling,Default Profile,True,False,1570
+160177,Running,50.00,57.41,0,Cooling,Default Profile,True,False,1570
+160277,Running,50.00,57.41,0,Cooling,Default Profile,True,False,1570
+160377,Running,50.00,57.41,0,Cooling,Default Profile,True,False,1570
+160477,Running,50.00,57.41,0,Cooling,Default Profile,True,False,1570
+160578,Running,50.00,56.45,0,Cooling,Default Profile,True,False,1580
+160678,Running,50.00,56.45,0,Cooling,Default Profile,True,False,1580
+160778,Running,50.00,56.45,0,Cooling,Default Profile,True,False,1580
+160878,Running,50.00,56.45,0,Cooling,Default Profile,True,False,1580
+160978,Running,50.00,56.45,0,Cooling,Default Profile,True,False,1580
+161079,Running,50.00,56.45,0,Cooling,Default Profile,True,False,1580
+161179,Running,50.00,56.45,0,Cooling,Default Profile,True,False,1580
+161279,Running,50.00,56.45,0,Cooling,Default Profile,True,False,1580
+161379,Running,50.00,56.45,0,Cooling,Default Profile,True,False,1580
+161480,Running,50.00,56.45,0,Cooling,Default Profile,True,False,1580
+161580,Running,50.00,55.51,0,Cooling,Default Profile,True,False,1590
+161680,Running,50.00,55.51,0,Cooling,Default Profile,True,False,1590
+161780,Running,50.00,55.51,0,Cooling,Default Profile,True,False,1590
+161881,Running,50.00,55.51,0,Cooling,Default Profile,True,False,1590
+161981,Running,50.00,55.51,0,Cooling,Default Profile,True,False,1590
+162081,Running,50.00,55.51,0,Cooling,Default Profile,True,False,1590
+162181,Running,50.00,55.51,0,Cooling,Default Profile,True,False,1590
+162282,Running,50.00,55.51,0,Cooling,Default Profile,True,False,1590
+162382,Running,50.00,55.51,0,Cooling,Default Profile,True,False,1590
+162482,Running,50.00,55.51,0,Cooling,Default Profile,True,False,1590
+162582,Running,50.00,54.60,0,Cooling,Default Profile,True,False,1600
+162683,Running,50.00,54.60,0,Cooling,Default Profile,True,False,1600
+162783,Running,50.00,54.60,0,Cooling,Default Profile,True,False,1600
+162883,Running,50.00,54.60,0,Cooling,Default Profile,True,False,1600
+162983,Running,50.00,54.60,0,Cooling,Default Profile,True,False,1600
+163084,Running,50.00,54.60,0,Cooling,Default Profile,True,False,1600
+163184,Running,50.00,54.60,0,Cooling,Default Profile,True,False,1600
+163284,Running,50.00,54.60,0,Cooling,Default Profile,True,False,1600
+163384,Running,50.00,54.60,0,Cooling,Default Profile,True,False,1600
+163485,Running,50.00,54.60,0,Cooling,Default Profile,True,False,1600
+163585,Running,50.00,53.72,0,Cooling,Default Profile,True,False,1610
+163685,Running,50.00,53.72,0,Cooling,Default Profile,True,False,1610
+163785,Running,50.00,53.72,0,Cooling,Default Profile,True,False,1610
+163886,Running,50.00,53.72,0,Cooling,Default Profile,True,False,1610
+163986,Running,50.00,53.72,0,Cooling,Default Profile,True,False,1610
+164086,Running,50.00,53.72,0,Cooling,Default Profile,True,False,1610
+164186,Running,50.00,53.72,0,Cooling,Default Profile,True,False,1610
+164287,Running,50.00,53.72,0,Cooling,Default Profile,True,False,1610
+164387,Running,50.00,53.72,0,Cooling,Default Profile,True,False,1610
+164487,Running,50.00,53.72,0,Cooling,Default Profile,True,False,1610
+164587,Running,50.00,52.87,0,Cooling,Default Profile,True,False,1620
+164688,Running,50.00,52.87,0,Cooling,Default Profile,True,False,1620
+164788,Running,50.00,52.87,0,Cooling,Default Profile,True,False,1620
+164888,Running,50.00,52.87,0,Cooling,Default Profile,True,False,1620
+164988,Running,50.00,52.87,0,Cooling,Default Profile,True,False,1620
+165089,Running,50.00,52.87,0,Cooling,Default Profile,True,False,1620
+165189,Running,50.00,52.87,0,Cooling,Default Profile,True,False,1620
+165289,Running,50.00,52.87,0,Cooling,Default Profile,True,False,1620
+165389,Running,50.00,52.87,0,Cooling,Default Profile,True,False,1620
+165490,Running,50.00,52.87,0,Cooling,Default Profile,True,False,1620
+165590,Running,50.00,52.04,0,Cooling,Default Profile,True,False,1630
+165690,Running,50.00,52.04,0,Cooling,Default Profile,True,False,1630
+165790,Running,50.00,52.04,0,Cooling,Default Profile,True,False,1630
+165891,Running,50.00,52.04,0,Cooling,Default Profile,True,False,1630
+165991,Running,50.00,52.04,0,Cooling,Default Profile,True,False,1630
+166091,Running,50.00,52.04,0,Cooling,Default Profile,True,False,1630
+166191,Running,50.00,52.04,0,Cooling,Default Profile,True,False,1630
+166292,Running,50.00,52.04,0,Cooling,Default Profile,True,False,1630
+166392,Running,50.00,52.04,0,Cooling,Default Profile,True,False,1630
+166492,Running,50.00,52.04,0,Cooling,Default Profile,True,False,1630
+166592,Running,50.00,51.24,0,Cooling,Default Profile,True,False,1640
+166693,Running,50.00,51.24,0,Cooling,Default Profile,True,False,1640
+166793,Running,50.00,51.24,0,Cooling,Default Profile,True,False,1640
+166893,Running,50.00,51.24,0,Cooling,Default Profile,True,False,1640
+166993,Running,50.00,51.24,0,Cooling,Default Profile,True,False,1640
+167094,Running,50.00,51.24,0,Cooling,Default Profile,True,False,1640
+167194,Running,50.00,51.24,0,Cooling,Default Profile,True,False,1640
+167294,Running,50.00,51.24,0,Cooling,Default Profile,True,False,1640
+167394,Running,50.00,51.24,0,Cooling,Default Profile,True,False,1640
+167495,Running,50.00,51.24,0,Cooling,Default Profile,True,False,1640
+167595,Running,50.00,50.46,0,Cooling,Default Profile,True,False,1650
+167695,Running,50.00,50.46,0,Cooling,Default Profile,True,False,1650
+167795,Running,50.00,50.46,0,Cooling,Default Profile,True,False,1650
+167896,Running,50.00,50.46,0,Cooling,Default Profile,True,False,1650
+167996,Running,50.00,50.46,0,Cooling,Default Profile,True,False,1650
+168096,Running,50.00,50.46,0,Cooling,Default Profile,True,False,1650
+168196,Running,50.00,50.46,0,Cooling,Default Profile,True,False,1650
+168296,Running,50.00,50.46,0,Cooling,Default Profile,True,False,1650
+168397,Running,50.00,50.46,0,Cooling,Default Profile,True,False,1650
+168497,Running,50.00,50.46,0,Cooling,Default Profile,True,False,1650
+168597,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+168697,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+168798,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+168898,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+168998,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+169098,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+169199,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+169299,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+169399,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+169500,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+169600,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+169701,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+169801,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+169901,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+170001,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+170101,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+170202,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+170302,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+170402,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+170502,Finished,25.00,49.70,0,Cooling,Default Profile,True,True,1660
+170602,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+170703,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+170803,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+170903,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+171003,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+171103,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+171204,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+171304,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+171404,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+171504,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+171604,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+171705,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+171805,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+171905,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+172005,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+172105,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+172206,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+172306,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+172406,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+172506,Finished,25.00,47.53,0,Cooling,Default Profile,True,True,1680
+172606,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+172707,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+172807,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+172907,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+173007,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+173107,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+173208,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+173308,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+173408,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+173508,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+173608,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+173709,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+173809,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+173909,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+174009,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+174110,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+174210,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+174310,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+174410,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+174511,Finished,25.00,45.53,0,Cooling,Default Profile,True,True,1700
+174611,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+174711,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+174812,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+174912,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+175012,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+175112,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+175212,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+175313,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+175413,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+175513,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+175613,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+175714,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+175814,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+175914,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+176014,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+176114,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+176215,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+176315,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+176415,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+176515,Finished,25.00,43.73,0,Cooling,Default Profile,True,True,1720
+176615,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+176716,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+176816,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+176916,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+177016,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+177117,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+177217,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+177317,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+177417,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+177517,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+177618,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+177718,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+177818,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+177918,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+178019,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+178119,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+178219,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+178319,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+178419,Finished,25.00,42.08,0,Cooling,Default Profile,True,True,1740
+178520,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+178620,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+178720,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+178820,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+178920,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+179021,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+179121,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+179221,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+179321,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+179422,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+179522,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+179622,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+179722,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+179822,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+179923,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+180023,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+180123,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+180223,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+180324,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+180424,Finished,25.00,40.58,0,Cooling,Default Profile,True,True,1760
+180524,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+180624,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+180725,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+180825,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+180925,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+181025,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+181126,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+181226,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+181326,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+181426,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+181526,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+181627,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+181727,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+181827,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+181927,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+182028,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+182128,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+182228,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+182328,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+182428,Finished,25.00,39.21,0,Cooling,Default Profile,True,True,1780
+182529,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+182629,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+182729,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+182829,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+182929,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+183030,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+183130,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+183230,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+183330,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+183431,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+183531,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+183631,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+183731,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+183831,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+183932,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+184032,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+184132,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+184232,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+184332,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+184433,Finished,25.00,37.96,0,Cooling,Default Profile,True,True,1800
+184533,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+184633,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+184733,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+184833,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+184934,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+185034,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+185134,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+185234,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+185334,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+185435,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+185535,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+185635,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+185735,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+185836,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+185936,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+186036,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+186136,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+186236,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+186337,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+186437,Finished,25.00,36.83,0,Cooling,Default Profile,True,True,1820
+186537,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+186637,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+186737,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+186838,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+186938,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+187038,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+187138,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+187239,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+187339,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+187439,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+187539,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+187639,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+187740,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+187840,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+187940,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+188040,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+188140,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+188241,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+188341,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+188441,Finished,25.00,35.79,0,Cooling,Default Profile,True,True,1840
+188541,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+188641,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+188742,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+188842,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+188942,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+189042,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+189142,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+189243,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+189343,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+189443,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+189543,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+189644,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+189744,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+189844,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+189944,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+190044,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+190145,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+190245,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+190345,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+190445,Finished,25.00,34.84,0,Cooling,Default Profile,True,True,1860
+190545,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880
+190646,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880
+190746,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880
+190846,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880
+190946,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880
+191047,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880
+191147,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880
+191247,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880
+191347,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880
+191447,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880
+191548,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880
+191648,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880
+191748,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880
+191848,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880
+191948,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880
+192049,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880
+192149,Finished,25.00,33.98,0,Cooling,Default Profile,True,True,1880

@@ -1,0 +1,8 @@
+[2025-09-30T04:14:11.178505302Z INFO  reflow_controller::usb_interface_std] Serial interface initialized: input=/tmp/ttyV0, output=/tmp/ttyV1
+[2025-09-30T04:14:11.178607468Z INFO  reflow_controller::temperature_sensor_mock] Thermal parameters: max_rate=3°C/s, mass=0.3, loss=0.1
+[2025-09-30T04:14:11.178640227Z INFO  reflow_controller::heater_std] Starting heater task
+[2025-09-30T04:14:11.179014724Z INFO  reflow_controller::usb_interface_std] Serial port opened for reading: /tmp/ttyV0
+[2025-09-30T04:14:11.678819500Z INFO  reflow_controller::usb_interface_std] Serial port opened for writing: /tmp/ttyV1
+[2025-09-30T04:14:13.178725882Z INFO  reflow_controller::inputs_std] Door closed (simulated)
+[2025-09-30T04:14:14.178911721Z INFO  reflow_controller::inputs_std] Reflow process started automatically
+[2025-09-30T04:14:14.178995035Z INFO  reflow_controller::reflow_controller] Starting reflow process

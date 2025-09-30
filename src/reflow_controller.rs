@@ -45,7 +45,7 @@ impl ReflowController {
             status: Status::Initializing,
             profile_start_time: Instant::now(),
             step_start_time: Instant::now(),
-            pid_controller: PidController::new(3.0, 0.5, 0.0),
+            pid_controller: PidController::new(3.9, 0.5, 0.0),
             error_message: String::new(),
             sd_reader: SdProfileReader::new(),
         }
@@ -390,6 +390,83 @@ impl ReflowController {
     pub async fn init_sd_card(&mut self) -> Result<(), SdProfileError> {
         self.sd_reader.init().await
     }
+
+    // Getter methods for testing
+    #[cfg(test)]
+    pub fn status(&self) -> &Status {
+        &self.status
+    }
+
+    #[cfg(test)]
+    pub fn heater_power(&self) -> u8 {
+        self.heater_power
+    }
+
+    #[cfg(test)]
+    pub fn fan(&self) -> bool {
+        self.fan
+    }
+
+    #[cfg(test)]
+    pub fn light(&self) -> bool {
+        self.light
+    }
+
+    #[cfg(test)]
+    pub fn door_closed(&self) -> bool {
+        self.door_closed
+    }
+
+    #[cfg(test)]
+    pub fn set_door_closed(&mut self, closed: bool) {
+        self.door_closed = closed;
+    }
+
+    #[cfg(test)]
+    pub fn current_step_index(&self) -> usize {
+        self.current_step_index
+    }
+
+    #[cfg(test)]
+    pub fn target_temperature(&self) -> f32 {
+        self.target_temperature
+    }
+
+    #[cfg(test)]
+    pub fn current_temperature(&self) -> f32 {
+        self.current_temperature
+    }
+
+    #[cfg(test)]
+    pub fn set_current_temperature(&mut self, temp: f32) {
+        self.current_temperature = temp;
+    }
+
+    #[cfg(test)]
+    pub fn profile(&self) -> &Profile {
+        &self.profile
+    }
+
+    #[cfg(test)]
+    pub fn error_message(&self) -> &heapless::String<256> {
+        &self.error_message
+    }
+
+    #[cfg(test)]
+    pub fn enter_idle_state_test(&mut self) {
+        self.enter_idle_state();
+    }
+
+    #[cfg(test)]
+    pub fn exit_error_state_test(&mut self) {
+        self.exit_error_state();
+    }
+
+    #[cfg(test)]
+    pub fn step_completed_test(&self) -> bool {
+        self.step_completed()
+    }
+
 }
 
 #[embassy_executor::task]

@@ -4,8 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
+default = []
 rp2040 = ["embassy-rp", "assign-resources", "panic-probe", "defmt"]
-std = []
+std = ["async-io", "nix", "embedded-io-async", "embedded-io-adapters"]
 ramp_setpoint = []
 
 
@@ -54,7 +55,14 @@ heapless = { version = "0.8", features = ["serde"] }
 # Option B: JSON in no_std (writes into a fixed buffer you provide)
 serde-json-core = "0.6"
 embedded-hal-async = "1.0.0"
+async-io = {version = "1.6.0", optional = true}
+nix = {version = "0.26.2", optional = true}
+embedded-io-async = { version = "0.6.1", optional = true }
+embedded-io-adapters = { version = "0.6.1", features = ["futures-03"], optional = true }
 
 # SD card support - will be added when hardware integration is ready
 # embedded-sdmmc = "0.8"
 # nb = "1.1"
+
+[dev-dependencies]
+# (your test-only dependencies here)

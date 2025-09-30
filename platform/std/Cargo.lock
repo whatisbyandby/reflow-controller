@@ -1098,6 +1098,7 @@ dependencies = [
 name = "reflow-controller"
 version = "0.1.0"
 dependencies = [
+ "async-io",
  "bitflags 2.9.4",
  "critical-section",
  "display-interface",
@@ -1110,11 +1111,14 @@ dependencies = [
  "embassy-usb-logger",
  "embedded-graphics",
  "embedded-hal-async",
+ "embedded-io-adapters",
+ "embedded-io-async",
  "fixed",
  "fixed-macro",
  "heapless",
  "log",
  "mipidsi",
+ "nix",
  "portable-atomic",
  "serde",
  "serde-json-core",
