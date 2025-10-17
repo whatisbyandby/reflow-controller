@@ -5,13 +5,12 @@ edition = "2021"
 
 [features]
 ramp_setpoint = []
-mock_temperature_sensor = []
-std = []
+mock_temperature_sensor = ["reflow-controller/mock_temperature_sensor"]
 
 
 [dependencies]
 
-reflow-controller = { path = "../../", features = ["rp2040"] }
+reflow-controller = { path = "../../", default-features = false, features = ["rp2040"] }
 
 embassy-embedded-hal = { version = "0.5.0", path = "../../../embassy/embassy-embedded-hal", features = [
     "defmt",
@@ -68,7 +67,6 @@ heapless = { version = "0.8", features = ["serde"] }
 # Option B: JSON in no_std (writes into a fixed buffer you provide)
 serde-json-core = "0.6"
 embedded-hal-async = "1.0.0"
-
-# SD card support - will be added when hardware integration is ready
-# embedded-sdmmc = "0.8"
-# nb = "1.1"
+embedded-hal-bus = { version = "0.1", features = ["async"] }
+embedded-sdmmc = "0.7.0"
+embedded-storage = { version = "0.3" }

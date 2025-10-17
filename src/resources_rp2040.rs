@@ -19,9 +19,6 @@ assign_resources! {
         start_button: PIN_5,
     },
     outputs: OutputResources {
-        fan: PIN_17,
-        light: PIN_18,
-        buzzer: PIN_19,
         start_button_light: PIN_3,
     },
     usb: USBResources {
@@ -29,15 +26,14 @@ assign_resources! {
     },
     i2c: I2CResources {
         i2c: I2C0,
-        sda: PIN_20,
-        scl: PIN_21,
+        sda: PIN_16,
+        scl: PIN_17,
     },
-    // SD card resources - will be added when hardware integration is ready
-    // sd_card: SdCardResources {
-    //     spi: SPI0,
-    //     miso: PIN_16,
-    //     mosi: PIN_19,
-    //     clk: PIN_18,
-    //     cs: PIN_17,
-    // },
+    spi: SpiResources {
+        spi: SPI0,
+        miso: PIN_20,
+        mosi: PIN_19,
+        clk: PIN_18,
+        cs: PIN_21,
+    },
 }

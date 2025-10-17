@@ -11,17 +11,19 @@ pub async fn run_temperature_sensor() -> ! {
     use crate::HeaterCommand;
     use crate::HEATER_POWER;
 
-    // info!("Starting mock temperature sensor with thermal simulation");
+    info!("Starting mock temperature sensor with thermal simulation");
 
     // Thermal simulation parameters - configurable for testing
     let mut current_temp = 25.0; // Start at room temperature
     let ambient_temp = 25.0;
     let max_heating_rate = 3.0; // degrees C/second at 100% power (as requested)
-    let thermal_mass = 0.3; // Factor affecting heat retention (0-1)
+    let thermal_mass = 0.8; // Factor affecting heat retention (0-1)
     let heat_loss_coefficient = 0.1; // Heat loss to ambient per degree difference
     let update_interval_ms = SYSTEM_TICK_MILLIS * 5;
 
     let time_step = update_interval_ms as f32 / SYSTEM_TICK_MILLIS as f32 / 10.0;
+
+    info!("{}", time_step);
 
     info!(
         "Thermal parameters: max_rate={}°C/s, mass={}, loss={}",

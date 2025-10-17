@@ -23,7 +23,7 @@ pub async fn run_temperature_sensor(i2c_bus: &'static I2c0Bus) -> ! {
 
     loop {
         let temp_reading = with_timeout(
-            Duration::from_millis((SYSTEM_TICK_MILLIS * 2).into()),
+            Duration::from_millis((SYSTEM_TICK_MILLIS).into()),
             sensor.read_hot_c(),
         )
         .await;

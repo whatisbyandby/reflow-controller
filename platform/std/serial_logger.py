@@ -108,7 +108,8 @@ class ReflowSerialLogger:
         # Auto-start if requested
         if self.auto_start and self.ser_input:
             time.sleep(2)  # Wait for controller to initialize
-            self.send_command("START")
+            self.send_command("SET_PROFILE lead_free.txt")
+            # self.send_command("START")
 
         try:
             while self.running:

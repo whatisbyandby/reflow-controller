@@ -1,90 +1,21 @@
 #[path = "./serial_port.rs"]
 mod serial_port;
 
-use crate::profile::Profile;
-use crate::Event;
+use crate::text_interface::{handle_command, to_json_heapless, ProfileListResponse, ActiveProfileResponse};
 use crate::{
-    ReflowControllerState, ACTIVE_PROFILE_CHANNEL, CURRENT_STATE, INPUT_EVENT_CHANNEL,
-    PROFILE_LIST_CHANNEL, SYSTEM_TICK_MILLIS,
+    ACTIVE_PROFILE_CHANNEL, CURRENT_STATE, PROFILE_LIST_CHANNEL, SYSTEM_TICK_MILLIS,
 };
 use embassy_executor::Spawner;
 use embassy_time::Timer;
-use heapless::String;
-use serde::{Deserialize, Serialize};
 
 use async_io::Async;
 use embedded_io_async::{Read, Write as AsyncWrite};
 use nix::sys::termios;
-use std::sync::{Arc, Mutex};
 
 use self::serial_port::SerialPort;
 
-#[derive(Serialize, Deserialize)]
-struct ProfileListResponse {
-    profiles: heapless::Vec<heapless::String<64>, 16>,
-}
-
-#[derive(Serialize, Deserialize)]
-struct ActiveProfileResponse {
-    active_profile: Profile,
-}
-
-pub fn to_json_heapless(msg: &ReflowControllerState) -> String<1024> {
-    let out = serde_json_core::ser::to_string(msg).unwrap();
-    out
-}
-
 async fn handle_serial_data(data: &[u8]) {
-    if let Ok(data) = core::str::from_utf8(data) {
-        let data = data.trim();
-        match data {
-            "START" => {
-                INPUT_EVENT_CHANNEL
-                    .sender()
-                    .try_send(Event::StartCommand)
-                    .ok();
-            }
-            "STOP" => {
-                INPUT_EVENT_CHANNEL
-                    .sender()
-                    .try_send(Event::StopCommand)
-                    .ok();
-            }
-            "RESET" => {
-                INPUT_EVENT_CHANNEL
-                    .sender()
-                    .try_send(Event::ResetCommand)
-                    .ok();
-            }
-            "LIST_PROFILES" => {
-                INPUT_EVENT_CHANNEL
-                    .sender()
-                    .try_send(Event::ListProfilesRequest)
-                    .ok();
-            }
-            _ => {
-                // Check for SET_PROFILE command with parameter
-                if data.starts_with("SET_PROFILE ") {
-                    let profile_name = &data[12..]; // Skip "SET_PROFILE "
-                    if !profile_name.is_empty() {
-                        let mut profile_string = heapless::String::<64>::new();
-                        if profile_string.push_str(profile_name).is_ok() {
-                            INPUT_EVENT_CHANNEL
-                                .sender()
-                                .try_send(Event::LoadProfile(profile_string))
-                                .ok();
-                        } else {
-                            log::warn!("Profile name too long: {}", profile_name);
-                        }
-                    } else {
-                        log::warn!("SET_PROFILE command requires a profile name");
-                    }
-                } else {
-                    log::warn!("Unknown command: {}", data);
-                }
-            }
-        }
-    }
+    handle_command(data);
 }
 
 #[embassy_executor::task]
@@ -108,11 +39,29 @@ async fn serial_reader_task(serial_path: &'static str) {
 
     log::info!("Serial port opened for reading: {}", serial_path);
 
+    // Line buffer to accumulate data until we receive a newline
+    let mut line_buffer = heapless::Vec::<u8, 4096>::new();
+
     loop {
         let mut buf = [0u8; 256];
         match port.read(&mut buf).await {
             Ok(n) if n > 0 => {
-                handle_serial_data(&buf[..n]).await;
+                // Process each byte, looking for newlines
+                for &byte in &buf[..n] {
+                    if byte == b'\n' || byte == b'\r' {
+                        // End of line - process the command if buffer has data
+                        if !line_buffer.is_empty() {
+                            handle_serial_data(&line_buffer).await;
+                            line_buffer.clear();
+                        }
+                    } else {
+                        // Add byte to buffer if there's space
+                        if line_buffer.push(byte).is_err() {
+                            log::warn!("Command too long, discarding buffer");
+                            line_buffer.clear();
+                        }
+                    }
+                }
             }
             Ok(_) => {}
             Err(e) => {

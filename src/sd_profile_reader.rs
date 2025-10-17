@@ -2,15 +2,7 @@ use crate::log::*;
 use heapless::{String, Vec};
 
 use crate::profile::{Profile, Step, StepName};
-
-#[derive(Debug)]
-pub enum SdProfileError {
-    SdCardError,
-    FileNotFound,
-    ParseError,
-    InvalidFormat,
-    TooManyProfiles,
-}
+use crate::SdProfileError;
 
 pub struct SdProfileReader {
     // For now, we'll keep this simple and just track if SD is initialized
@@ -259,7 +251,7 @@ impl SdProfileReader {
                     set_temperature: 100.0,
                     target_time: 180,
                     step_time: 180,
-                    max_rate: 2.0,
+                    max_rate: 0.5,
                     is_cooling: false,
                     has_fan: false,
                 },
@@ -268,7 +260,7 @@ impl SdProfileReader {
                     set_temperature: 150.0,
                     target_time: 270,
                     step_time: 90,
-                    max_rate: 2.0,
+                    max_rate: 0.5,
                     is_cooling: false,
                     has_fan: false,
                 },
@@ -277,7 +269,7 @@ impl SdProfileReader {
                     set_temperature: 183.0,
                     target_time: 300,
                     step_time: 30,
-                    max_rate: 3.0,
+                    max_rate: 1.0,
                     is_cooling: false,
                     has_fan: false,
                 },
@@ -286,7 +278,7 @@ impl SdProfileReader {
                     set_temperature: 215.0,
                     target_time: 330,
                     step_time: 30,
-                    max_rate: 2.0,
+                    max_rate: 1.0,
                     is_cooling: false,
                     has_fan: false,
                 },
@@ -295,16 +287,16 @@ impl SdProfileReader {
                     set_temperature: 183.0,
                     target_time: 360,
                     step_time: 30,
-                    max_rate: 2.0,
+                    max_rate: 1.0,
                     is_cooling: true,
-                    has_fan: false,
+                    has_fan: true,
                 },
                 Step {
                     step_name: StepName::Cooling,
                     set_temperature: 50.0,
                     target_time: 420,
                     step_time: 60,
-                    max_rate: 5.0,
+                    max_rate: 3.0,
                     is_cooling: true,
                     has_fan: true,
                 },

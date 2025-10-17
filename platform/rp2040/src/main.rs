@@ -17,8 +17,10 @@ use {defmt_rtt as _, panic_probe as _};
 
 use reflow_controller::reflow_controller::controller_task;
 use reflow_controller::resources::{
-    AssignedResources, I2CResources, I2c0Bus, InputResources, OutputResources, USBResources,
+    AssignedResources, I2CResources, I2c0Bus, InputResources, OutputResources, SpiResources,
+    USBResources,
 };
+use reflow_controller::sd_profile_reader::sd_card_task;
 use reflow_controller::split_resources;
 
 #[embassy_executor::main]
@@ -36,11 +38,17 @@ async fn main(spawner: Spawner) {
     let i2c_bus = I2C_BUS.init(Mutex::new(i2c));
 
     spawner.spawn(unwrap!(heater_task(i2c_bus)));
+
+    #[cfg(feature = "mock_temperature_sensor")]
+    spawner.spawn(unwrap!(run_temperature_sensor()));
+
+    #[cfg(not(feature = "mock_temperature_sensor"))]
     spawner.spawn(unwrap!(run_temperature_sensor(i2c_bus)));
 
     spawner.spawn(unwrap!(interface_task(spawner, r.inputs)));
     spawner.spawn(unwrap!(output_task(spawner, r.outputs)));
 
     spawner.spawn(unwrap!(usb_task(spawner, r.usb)));
+    spawner.spawn(unwrap!(sd_card_task(r.spi)));
     spawner.spawn(unwrap!(controller_task()));
 }

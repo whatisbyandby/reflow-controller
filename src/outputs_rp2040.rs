@@ -14,9 +14,6 @@ pub static LED_STATE: Watch<CriticalSectionRawMutex, LedState, 1> = Watch::new()
 pub async fn output_task(spawner: Spawner, r: OutputResources) {
     Timer::after_millis(SYSTEM_TICK_MILLIS.into()).await;
 
-    let mut fan = Output::new(r.fan, Level::Low);
-    let mut light = Output::new(r.light, Level::Low);
-    let mut buzzer = Output::new(r.buzzer, Level::Low);
     let start_button_light = Output::new(r.start_button_light, Level::Low);
 
     let receiver = OUTPUT_COMMAND_CHANNEL.receiver();
@@ -25,15 +22,6 @@ pub async fn output_task(spawner: Spawner, r: OutputResources) {
     loop {
         let command = receiver.receive().await;
         match command {
-            OutputCommand::SetFan(state) => {
-                fan.set_level(if state { Level::High } else { Level::Low })
-            }
-            OutputCommand::SetLight(state) => {
-                light.set_level(if state { Level::High } else { Level::Low })
-            }
-            OutputCommand::SetBuzzer(state) => {
-                buzzer.set_level(if state { Level::High } else { Level::Low })
-            }
             OutputCommand::SetStartButtonLight(state) => LED_STATE.sender().send(state),
         }
     }

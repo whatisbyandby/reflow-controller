@@ -7,7 +7,7 @@ use embassy_time::Timer;
 pub static LED_STATE: Watch<CriticalSectionRawMutex, LedState, 1> = Watch::new();
 
 #[embassy_executor::task]
-pub async fn output_task(spawner: Spawner) {
+pub async fn output_task(_spawner: Spawner) {
     loop {
         Timer::after_millis(SYSTEM_TICK_MILLIS.into()).await;
     }
