@@ -1,5 +1,5 @@
-use crate::{log::*, SdCommand, SdResponse};
-use embassy_time::{Instant, Timer};
+use crate::{log::*, ReflowControllerMessage, SdCommand, SdResponse, MESSAGE_OUTPUT_CHANNEL};
+use embassy_time::{with_timeout, Duration, Instant, Timer};
 use heapless::String;
 
 use crate::{
@@ -9,9 +9,8 @@ use crate::{
 };
 use crate::{temperature_sensor::CURRENT_TEMPERATURE, HEATER_POWER};
 use crate::{
-    Event, OutputCommand, ReflowControllerState, Status, ACTIVE_PROFILE_CHANNEL, CURRENT_STATE,
-    INPUT_EVENT_CHANNEL, OUTPUT_COMMAND_CHANNEL, PROFILE_LIST_CHANNEL, SD_COMMAND_CHANNEL,
-    SD_RESPONSE_CHANNEL, SYSTEM_TICK_MILLIS,
+    Event, OutputCommand, ReflowControllerState, Status, INPUT_EVENT_CHANNEL,
+    OUTPUT_COMMAND_CHANNEL, SD_COMMAND_CHANNEL, SD_RESPONSE_CHANNEL, SYSTEM_TICK_MILLIS,
 };
 
 pub struct ReflowController {
@@ -29,12 +28,6 @@ pub struct ReflowController {
     step_start_time: Instant,
     pid_controller: PidController,
     error_message: String<256>,
-    sd_card_receiver: embassy_sync::channel::Receiver<
-        'static,
-        embassy_sync::blocking_mutex::raw::CriticalSectionRawMutex,
-        SdResponse,
-        2,
-    >,
 }
 
 impl ReflowController {
@@ -53,20 +46,17 @@ impl ReflowController {
             profile_start_time: Instant::now(),
             step_start_time: Instant::now(),
             // Sample time: (SYSTEM_TICK_MILLIS * 10) / 1000.0 = 1.0 second
-            pid_controller: PidController::new(6.0, 0.05, 1.5, 1.0),
+            pid_controller: PidController::new(12.0, 0.05, 5.0, 1.0),
             error_message: String::new(),
-            sd_card_receiver: SD_RESPONSE_CHANNEL.receiver(),
         }
     }
 
     pub async fn run(&mut self) {
         loop {
-            // info!("Reflow Controller Tick");
             if CURRENT_TEMPERATURE.signaled() {
                 let new_temp = CURRENT_TEMPERATURE.wait().await;
                 self.handle_new_temperature(new_temp).await;
             }
-            // Check for input events
             let receiver = INPUT_EVENT_CHANNEL.receiver();
 
             if !receiver.is_empty() {
@@ -86,7 +76,7 @@ impl ReflowController {
             heater_sender
                 .send(crate::HeaterCommand::SetPower(self.heater_power))
                 .await;
-            self.send_state();
+            self.send_state().await;
             Timer::after_millis((SYSTEM_TICK_MILLIS * 10).into()).await;
         }
     }
@@ -184,7 +174,6 @@ impl ReflowController {
         self.step_start_time = Instant::now();
         self.step_start_temperature = self.current_temperature;
         self.update_setpoint();
-        // Reset PID integral term for clean profile start
         self.pid_controller.reset_integral();
     }
 
@@ -200,27 +189,23 @@ impl ReflowController {
         let temp_reached = if step.is_cooling {
             self.current_temperature <= step.set_temperature
         } else {
-            self.current_temperature >= (step.set_temperature - 1.0) // Allow small overshoot margin
+            self.current_temperature >= (step.set_temperature - 10.0) // Allow small overshoot margin
         };
         time_elapsed >= step_end_time && temp_reached
     }
 
     async fn running(&mut self) {
-        // Check if we've reached the target temperature for the current step
         self.update_setpoint();
         if self.step_completed() {
             // Move to the next step if available
             let profile = self.profile.as_ref().unwrap(); // Safe: we can't be running without a profile
             if self.current_step_index + 1 < profile.steps.len() {
-                self.fan = profile.steps[self.current_step_index].has_fan;
                 self.current_step_index += 1;
                 self.step_start_time = Instant::now();
                 self.step_start_temperature = self.current_temperature;
                 self.update_setpoint();
-                // Reset PID integral term for clean step transition
                 self.pid_controller.reset_integral();
             } else {
-                // Completed all steps
                 self.exit_running_state().await;
                 self.enter_finished_state().await;
                 return;
@@ -271,7 +256,7 @@ impl ReflowController {
         self.error_message.clear();
     }
 
-    fn send_state(&mut self) {
+    async fn send_state(&mut self) {
         let (kp, ki, kd) = self.pid_controller.get_parameters();
         let (p_term, i_term, d_term) = self.pid_controller.get_last_terms();
 
@@ -299,12 +284,12 @@ impl ReflowController {
             timer: if self.status == Status::Idle || self.status == Status::Error {
                 0
             } else if self.status == Status::PidTuning {
-                self.get_elapsed_time_ms(self.profile_start_time)
+                self.get_elapsed_time_ms()
             } else {
-                self.get_elapsed_time_ms(self.profile_start_time)
+                self.get_elapsed_time_ms()
             },
             current_profile: profile_name,
-            current_step: step_name,
+            current_step: String::try_from(step_name).unwrap_or_default(),
             error_message: self.error_message.clone(),
             pid_kp: kp,
             pid_ki: ki,
@@ -313,10 +298,13 @@ impl ReflowController {
             pid_i_term: i_term,
             pid_d_term: d_term,
         };
-        CURRENT_STATE.sender().send(state);
+        MESSAGE_OUTPUT_CHANNEL
+            .sender()
+            .send(ReflowControllerMessage::StateUpdate(state))
+            .await;
     }
 
-    fn get_elapsed_time_ms(&self, instant: Instant) -> u32 {
+    fn get_elapsed_time_ms(&self) -> u32 {
         (self.profile_start_time.elapsed().as_millis() as u32) * (SYSTEM_TICK_MILLIS / 100)
     }
 
@@ -334,17 +322,25 @@ impl ReflowController {
         // Calculate the total temperature change needed for this step
         let temp_delta = step.set_temperature - self.step_start_temperature;
 
-        // Calculate target temperature based on maximum allowed rate of change
-        // max_rate is in degrees Celsius per second
-        let max_temp_change = step.max_rate * elapsed_seconds;
-
-        // Calculate the target temperature with rate limiting
-        let rate_limited_target = if temp_delta >= 0.0 {
-            // Heating: ramp up at max_rate, but don't exceed set_temperature
-            (self.step_start_temperature + max_temp_change).min(step.set_temperature)
+        // Calculate the target rate based on step_time (in seconds) and temperature difference
+        // This gives us the ideal rate to reach set_temperature within step_time
+        let step_time_seconds = step.step_time as f32;
+        let target_rate = if step_time_seconds > 0.0 {
+            temp_delta / step_time_seconds
         } else {
-            // Cooling: ramp down at max_rate, but don't go below set_temperature
-            (self.step_start_temperature - max_temp_change).max(step.set_temperature)
+            0.0 // Avoid division by zero
+        };
+
+        // Calculate target temperature based on the calculated rate
+        let temp_change = target_rate * elapsed_seconds;
+
+        // Calculate the target temperature, clamping to set_temperature
+        let rate_limited_target = if temp_delta >= 0.0 {
+            // Heating: ramp up at target_rate, but don't exceed set_temperature
+            (self.step_start_temperature + temp_change).min(step.set_temperature)
+        } else {
+            // Cooling: ramp down at target_rate, but don't go below set_temperature
+            (self.step_start_temperature + temp_change).max(step.set_temperature)
         };
 
         self.target_temperature = rate_limited_target;
@@ -410,15 +406,24 @@ impl ReflowController {
                         .send(SdCommand::ReadProfile { filename })
                         .await;
 
-                    let response = self.sd_card_receiver.receive().await;
+                    let sd_card_response =
+                        with_timeout(Duration::from_millis(500), SD_RESPONSE_CHANNEL.receive())
+                            .await;
 
-                    info!("Received SD card response");
+                    if sd_card_response.is_err() {
+                        info!("Timeout or error loading profile");
+                        return;
+                    }
+
+                    let response = sd_card_response.unwrap();
 
                     match response {
                         SdResponse::ProfileData(profile) => {
                             info!("Profile loaded: {}", profile.name.as_str());
-                            let sender = ACTIVE_PROFILE_CHANNEL.sender();
-                            sender.send(profile.clone()).await;
+                            MESSAGE_OUTPUT_CHANNEL
+                                .sender()
+                                .send(ReflowControllerMessage::ActiveProfile(profile.clone()))
+                                .await;
                             self.profile = Some(profile);
                         }
                         SdResponse::Error(_err) => {
@@ -436,19 +441,27 @@ impl ReflowController {
                     info!("Cannot load profile: not in idle state");
                 }
             }
+            Event::RemoveProfile(profile) => {
+                info!("Remove Profile Event");
+                if self.status == Status::Idle || self.status == Status::Error {
+                    SD_COMMAND_CHANNEL
+                        .sender()
+                        .send(SdCommand::DeleteProfile { filename: profile })
+                        .await;
+                } else {
+                    info!("Cannot remove profile: not in idle state");
+                }
+            }
             Event::ListProfilesRequest => {
                 info!("Listing available profiles");
                 match self.get_available_profiles().await {
                     Ok(profiles) => {
-                        let sender = PROFILE_LIST_CHANNEL.sender();
-                        sender.send(profiles).await;
+                        MESSAGE_OUTPUT_CHANNEL
+                            .send(ReflowControllerMessage::ProfileList(profiles))
+                            .await;
                     }
                     Err(err) => {
-                        info!("Error listing profiles");
-                        // Send empty list on error
-                        let sender = PROFILE_LIST_CHANNEL.sender();
-                        let empty_list = heapless::Vec::new();
-                        sender.send(empty_list).await;
+                        error!("Error listing profiles {}", Debug2Format(&err));
                     }
                 }
             }
@@ -474,7 +487,7 @@ impl ReflowController {
             }
             Event::WriteProfile {
                 filename,
-                profile_json,
+                profile_json: _,
             } => {
                 info!("Writing profile to file: {}", filename.as_str());
             }
@@ -498,94 +511,18 @@ impl ReflowController {
 
     pub async fn get_available_profiles(
         &self,
-    ) -> Result<heapless::Vec<heapless::String<64>, 16>, SdProfileError> {
+    ) -> Result<heapless::Vec<heapless::String<14>, 16>, SdProfileError> {
         SD_COMMAND_CHANNEL
             .sender()
             .send(SdCommand::ListProfiles)
             .await;
 
-        let response = self.sd_card_receiver.receive().await;
+        let response = SD_RESPONSE_CHANNEL.receive().await;
         match response {
             SdResponse::ProfileList(profiles) => Ok(profiles),
             SdResponse::Error(err) => Err(err),
             _ => Err(SdProfileError::Unknown),
         }
-    }
-
-    // Getter methods for testing
-    #[cfg(test)]
-    pub fn status(&self) -> &Status {
-        &self.status
-    }
-
-    #[cfg(test)]
-    pub fn heater_power(&self) -> u8 {
-        self.heater_power
-    }
-
-    #[cfg(test)]
-    pub fn fan(&self) -> bool {
-        self.fan
-    }
-
-    #[cfg(test)]
-    pub fn light(&self) -> bool {
-        self.light
-    }
-
-    #[cfg(test)]
-    pub fn door_closed(&self) -> bool {
-        self.door_closed
-    }
-
-    #[cfg(test)]
-    pub fn set_door_closed(&mut self, closed: bool) {
-        self.door_closed = closed;
-    }
-
-    #[cfg(test)]
-    pub fn current_step_index(&self) -> usize {
-        self.current_step_index
-    }
-
-    #[cfg(test)]
-    pub fn target_temperature(&self) -> f32 {
-        self.target_temperature
-    }
-
-    #[cfg(test)]
-    pub fn current_temperature(&self) -> f32 {
-        self.current_temperature
-    }
-
-    #[cfg(test)]
-    pub fn set_current_temperature(&mut self, temp: f32) {
-        self.current_temperature = temp;
-    }
-
-    #[cfg(test)]
-    pub fn profile(&self) -> &Option<Profile> {
-        &self.profile
-    }
-
-    #[cfg(test)]
-    pub fn error_message(&self) -> &heapless::String<256> {
-        &self.error_message
-    }
-
-    #[cfg(test)]
-    pub fn enter_idle_state_test(&mut self) {
-        self.enter_idle_state();
-    }
-
-    #[cfg(test)]
-    pub fn exit_error_state_test(&mut self) {
-        self.exit_error_state();
-    }
-
-    #[cfg(test)]
-    pub fn step_completed_test(&self) -> bool {
-        self.step_completed()
     }
 }
 

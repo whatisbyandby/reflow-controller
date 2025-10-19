@@ -3,12 +3,10 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Step {
     pub is_cooling: bool,
-    pub has_fan: bool,
     pub step_name: StepName,
     pub set_temperature: f32,
     pub target_time: u32,
     pub step_time: u32,
-    pub max_rate: f32, // degrees per second
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -40,4 +38,3 @@ impl StepName {
         }
     }
 }
-

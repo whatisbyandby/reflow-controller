@@ -5,22 +5,12 @@
 
 use crate::log::{info, warn};
 use crate::profile::Profile;
-use crate::{Event, ReflowControllerState, INPUT_EVENT_CHANNEL};
+use crate::{Event, ReflowControllerMessage, INPUT_EVENT_CHANNEL};
 use core::str;
 use heapless::String;
 use serde::{Deserialize, Serialize};
 
 use crate::{SdCommand, SD_COMMAND_CHANNEL};
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ProfileListResponse {
-    pub profiles: heapless::Vec<heapless::String<64>, 16>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ActiveProfileResponse {
-    pub active_profile: Profile,
-}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct WriteProfileResponse {
@@ -30,55 +20,44 @@ pub struct WriteProfileResponse {
 }
 
 /// Convert a ReflowControllerState to a JSON string using heapless buffers
-pub fn to_json_heapless(msg: &ReflowControllerState) -> String<1024> {
+pub fn to_json_heapless(msg: &ReflowControllerMessage) -> String<1024> {
     serde_json_core::ser::to_string(msg).unwrap()
 }
 
-/// Parse and handle incoming text commands
-///
-/// This function processes text commands from either USB or serial interfaces
-/// and sends corresponding events to the controller.
-///
-/// Platform-specific behavior (like RP2040's 'q' command) must be handled
-/// by the caller before calling this function.
-pub fn handle_command(data: &[u8]) {
-    if let Ok(data) = str::from_utf8(data) {
-        let data = data.trim();
-        match data {
-            "START" => {
-                INPUT_EVENT_CHANNEL
-                    .sender()
-                    .try_send(Event::StartCommand)
-                    .ok();
-            }
-            "STOP" => {
-                INPUT_EVENT_CHANNEL
-                    .sender()
-                    .try_send(Event::StopCommand)
-                    .ok();
-            }
-            "RESET" => {
-                INPUT_EVENT_CHANNEL
-                    .sender()
-                    .try_send(Event::ResetCommand)
-                    .ok();
-            }
-            "LIST_PROFILES" => {
-                // On RP2040, send command to SD card task
-                SD_COMMAND_CHANNEL
-                    .sender()
-                    .try_send(SdCommand::ListProfiles)
-                    .ok();
-            }
-            "TUNE_PID" => {
-                INPUT_EVENT_CHANNEL
-                    .sender()
-                    .try_send(Event::StartPidTuning)
-                    .ok();
-            }
-            _ => {
-                handle_parameterized_command(data);
-            }
+pub fn handle_command(data: &str) {
+    match data {
+        "START" => {
+            INPUT_EVENT_CHANNEL
+                .sender()
+                .try_send(Event::StartCommand)
+                .ok();
+        }
+        "STOP" => {
+            INPUT_EVENT_CHANNEL
+                .sender()
+                .try_send(Event::StopCommand)
+                .ok();
+        }
+        "RESET" => {
+            INPUT_EVENT_CHANNEL
+                .sender()
+                .try_send(Event::ResetCommand)
+                .ok();
+        }
+        "LIST_PROFILES" => {
+            INPUT_EVENT_CHANNEL
+                .sender()
+                .try_send(Event::ListProfilesRequest)
+                .ok();
+        }
+        "TUNE_PID" => {
+            INPUT_EVENT_CHANNEL
+                .sender()
+                .try_send(Event::StartPidTuning)
+                .ok();
+        }
+        _ => {
+            handle_parameterized_command(data);
         }
     }
 }
@@ -89,6 +68,8 @@ fn handle_parameterized_command(data: &str) {
         handle_set_profile_command(data);
     } else if data.starts_with("WRITE_PROFILE ") {
         handle_write_profile_command(data);
+    } else if data.starts_with("REMOVE_PROFILE ") {
+        handle_remove_profile_command(data);
     } else if data.starts_with("PID ") {
         handle_pid_command(data);
     } else if data.starts_with("FAN ") {
@@ -102,7 +83,7 @@ fn handle_parameterized_command(data: &str) {
 fn handle_set_profile_command(data: &str) {
     let profile_name = &data[12..]; // Skip "SET_PROFILE "
     if !profile_name.is_empty() {
-        let mut profile_string = heapless::String::<64>::new();
+        let mut profile_string = heapless::String::<14>::new();
         if profile_string.push_str(profile_name).is_ok() {
             INPUT_EVENT_CHANNEL
                 .sender()
@@ -179,62 +160,83 @@ fn handle_fan_command(data: &str) {
     }
 }
 
-/// Handle WRITE_PROFILE command with filename and JSON data
-/// Format: WRITE_PROFILE filename.json <JSON_PROFILE_DATA>
 fn handle_write_profile_command(data: &str) {
-    let params = &data[14..]; // Skip "WRITE_PROFILE "
+    let mut command: String<2048> = String::new();
+    command.push_str(data).ok();
+    let mut string_split = command.split_ascii_whitespace();
+    let _command = string_split.next();
+    let filename = string_split.next();
+    let json_data = string_split.next();
 
-    // Find the first space to separate filename from JSON data
-    if let Some(space_idx) = params.find(' ') {
-        let filename = &params[..space_idx].trim();
-        let json_data = &params[space_idx + 1..].trim();
+    if filename.is_none() || json_data.is_none() {
+        warn!("WRITE_PROFILE command requires a filename and JSON profile data");
+        return;
+    }
 
-        if filename.is_empty() {
-            warn!("WRITE_PROFILE requires a filename");
-            return;
-        }
+    process_write_profile(filename.unwrap(), json_data.unwrap());
+}
 
-        if json_data.is_empty() {
-            warn!("WRITE_PROFILE requires JSON profile data");
-            return;
-        }
-
-        // Try to parse the JSON to validate it's a valid profile
-        let parse_result: Result<(Profile, usize), _> = serde_json_core::from_str(json_data);
-
-        match parse_result {
-            Ok((profile, _)) => {
-                let mut filename_string = heapless::String::<64>::new();
-                if filename_string.push_str(filename).is_err() {
-                    warn!("Filename too long (max 64 chars): {}", filename);
-                    return;
-                }
-
-                #[cfg(feature = "rp2040")]
-                {
-                    // On RP2040, send command to SD card task to write profile
-                    info!("Writing profile to SD card: {}", filename);
-                    SD_COMMAND_CHANNEL
-                        .sender()
-                        .try_send(SdCommand::WriteProfile {
-                            filename: filename_string,
-                            profile,
-                        })
-                        .ok();
-                }
-
-                #[cfg(not(feature = "rp2040"))]
-                {
-                    // On std platform, this command is not yet supported
-                    let _ = profile; // Use the variable to avoid warning
-                    warn!("WRITE_PROFILE is only supported on RP2040 platform with SD card");
-                }
+fn handle_remove_profile_command(data: &str) {
+    let profile_name = &data[15..]; // Skip "REMOVE_PROFILE "
+    if !profile_name.is_empty() {
+        let mut profile_string = heapless::String::<14>::new();
+        if profile_string.push_str(profile_name).is_ok() {
+            #[cfg(feature = "rp2040")]
+            {
+                info!("Removing profile from SD card: {}", profile_name);
+                SD_COMMAND_CHANNEL
+                    .sender()
+                    .try_send(SdCommand::DeleteProfile {
+                        filename: profile_string,
+                    })
+                    .ok();
             }
-            Err(_) => {
-                warn!("Invalid JSON profile data. Failed to parse profile.");
+
+            #[cfg(not(feature = "rp2040"))]
+            {
+                warn!("REMOVE_PROFILE is only supported on RP2040 platform with SD card");
             }
+        } else {
+            warn!("Profile name too long: {}", profile_name);
         }
     } else {
-        warn!("WRITE_PROFILE format: WRITE_PROFILE filename.json <JSON_DATA>");
+        warn!("REMOVE_PROFILE command requires a profile name");
+    }
+}
+
+/// Process the complete write profile command
+fn process_write_profile(filename: &str, json_data: &str) {
+    info!("Json Data Received: {}", json_data);
+    let parse_result: Result<(Profile, usize), _> = serde_json_core::from_str(json_data);
+
+    match parse_result {
+        Ok((profile, _)) => {
+            let mut filename_string = heapless::String::<14>::new();
+            if filename_string.push_str(filename).is_err() {
+                warn!("Filename too long (max 12 chars): {}", filename);
+                return;
+            }
+
+            #[cfg(feature = "rp2040")]
+            {
+                info!("Writing profile to SD card: {}", filename);
+                SD_COMMAND_CHANNEL
+                    .sender()
+                    .try_send(SdCommand::WriteProfile {
+                        filename: filename_string,
+                        profile,
+                    })
+                    .ok();
+            }
+
+            #[cfg(not(feature = "rp2040"))]
+            {
+                let _ = profile;
+                warn!("WRITE_PROFILE is only supported on RP2040 platform with SD card");
+            }
+        }
+        Err(_) => {
+            warn!("Invalid JSON profile data. Failed to parse profile.");
+        }
     }
 }

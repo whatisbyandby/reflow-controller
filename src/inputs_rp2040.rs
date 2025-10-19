@@ -94,7 +94,6 @@ async fn door_switch_task(pin: Peri<'static, PIN_4>) -> ! {
     loop {
         // Wait for a change in the door switch state
         door_switch.wait_for_any_edge().await;
-        defmt::info!("Door switch state changed");
         Timer::after_millis((SYSTEM_TICK_MILLIS * 5).into()).await; // Debounce delay (500ms equivalent)
 
         let new_state = door_switch.get_level();

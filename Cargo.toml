@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
-default = ["std"]
+default = ["rp2040"]
 rp2040 = [
     "embassy-rp",
     "assign-resources",
@@ -13,15 +13,6 @@ rp2040 = [
     "embedded-sdmmc",
     "embedded-hal-bus",
 ]
-std = [
-    "async-io",
-    "nix",
-    "embedded-io-async",
-    "embedded-io-adapters",
-    "mock_temperature_sensor",
-]
-ramp_setpoint = []
-mock_temperature_sensor = []
 
 
 [dependencies]
@@ -37,6 +28,7 @@ embassy-rp = { version = "0.8.0", path = "../embassy/embassy-rp", features = [
     "rp2040",
 ], optional = true }
 
+embassy-usb = { version = "0.5.1", path = "../embassy/embassy-usb" }
 embassy-usb-logger = { version = "0.5.1", path = "../embassy/embassy-usb-logger" }
 embassy-futures = { version = "0.1.2", path = "../embassy/embassy-futures" }
 

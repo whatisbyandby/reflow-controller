@@ -81,21 +81,17 @@ pub async fn sd_card_task(r: SpiResources) {
         let command = SD_COMMAND_CHANNEL.receive().await;
 
         match command {
-            SdCommand::ListProfiles => {
-                info!("Listing profiles from SD card");
-                match list_profiles_from_sd(&mut volume).await {
-                    Ok(profiles) => {
-                        info!("Found {} profiles", profiles.len());
-                        SD_RESPONSE_CHANNEL
-                            .send(SdResponse::ProfileList(profiles))
-                            .await;
-                    }
-                    Err(e) => {
-                        error!("Failed to list profiles");
-                        SD_RESPONSE_CHANNEL.send(SdResponse::Error(e)).await;
-                    }
+            SdCommand::ListProfiles => match list_profiles_from_sd(&mut volume).await {
+                Ok(profiles) => {
+                    SD_RESPONSE_CHANNEL
+                        .send(SdResponse::ProfileList(profiles))
+                        .await;
                 }
-            }
+                Err(e) => {
+                    error!("Failed to list profiles");
+                    SD_RESPONSE_CHANNEL.send(SdResponse::Error(e)).await;
+                }
+            },
             SdCommand::ReadProfile { filename } => {
                 info!("Reading profile: {}", filename.as_str());
                 match read_profile_from_sd(&mut volume, &filename).await {
@@ -124,8 +120,46 @@ pub async fn sd_card_task(r: SpiResources) {
                     }
                 }
             }
+            SdCommand::DeleteProfile { filename } => {
+                info!("Removing profile: {}", filename.as_str());
+                match remove_profile_from_sd(&mut volume, &filename).await {
+                    Ok(()) => {
+                        info!("Profile removed successfully");
+                        SD_RESPONSE_CHANNEL.send(SdResponse::DeleteSuccess).await;
+                    }
+                    Err(e) => {
+                        error!("Failed to remove profile");
+                        SD_RESPONSE_CHANNEL.send(SdResponse::Error(e)).await;
+                    }
+                }
+            }
         }
     }
+}
+
+async fn remove_profile_from_sd<
+    D,
+    T,
+    const MAX_DIRS: usize,
+    const MAX_FILES: usize,
+    const MAX_VOLUMES: usize,
+>(
+    volume: &mut embedded_sdmmc::Volume<'_, D, T, MAX_DIRS, MAX_FILES, MAX_VOLUMES>,
+    filename: &str,
+) -> Result<(), SdProfileError>
+where
+    D: embedded_sdmmc::BlockDevice,
+    T: embedded_sdmmc::TimeSource,
+{
+    let mut root_dir = volume
+        .open_root_dir()
+        .map_err(|_| SdProfileError::SdCardError)?;
+
+    root_dir
+        .delete_file_in_dir(filename)
+        .map_err(|_| SdProfileError::SdCardError)?;
+
+    Ok(())
 }
 
 async fn list_profiles_from_sd<
@@ -136,7 +170,7 @@ async fn list_profiles_from_sd<
     const MAX_VOLUMES: usize,
 >(
     volume: &mut embedded_sdmmc::Volume<'_, D, T, MAX_DIRS, MAX_FILES, MAX_VOLUMES>,
-) -> Result<Vec<String<64>, 16>, SdProfileError>
+) -> Result<Vec<String<14>, 16>, SdProfileError>
 where
     D: embedded_sdmmc::BlockDevice,
     T: embedded_sdmmc::TimeSource,

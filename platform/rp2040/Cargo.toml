@@ -4,13 +4,13 @@ version = "0.1.0"
 edition = "2021"
 
 [features]
-ramp_setpoint = []
-mock_temperature_sensor = ["reflow-controller/mock_temperature_sensor"]
 
 
 [dependencies]
 
-reflow-controller = { path = "../../", default-features = false, features = ["rp2040"] }
+reflow-controller = { path = "../../", default-features = false, features = [
+    "rp2040",
+] }
 
 embassy-embedded-hal = { version = "0.5.0", path = "../../../embassy/embassy-embedded-hal", features = [
     "defmt",
@@ -34,6 +34,7 @@ embassy-rp = { version = "0.8.0", path = "../../../embassy/embassy-rp", features
 ] }
 
 embassy-usb-logger = { version = "0.5.1", path = "../../../embassy/embassy-usb-logger" }
+embassy-usb = { version = "0.5.1", path = "../../../embassy/embassy-usb" }
 embassy-futures = { version = "0.1.2", path = "../../../embassy/embassy-futures" }
 
 embedded-graphics = "0.8.1"

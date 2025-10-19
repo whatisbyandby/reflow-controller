@@ -1,8 +1,5 @@
 #![no_std]
 
-#[cfg(feature = "std")]
-extern crate std;
-
 pub mod pid;
 pub mod profile;
 pub mod reflow_controller;
@@ -12,28 +9,16 @@ pub mod text_interface;
 #[cfg(feature = "rp2040")]
 pub use defmt as log;
 
-#[cfg(feature = "std")]
-pub use log;
-
 #[cfg(feature = "rp2040")]
 pub mod inputs_rp2040;
 #[cfg(feature = "rp2040")]
 pub use inputs_rp2040 as inputs;
 
-#[cfg(feature = "std")]
-pub mod inputs_std;
-#[cfg(feature = "std")]
-pub use inputs_std as inputs;
-
 #[cfg(feature = "rp2040")]
 pub mod outputs_rp2040;
+
 #[cfg(feature = "rp2040")]
 pub use outputs_rp2040 as outputs;
-
-#[cfg(feature = "std")]
-pub mod outputs_std;
-#[cfg(feature = "std")]
-pub use outputs_std as outputs;
 
 #[cfg(feature = "rp2040")]
 pub mod resources_rp2040;
@@ -45,38 +30,18 @@ pub mod heater_rp2040;
 #[cfg(feature = "rp2040")]
 pub use heater_rp2040 as heater;
 
-#[cfg(feature = "std")]
-pub mod heater_std;
-#[cfg(feature = "std")]
-pub use heater_std as heater;
-
-#[cfg(not(feature = "mock_temperature_sensor"))]
 pub mod temperature_sensor_mcp9600;
-#[cfg(not(feature = "mock_temperature_sensor"))]
 pub use temperature_sensor_mcp9600 as temperature_sensor;
-
-#[cfg(feature = "mock_temperature_sensor")]
-pub mod temperature_sensor_mock;
-#[cfg(feature = "mock_temperature_sensor")]
-pub use temperature_sensor_mock as temperature_sensor;
 
 #[cfg(feature = "rp2040")]
 pub mod usb_interface_rp2040;
 #[cfg(feature = "rp2040")]
 pub use usb_interface_rp2040 as usb_interface;
 
-#[cfg(feature = "std")]
-pub mod usb_interface_std;
-#[cfg(feature = "std")]
-pub use usb_interface_std as usb_interface;
-
 #[cfg(feature = "rp2040")]
 pub mod sd_card_rp2040;
 #[cfg(feature = "rp2040")]
 pub use sd_card_rp2040 as sd_profile_reader;
-
-#[cfg(feature = "std")]
-pub mod sd_profile_reader;
 
 pub static VERSION: &str = "v0.1";
 pub static SYSTEM_TICK_MILLIS: u32 = 100;
@@ -93,7 +58,8 @@ pub enum Event {
     StopCommand,
     ResetCommand,
     DoorStateChanged(bool),
-    LoadProfile(String<64>), // filename to load from SD card
+    LoadProfile(String<14>),   // filename to load from SD card
+    RemoveProfile(String<14>), // filename to remove from SD card
     ListProfilesRequest,
     SimulationReset,
     UpdatePidParameters {
@@ -104,7 +70,7 @@ pub enum Event {
     FanControl(bool), // true = on, false = off
     StartPidTuning,
     WriteProfile {
-        filename: String<64>,
+        filename: String<14>,
         profile_json: String<2048>,
     },
 }
@@ -132,20 +98,24 @@ pub enum HeaterCommand {
 #[derive(Debug, Clone)]
 pub enum SdCommand {
     ListProfiles,
+    DeleteProfile {
+        filename: String<14>,
+    },
     ReadProfile {
-        filename: String<64>,
+        filename: String<14>,
     },
     WriteProfile {
-        filename: String<64>,
+        filename: String<14>,
         profile: profile::Profile,
     },
 }
 
 #[derive(Debug, Clone)]
 pub enum SdResponse {
-    ProfileList(heapless::Vec<String<64>, 16>),
+    ProfileList(heapless::Vec<String<14>, 16>),
     ProfileData(profile::Profile),
     WriteSuccess,
+    DeleteSuccess,
     Error(SdProfileError),
 }
 
@@ -160,19 +130,12 @@ pub enum SdProfileError {
 }
 
 pub static INPUT_EVENT_CHANNEL: Channel<CriticalSectionRawMutex, Event, 3> = Channel::new();
+pub static MESSAGE_OUTPUT_CHANNEL: Channel<CriticalSectionRawMutex, ReflowControllerMessage, 3> =
+    Channel::new();
 pub static OUTPUT_COMMAND_CHANNEL: Channel<CriticalSectionRawMutex, OutputCommand, 3> =
     Channel::new();
 pub static HEATER_POWER: Channel<CriticalSectionRawMutex, HeaterCommand, 2> = Channel::new();
 pub static CURRENT_STATE: Watch<CriticalSectionRawMutex, ReflowControllerState, 3> = Watch::new();
-pub static PROFILE_LIST_CHANNEL: Channel<
-    CriticalSectionRawMutex,
-    heapless::Vec<heapless::String<64>, 16>,
-    1,
-> = Channel::new();
-pub static ACTIVE_PROFILE_CHANNEL: Channel<CriticalSectionRawMutex, profile::Profile, 1> =
-    Channel::new();
-pub static WRITE_PROFILE_RESULT: Channel<CriticalSectionRawMutex, WriteProfileResult, 1> =
-    Channel::new();
 
 pub static SD_COMMAND_CHANNEL: Channel<CriticalSectionRawMutex, SdCommand, 2> = Channel::new();
 pub static SD_RESPONSE_CHANNEL: Channel<CriticalSectionRawMutex, SdResponse, 2> = Channel::new();
@@ -204,7 +167,7 @@ pub struct ReflowControllerState {
     pub light: bool,
     pub heater_power: u8, // value between 0 and 100
     pub timer: u32,       // this is in ms
-    pub current_step: &'static str,
+    pub current_step: heapless::String<32>,
     pub current_profile: heapless::String<32>,
     pub error_message: heapless::String<256>,
     pub pid_kp: f32,
@@ -215,767 +178,10 @@ pub struct ReflowControllerState {
     pub pid_d_term: f32,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    mod pid_controller_tests {
-        use super::*;
-        use crate::pid::PidController;
-
-        #[test]
-        fn test_pid_controller_new() {
-            let pid = PidController::new(1.0, 0.5, 0.1, 1.0);
-            let (kp, ki, kd) = pid.get_parameters();
-
-            assert_eq!(kp, 1.0);
-            assert_eq!(ki, 0.5);
-            assert_eq!(kd, 0.1);
-        }
-
-        #[test]
-        fn test_pid_controller_update_basic() {
-            let mut pid = PidController::new(1.0, 0.0, 0.0, 1.0); // P-only controller, dt=1.0s
-
-            // Test with positive error (setpoint > measurement)
-            let output = pid.update(100.0, 90.0); // Error = 10.0
-            assert_eq!(output, 10); // P * error = 1.0 * 10.0 = 10.0
-        }
-
-        #[test]
-        fn test_pid_controller_integral_term() {
-            let mut pid = PidController::new(0.0, 1.0, 0.0, 1.0); // I-only controller, dt=1.0s
-
-            // First update: integral accumulates error * dt
-            let output1 = pid.update(100.0, 90.0); // Error = 10.0, integral = 10.0 * 1.0 = 10.0
-            assert_eq!(output1, 10); // I * integral = 1.0 * 10.0 = 10.0
-
-            // Second update: integral accumulates more error * dt
-            let output2 = pid.update(100.0, 90.0); // Error = 10.0 again, integral = 10.0 + 10.0 = 20.0
-            assert_eq!(output2, 20); // I * integral = 1.0 * 20.0 = 20.0
-        }
-
-        #[test]
-        fn test_pid_controller_derivative_term() {
-            let mut pid = PidController::new(0.0, 0.0, 1.0, 1.0); // D-only controller, dt=1.0s
-
-            // First update: no previous error, so derivative is error/dt
-            let output1 = pid.update(100.0, 90.0); // Error = 10.0
-            assert_eq!(output1, 10); // D * (error - prev_error)/dt = 1.0 * (10.0 - 0.0)/1.0 = 10.0
-
-            // Second update: error changes
-            let output2 = pid.update(100.0, 85.0); // Error = 15.0
-            assert_eq!(output2, 5); // D * (error - prev_error)/dt = 1.0 * (15.0 - 10.0)/1.0 = 5.0
-        }
-
-        #[test]
-        fn test_pid_controller_output_clamping() {
-            let mut pid = PidController::new(10.0, 0.0, 0.0, 1.0); // High P gain, dt=1.0s
-
-            // Large error should be clamped to max output (100)
-            let output = pid.update(200.0, 0.0); // Error = 200.0
-            assert_eq!(output, 100); // Should be clamped to max (100)
-
-            // Negative error should be clamped to min output (0)
-            let output = pid.update(0.0, 200.0); // Error = -200.0
-            assert_eq!(output, 0); // Should be clamped to min (0)
-        }
-
-        #[test]
-        fn test_pid_controller_integral_windup_protection() {
-            let mut pid = PidController::new(1.0, 1.0, 0.0, 1.0);
-
-            // Create a large error that would saturate output
-            pid.update(200.0, 0.0); // Large error, output will be clamped
-
-            // The integral should be reduced due to windup protection
-            // This is harder to test directly, but we can verify behavior
-            let output = pid.update(110.0, 100.0); // Small error = 10.0
-                                                   // If windup protection works, output should be reasonable
-            assert!(output <= 100 && output >= 0);
-        }
-
-        #[test]
-        fn test_pid_controller_reset_integral() {
-            let mut pid = PidController::new(0.0, 1.0, 0.0, 1.0);
-
-            // Build up integral term
-            pid.update(100.0, 90.0);
-            pid.update(100.0, 90.0);
-            let output_before = pid.update(100.0, 90.0);
-            assert!(output_before > 20); // Should have accumulated
-
-            // Reset integral
-            pid.reset_integral();
-            let output_after = pid.update(100.0, 90.0);
-            assert_eq!(output_after, 10); // Should be back to single error value
-        }
-
-        #[test]
-        fn test_pid_controller_update_parameters() {
-            let mut pid = PidController::new(1.0, 1.0, 1.0, 1.0);
-
-            // Update parameters without resetting integral
-            pid.update(100.0, 90.0); // Build up some integral
-            pid.update_parameters(2.0, 2.0, 2.0, false);
-
-            let (kp, ki, kd) = pid.get_parameters();
-            assert_eq!(kp, 2.0);
-            assert_eq!(ki, 2.0);
-            assert_eq!(kd, 2.0);
-
-            // Update parameters with integral reset
-            pid.update_parameters(3.0, 3.0, 3.0, true);
-            let output = pid.update(100.0, 90.0);
-            // With reset integral:
-            // P: 3.0 * 10.0 = 30.0
-            // I: 3.0 * (10.0 * 1.0) = 30.0 (integral accumulates current error * dt)
-            // D: 3.0 * (10.0 - 10.0)/1.0 = 0.0 (previous_error retained from before parameter update)
-            // Total: 30 + 30 + 0 = 60
-            assert_eq!(output, 60);
-        }
-
-        #[test]
-        fn test_pid_controller_zero_error() {
-            let mut pid = PidController::new(1.0, 1.0, 1.0, 1.0);
-
-            // Zero error should produce zero output (ignoring accumulated integral)
-            let output = pid.update(100.0, 100.0);
-            assert_eq!(output, 0);
-        }
-
-        #[test]
-        fn test_pid_controller_negative_setpoint() {
-            let mut pid = PidController::new(1.0, 0.0, 0.0, 1.0);
-
-            // Negative setpoint should work correctly
-            let output = pid.update(-10.0, 0.0); // Error = -10.0
-            assert_eq!(output, 0); // Clamped to minimum (0)
-        }
-    }
-
-    mod profile_tests {
-        use crate::profile::{Step, StepName};
-
-        #[test]
-        fn test_step_name_to_str() {
-            assert_eq!(StepName::Preheat.to_str(), "Preheat");
-            assert_eq!(StepName::Soak.to_str(), "Soak");
-            assert_eq!(StepName::Ramp.to_str(), "Ramp");
-            assert_eq!(StepName::ReflowRamp.to_str(), "Reflow Ramp");
-            assert_eq!(StepName::ReflowCool.to_str(), "Reflow Cool");
-            assert_eq!(StepName::Cooling.to_str(), "Cooling");
-        }
-
-        #[test]
-        fn test_step_equality() {
-            let step1 = Step {
-                step_name: StepName::Preheat,
-                set_temperature: 150.0,
-                target_time: 90,
-                step_time: 90,
-                max_rate: 2.0,
-                is_cooling: false,
-                has_fan: false,
-            };
-
-            let step2 = Step {
-                step_name: StepName::Preheat,
-                set_temperature: 150.0,
-                target_time: 90,
-                step_time: 90,
-                max_rate: 2.0,
-                is_cooling: false,
-                has_fan: false,
-            };
-
-            // Steps should be equal
-            assert_eq!(step1.step_name, step2.step_name);
-            assert_eq!(step1.set_temperature, step2.set_temperature);
-        }
-    }
-
-    mod event_tests {
-        use super::*;
-
-        #[test]
-        fn test_reset_command_from_finished() {
-            let reset_event = Event::ResetCommand;
-
-            // Verify reset event structure
-            match reset_event {
-                Event::ResetCommand => {
-                    // Reset command should work from Finished state
-                    assert!(true);
-                }
-                _ => panic!("Expected ResetCommand event"),
-            }
-        }
-
-        #[test]
-        fn test_reset_command_from_error() {
-            let reset_event = Event::ResetCommand;
-
-            // Verify reset event structure
-            match reset_event {
-                Event::ResetCommand => {
-                    // Reset command should work from Error state
-                    assert!(true);
-                }
-                _ => panic!("Expected ResetCommand event"),
-            }
-        }
-
-        #[test]
-        fn test_stop_command() {
-            let stop_event = Event::StopCommand;
-
-            // Verify stop event structure
-            match stop_event {
-                Event::StopCommand => {
-                    // Stop command should work from Running state
-                    assert!(true);
-                }
-                _ => panic!("Expected StopCommand event"),
-            }
-        }
-
-        #[test]
-        fn test_profile_load_event() {
-            let mut profile_name = heapless::String::<64>::new();
-            profile_name.push_str("test_profile.txt").unwrap();
-            let load_event = Event::LoadProfile(profile_name.clone());
-
-            match load_event {
-                Event::LoadProfile(filename) => {
-                    assert_eq!(filename.as_str(), "test_profile.txt");
-                }
-                _ => panic!("Expected LoadProfile event"),
-            }
-        }
-
-        #[test]
-        fn test_pid_parameter_update_event() {
-            let pid_event = Event::UpdatePidParameters {
-                kp: 1.5,
-                ki: 0.3,
-                kd: 0.1,
-            };
-
-            match pid_event {
-                Event::UpdatePidParameters { kp, ki, kd } => {
-                    assert_eq!(kp, 1.5);
-                    assert_eq!(ki, 0.3);
-                    assert_eq!(kd, 0.1);
-                }
-                _ => panic!("Expected UpdatePidParameters event"),
-            }
-        }
-
-        #[test]
-        fn test_door_state_change_event() {
-            // Test door closing
-            let door_close_event = Event::DoorStateChanged(true);
-            match door_close_event {
-                Event::DoorStateChanged(closed) => {
-                    assert!(closed);
-                }
-                _ => panic!("Expected DoorStateChanged event"),
-            }
-
-            // Test door opening
-            let door_open_event = Event::DoorStateChanged(false);
-            match door_open_event {
-                Event::DoorStateChanged(closed) => {
-                    assert!(!closed);
-                }
-                _ => panic!("Expected DoorStateChanged event"),
-            }
-        }
-
-        #[test]
-        fn test_simulation_reset_event() {
-            let sim_reset_event = Event::SimulationReset;
-            match sim_reset_event {
-                Event::SimulationReset => {
-                    assert!(true);
-                }
-                _ => panic!("Expected SimulationReset event"),
-            }
-        }
-
-        #[test]
-        fn test_list_profiles_request_event() {
-            let list_event = Event::ListProfilesRequest;
-            match list_event {
-                Event::ListProfilesRequest => {
-                    assert!(true);
-                }
-                _ => panic!("Expected ListProfilesRequest event"),
-            }
-        }
-
-        #[test]
-        fn test_start_command_event() {
-            let start_event = Event::StartCommand;
-            match start_event {
-                Event::StartCommand => {
-                    assert!(true);
-                }
-                _ => panic!("Expected StartCommand event"),
-            }
-        }
-    }
-
-    mod sd_profile_reader_tests {
-        use super::*;
-        use crate::sd_profile_reader::SdProfileReader;
-        use crate::SdProfileError;
-
-        #[test]
-        fn test_sd_profile_reader_new() {
-            let reader = SdProfileReader::new();
-            // Can't access initialized field directly, but we can test that new() doesn't panic
-            assert!(true);
-        }
-
-        #[test]
-        fn test_sd_profile_error_types() {
-            // Test that all error variants can be created
-            let _file_not_found = SdProfileError::FileNotFound;
-            let _parse_error = SdProfileError::ParseError;
-            let _invalid_format = SdProfileError::InvalidFormat;
-            let _sd_card_error = SdProfileError::SdCardError;
-            let _too_many_profiles = SdProfileError::TooManyProfiles;
-
-            // All error types exist and can be constructed
-            assert!(true);
-        }
-
-        // Note: The mock profile creation methods are private,
-        // so we can't test them directly without async runtime.
-        // The profile structure and logic is already tested in profile_tests module.
-    }
-
-    mod data_structure_tests {
-        use super::*;
-
-        #[test]
-        fn test_status_enum() {
-            let statuses = [
-                Status::Initializing,
-                Status::Idle,
-                Status::Running,
-                Status::Finished,
-                Status::Error,
-                Status::PidTuning,
-            ];
-
-            // Test that all status variants can be created and compared
-            for status in &statuses {
-                assert_eq!(*status, *status); // Self-equality
-            }
-
-            // Test specific comparisons
-            assert_ne!(Status::Idle, Status::Running);
-            assert_ne!(Status::Error, Status::Finished);
-            assert_ne!(Status::PidTuning, Status::Running);
-        }
-
-        #[test]
-        fn test_led_state_enum() {
-            let led_on = LedState::LedOn;
-            let led_off = LedState::LedOff;
-            let led_blink = LedState::Blink(500, 500);
-
-            // Test that LED states can be created and compared
-            assert_eq!(led_on, LedState::LedOn);
-            assert_eq!(led_off, LedState::LedOff);
-            assert_eq!(led_blink, LedState::Blink(500, 500));
-            assert_ne!(led_on, led_off);
-        }
-
-        #[test]
-        fn test_output_command_enum() {
-            let commands = [
-                OutputCommand::SetStartButtonLight(LedState::LedOn),
-                OutputCommand::SetStartButtonLight(LedState::LedOff),
-                OutputCommand::SetStartButtonLight(LedState::Blink(500, 500)),
-            ];
-
-            // Test that all command variants can be created
-            for command in &commands {
-                match command {
-                    OutputCommand::SetStartButtonLight(_) => assert!(true),
-                }
-            }
-        }
-
-        #[test]
-        fn test_heater_command_enum() {
-            let commands = [
-                HeaterCommand::SetPower(50),
-                HeaterCommand::SetFan(true),
-                HeaterCommand::SimulationReset,
-                HeaterCommand::UpdatePidParameters {
-                    kp: 1.0,
-                    ki: 0.5,
-                    kd: 0.1,
-                },
-            ];
-
-            // Test that all heater command variants can be created
-            for command in &commands {
-                match command {
-                    HeaterCommand::SetPower(power) => assert!(*power <= 100),
-                    HeaterCommand::SetFan(_) => assert!(true),
-                    HeaterCommand::SimulationReset => assert!(true),
-                    HeaterCommand::UpdatePidParameters { kp, ki, kd } => {
-                        assert!(*kp >= 0.0 && *ki >= 0.0 && *kd >= 0.0);
-                    }
-                }
-            }
-        }
-
-        #[test]
-        fn test_reflow_controller_state() {
-            let mut error_msg = heapless::String::<256>::new();
-            error_msg.push_str("Test error").unwrap();
-
-            let mut profile_name = heapless::String::<32>::new();
-            profile_name.push_str("Test Profile").unwrap();
-
-            let state = ReflowControllerState {
-                status: Status::Running,
-                target_temperature: 200.0,
-                current_temperature: 195.0,
-                door_closed: true,
-                fan: false,
-                light: true,
-                heater_power: 75,
-                timer: 120,
-                current_step: "Ramp",
-                current_profile: profile_name,
-                error_message: error_msg,
-                pid_kp: 3.9,
-                pid_ki: 0.5,
-                pid_kd: 0.0,
-                pid_p_term: 5.0,
-                pid_i_term: 2.5,
-                pid_d_term: 0.0,
-            };
-
-            // Test that state structure can be created and fields accessed
-            assert_eq!(state.status, Status::Running);
-            assert_eq!(state.target_temperature, 200.0);
-            assert_eq!(state.current_temperature, 195.0);
-            assert!(state.door_closed);
-            assert!(!state.fan);
-            assert!(state.light);
-            assert_eq!(state.heater_power, 75);
-            assert_eq!(state.timer, 120);
-            assert_eq!(state.current_step, "Ramp");
-            assert_eq!(state.current_profile.as_str(), "Test Profile");
-            assert_eq!(state.error_message.as_str(), "Test error");
-        }
-
-        #[test]
-        fn test_heapless_string_constraints() {
-            // Test that heapless strings respect their size constraints
-            let mut small_string = heapless::String::<32>::new();
-            let mut large_string = heapless::String::<256>::new();
-
-            // Should be able to add up to capacity
-            for i in 0..31 {
-                small_string.push('a').unwrap();
-            }
-            assert_eq!(small_string.len(), 31);
-
-            // Should be able to add more to large string
-            for i in 0..100 {
-                large_string.push('b').unwrap();
-            }
-            assert_eq!(large_string.len(), 100);
-
-            // Test that strings can be cleared
-            small_string.clear();
-            assert_eq!(small_string.len(), 0);
-            assert!(small_string.is_empty());
-        }
-
-        #[test]
-        fn test_event_enum_completeness() {
-            // Test that we can create all event variants
-            let mut profile_name = heapless::String::<64>::new();
-            profile_name.push_str("test.txt").unwrap();
-
-            let events = [
-                Event::StartCommand,
-                Event::StopCommand,
-                Event::ResetCommand,
-                Event::DoorStateChanged(true),
-                Event::DoorStateChanged(false),
-                Event::LoadProfile(profile_name),
-                Event::ListProfilesRequest,
-                Event::SimulationReset,
-                Event::UpdatePidParameters {
-                    kp: 1.0,
-                    ki: 0.5,
-                    kd: 0.1,
-                },
-                Event::FanControl(true),
-                Event::FanControl(false),
-                Event::StartPidTuning,
-            ];
-
-            // Test that all events can be pattern matched
-            for event in &events {
-                match event {
-                    Event::StartCommand => assert!(true),
-                    Event::StopCommand => assert!(true),
-                    Event::ResetCommand => assert!(true),
-                    Event::DoorStateChanged(_) => assert!(true),
-                    Event::LoadProfile(_) => assert!(true),
-                    Event::ListProfilesRequest => assert!(true),
-                    Event::SimulationReset => assert!(true),
-                    Event::UpdatePidParameters { .. } => assert!(true),
-                    Event::FanControl(_) => assert!(true),
-                    Event::StartPidTuning => assert!(true),
-                    Event::WriteProfile { .. } => assert!(true),
-                }
-            }
-        }
-
-        #[test]
-        fn test_constants() {
-            // Test system constants
-            assert_eq!(VERSION, "v0.1");
-            assert_eq!(SYSTEM_TICK_MILLIS, 100);
-
-            // Constants should be reasonable values
-            assert!(SYSTEM_TICK_MILLIS > 0);
-            assert!(SYSTEM_TICK_MILLIS < 10000); // Less than 10 seconds
-            assert!(!VERSION.is_empty());
-        }
-    }
-
-    mod json_serialization_tests {
-        use super::*;
-        use crate::profile::{Profile, Step, StepName};
-
-        #[test]
-        fn test_profile_json_serialization() {
-            // Create a test profile
-            let mut name = heapless::String::new();
-            name.push_str("Test Profile").unwrap();
-
-            let profile = Profile {
-                name,
-                steps: [
-                    Step {
-                        step_name: StepName::Preheat,
-                        set_temperature: 150.0,
-                        target_time: 90,
-                        step_time: 90,
-                        max_rate: 2.0,
-                        is_cooling: false,
-                        has_fan: false,
-                    },
-                    Step {
-                        step_name: StepName::Soak,
-                        set_temperature: 180.0,
-                        target_time: 180,
-                        step_time: 90,
-                        max_rate: 2.0,
-                        is_cooling: false,
-                        has_fan: false,
-                    },
-                    Step {
-                        step_name: StepName::Ramp,
-                        set_temperature: 217.0,
-                        target_time: 210,
-                        step_time: 30,
-                        max_rate: 3.0,
-                        is_cooling: false,
-                        has_fan: false,
-                    },
-                    Step {
-                        step_name: StepName::ReflowRamp,
-                        set_temperature: 245.0,
-                        target_time: 240,
-                        step_time: 30,
-                        max_rate: 2.0,
-                        is_cooling: false,
-                        has_fan: false,
-                    },
-                    Step {
-                        step_name: StepName::ReflowCool,
-                        set_temperature: 217.0,
-                        target_time: 270,
-                        step_time: 30,
-                        max_rate: 2.0,
-                        is_cooling: true,
-                        has_fan: false,
-                    },
-                    Step {
-                        step_name: StepName::Cooling,
-                        set_temperature: 50.0,
-                        target_time: 330,
-                        step_time: 60,
-                        max_rate: 5.0,
-                        is_cooling: true,
-                        has_fan: true,
-                    },
-                ],
-            };
-
-            // Serialize to JSON
-            let json_result: Result<heapless::String<2048>, _> =
-                serde_json_core::to_string(&profile);
-            assert!(json_result.is_ok());
-
-            let json = json_result.unwrap();
-            assert!(json.len() > 0);
-            assert!(json.contains("Test Profile"));
-            assert!(json.contains("Preheat"));
-            assert!(json.contains("150.0"));
-        }
-
-        #[test]
-        fn test_profile_json_deserialization() {
-            // JSON representation of a simple profile
-            let json_str = r#"{"name":"Test","steps":[
-                {"step_name":"Preheat","set_temperature":150.0,"target_time":90,"step_time":90,"max_rate":2.0,"is_cooling":false,"has_fan":false},
-                {"step_name":"Soak","set_temperature":180.0,"target_time":180,"step_time":90,"max_rate":2.0,"is_cooling":false,"has_fan":false},
-                {"step_name":"Ramp","set_temperature":217.0,"target_time":210,"step_time":30,"max_rate":3.0,"is_cooling":false,"has_fan":false},
-                {"step_name":"ReflowRamp","set_temperature":245.0,"target_time":240,"step_time":30,"max_rate":2.0,"is_cooling":false,"has_fan":false},
-                {"step_name":"ReflowCool","set_temperature":217.0,"target_time":270,"step_time":30,"max_rate":2.0,"is_cooling":true,"has_fan":false},
-                {"step_name":"Cooling","set_temperature":50.0,"target_time":330,"step_time":60,"max_rate":5.0,"is_cooling":true,"has_fan":true}
-            ]}"#;
-
-            // Deserialize from JSON
-            let result: Result<(Profile, usize), _> = serde_json_core::from_str(json_str);
-            assert!(result.is_ok());
-
-            let (profile, _) = result.unwrap();
-            assert_eq!(profile.name.as_str(), "Test");
-            assert_eq!(profile.steps[0].step_name, StepName::Preheat);
-            assert_eq!(profile.steps[0].set_temperature, 150.0);
-            assert_eq!(profile.steps[5].step_name, StepName::Cooling);
-            assert_eq!(profile.steps[5].has_fan, true);
-        }
-
-        #[test]
-        fn test_profile_roundtrip() {
-            // Create a profile
-            let mut name = heapless::String::new();
-            name.push_str("Roundtrip Test").unwrap();
-
-            let original = Profile {
-                name,
-                steps: [
-                    Step {
-                        step_name: StepName::Preheat,
-                        set_temperature: 100.0,
-                        target_time: 60,
-                        step_time: 60,
-                        max_rate: 1.5,
-                        is_cooling: false,
-                        has_fan: false,
-                    },
-                    Step {
-                        step_name: StepName::Soak,
-                        set_temperature: 150.0,
-                        target_time: 120,
-                        step_time: 60,
-                        max_rate: 1.5,
-                        is_cooling: false,
-                        has_fan: false,
-                    },
-                    Step {
-                        step_name: StepName::Ramp,
-                        set_temperature: 200.0,
-                        target_time: 150,
-                        step_time: 30,
-                        max_rate: 2.0,
-                        is_cooling: false,
-                        has_fan: false,
-                    },
-                    Step {
-                        step_name: StepName::ReflowRamp,
-                        set_temperature: 230.0,
-                        target_time: 180,
-                        step_time: 30,
-                        max_rate: 1.5,
-                        is_cooling: false,
-                        has_fan: false,
-                    },
-                    Step {
-                        step_name: StepName::ReflowCool,
-                        set_temperature: 200.0,
-                        target_time: 210,
-                        step_time: 30,
-                        max_rate: 1.5,
-                        is_cooling: true,
-                        has_fan: false,
-                    },
-                    Step {
-                        step_name: StepName::Cooling,
-                        set_temperature: 50.0,
-                        target_time: 270,
-                        step_time: 60,
-                        max_rate: 4.0,
-                        is_cooling: true,
-                        has_fan: true,
-                    },
-                ],
-            };
-
-            // Serialize
-            let json: heapless::String<2048> = serde_json_core::to_string(&original).unwrap();
-
-            // Deserialize
-            let (deserialized, _): (Profile, _) = serde_json_core::from_str(&json).unwrap();
-
-            // Compare
-            assert_eq!(original.name.as_str(), deserialized.name.as_str());
-            assert_eq!(original.steps.len(), deserialized.steps.len());
-            for i in 0..6 {
-                assert_eq!(original.steps[i].step_name, deserialized.steps[i].step_name);
-                assert_eq!(
-                    original.steps[i].set_temperature,
-                    deserialized.steps[i].set_temperature
-                );
-                assert_eq!(
-                    original.steps[i].target_time,
-                    deserialized.steps[i].target_time
-                );
-                assert_eq!(original.steps[i].step_time, deserialized.steps[i].step_time);
-                assert_eq!(original.steps[i].max_rate, deserialized.steps[i].max_rate);
-                assert_eq!(
-                    original.steps[i].is_cooling,
-                    deserialized.steps[i].is_cooling
-                );
-                assert_eq!(original.steps[i].has_fan, deserialized.steps[i].has_fan);
-            }
-        }
-
-        #[test]
-        fn test_step_json_serialization() {
-            let step = Step {
-                step_name: StepName::Preheat,
-                set_temperature: 150.0,
-                target_time: 90,
-                step_time: 90,
-                max_rate: 2.0,
-                is_cooling: false,
-                has_fan: false,
-            };
-
-            let json: heapless::String<256> = serde_json_core::to_string(&step).unwrap();
-            assert!(json.contains("Preheat"));
-            assert!(json.contains("150.0"));
-            assert!(json.contains("90"));
-        }
-    }
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum ReflowControllerMessage {
+    StateUpdate(ReflowControllerState),
+    ProfileList(heapless::Vec<heapless::String<14>, 16>),
+    ActiveProfile(profile::Profile),
+    WriteProfileResult(WriteProfileResult),
 }

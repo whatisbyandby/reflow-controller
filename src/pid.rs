@@ -55,11 +55,6 @@ impl PidController {
         // Calculate output
         let output = proportional + integral + derivative;
 
-        info!(
-            "PID Update - SP: {}, Meas: {}, Err: {}, P: {}, I: {}, D: {}, Out: {}",
-            setpoint, measurement, error, proportional, integral, derivative, output
-        );
-
         // Clamp to output range
         let clamped_output = output.max(self.out_min).min(self.out_max);
 

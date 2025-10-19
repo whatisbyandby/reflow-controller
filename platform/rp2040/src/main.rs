@@ -39,9 +39,6 @@ async fn main(spawner: Spawner) {
 
     spawner.spawn(unwrap!(heater_task(i2c_bus)));
 
-    #[cfg(feature = "mock_temperature_sensor")]
-    spawner.spawn(unwrap!(run_temperature_sensor()));
-
     #[cfg(not(feature = "mock_temperature_sensor"))]
     spawner.spawn(unwrap!(run_temperature_sensor(i2c_bus)));
 
